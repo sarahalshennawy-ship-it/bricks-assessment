@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bricks Growth Blueprint</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #1a1a1a;
+            --accent: #ff6b35;
+            --accent-dark: #d84315;
+            --success: #00b894;
+            --warning: #ffa502;
+            --danger: #ff4757;
+            --sage: #7a8f8f;
+            --bg: #f0f4f8;
+            --white: #ffffff;
+            --card-bg: #fafbfc;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--primary);
+            line-height: 1.6;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+        
+        .logo { font-size: 28px; font-weight: 800; letter-spacing: 3px; color: var(--white); }
+        
+        .screen { display: none; }
+        .screen.active { display: block; }
+        
+        /* Landing */
+        .landing { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; min-height: 85vh; }
+        .landing-content { color: var(--white); }
+        .landing-content h1 { font-size: 56px; font-weight: 800; margin-bottom: 30px; line-height: 1.2; }
+        .landing-content .accent { color: #ffd700; }
+        .landing-content p { font-size: 18px; color: rgba(255,255,255,0.9); margin-bottom: 20px; }
+        
+        .form-container { background: var(--white); padding: 45px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .form-container h2 { font-size: 28px; margin-bottom: 30px; color: var(--primary); }
+        .form-group { margin-bottom: 22px; }
+        .form-group label { display: block; margin-bottom: 10px; font-weight: 600; font-size: 14px; color: var(--primary); }
+        .form-group input { width: 100%; padding: 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: all 0.3s; }
+        .form-group input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(255,107,53,0.1); }
+        
+        .phone-group { display: grid; grid-template-columns: 150px 1fr; gap: 12px; }
+        
+        .country-select-wrapper {
+            position: relative;
+            width: 150px;
+        }
+        
+        .country-search-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .country-search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255,107,53,0.1);
+        }
+        
+        .country-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1000;
+            margin-top: 6px;
+            box-shadow: 0 10px 30px rgba(255,107,53,0.15);
+        }
+        
+        .country-dropdown.active { display: block; }
+        
+        .country-option {
+            padding: 12px 16px;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .country-option:hover {
+            background-color: rgba(255,107,53,0.05);
+            color: var(--accent);
+            padding-left: 20px;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            color: var(--white);
+            width: 100%;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(255,107,53,0.3); }
+        .btn:disabled { background: #ccc; cursor: not-allowed; }
+        
+        /* Intro Questions */
+        .intro-container { max-width: 900px; margin: 0 auto; background: var(--white); padding: 50px; border-radius: 16px; }
+        .intro-container h2 { font-size: 32px; margin-bottom: 15px; color: var(--primary); }
+        .intro-container > p { color: var(--sage); margin-bottom: 50px; font-size: 16px; }
+        .intro-group { margin-bottom: 45px; }
+        .intro-group label { display: block; margin-bottom: 20px; font-weight: 700; font-size: 16px; color: var(--primary); }
+        .intro-options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .intro-option { 
+            padding: 20px; 
+            border: 2px solid #e0e0e0; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            text-align: center;
+            transition: all 0.3s;
+            background: var(--white);
+        }
+        .intro-option:hover { border-color: var(--accent); transform: translateY(-3px); }
+        .intro-option.selected { border-color: var(--accent); background: rgba(255,107,53,0.08); color: var(--accent); }
+        .intro-option input { display: none; }
+        
+        /* Assessment */
+        .assessment { max-width: 900px; margin: 0 auto; background: var(--white); padding: 50px; border-radius: 16px; }
+        .assessment h2 { font-size: 32px; margin-bottom: 15px; color: var(--primary); }
+        .question-block { margin-bottom: 40px; }
+        .question-block h3 { font-size: 18px; font-weight: 700; margin-bottom: 25px; color: var(--primary); }
+        .options { display: flex; flex-direction: column; gap: 12px; }
+        .option { 
+            display: flex; 
+            align-items: flex-start; 
+            padding: 16px; 
+            background: var(--card-bg); 
+            border-radius: 8px; 
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .option:hover { border-color: var(--accent); background: rgba(255,107,53,0.05); transform: translateX(4px); }
+        .option.selected { border-color: var(--accent); background: rgba(255,107,53,0.1); }
+        .option input { margin-right: 14px; margin-top: 3px; cursor: pointer; accent-color: var(--accent); }
+        .option label { cursor: pointer; flex: 1; font-weight: 500; }
+        
+        .nav-buttons { display: flex; gap: 15px; margin-top: 50px; }
+        .nav-buttons button { flex: 1; padding: 14px; }
+        
+        .btn-secondary { background: transparent; color: var(--accent); border: 2px solid var(--accent); }
+        .btn-secondary:hover { background: rgba(255,107,53,0.1); }
+        
+        /* Dashboard */
+        .dashboard { max-width: 1200px; margin: 0 auto; }
+        .dashboard h1 { font-size: 42px; font-weight: 800; color: var(--white); margin-bottom: 10px; }
+        .dashboard-subtitle { color: rgba(255,255,255,0.9); font-size: 18px; margin-bottom: 50px; }
+        
+        .score-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border-left: 6px solid var(--accent);
+        }
+        
+        .score-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 30px;
+        }
+        
+        .score-title h2 { font-size: 28px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+        .score-title p { color: var(--sage); font-size: 14px; }
+        
+        .big-score {
+            font-size: 72px;
+            font-weight: 900;
+            color: var(--accent);
+            line-height: 1;
+        }
+        
+        .score-label { font-size: 12px; color: var(--sage); font-weight: 600; margin-top: 5px; }
+        
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent) 0%, #ff8a50 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .problem-box {
+            background: linear-gradient(135deg, #ffe5e5 0%, #ffe0e0 100%);
+            border-left: 4px solid var(--danger);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .problem-box h4 { color: var(--danger); font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+        .problem-box p { color: #333; font-size: 14px; line-height: 1.6; }
+        
+        .solution-box {
+            background: linear-gradient(135deg, #e5f5ff 0%, #e0f2ff 100%);
+            border-left: 4px solid var(--success);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .solution-box h4 { color: var(--success); font-size: 16px; font-weight: 700; margin-bottom: 10px; }
+        .solution-box ul { margin-left: 20px; }
+        .solution-box li { color: #333; font-size: 14px; margin-bottom: 8px; line-height: 1.6; }
+        
+        .upsell {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .package {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 16px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .package:hover {
+            border-color: var(--accent);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(255,107,53,0.2);
+        }
+        
+        .package.premium {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, rgba(255,107,53,0.05) 0%, rgba(255,107,53,0.02) 100%);
+        }
+        
+        .premium-badge {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            color: var(--white);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .package h4 { font-size: 24px; font-weight: 800; margin-bottom: 15px; color: var(--primary); }
+        .package-price { 
+            font-size: 48px; 
+            font-weight: 900; 
+            color: var(--accent); 
+            margin-bottom: 10px;
+        }
+        
+        .package-period { color: var(--sage); font-size: 14px; margin-bottom: 30px; }
+        .package ul { margin-left: 0; }
+        .package li { 
+            color: var(--primary); 
+            font-size: 14px; 
+            margin-bottom: 12px; 
+            line-height: 1.8;
+            padding-left: 24px;
+            position: relative;
+        }
+        
+        .package li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: 800;
+        }
+        
+        .package .btn { margin-top: 30px; }
+        
+        @media (max-width: 768px) {
+            .landing { grid-template-columns: 1fr; gap: 40px; }
+            .upsell { grid-template-columns: 1fr; }
+            .intro-options { grid-template-columns: 1fr; }
+            .score-header { flex-direction: column; }
+            .big-score { font-size: 48px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="BRICKS_LOGO.png" alt="Bricks & Co" style="height: 80px; object-fit: contain;">
+        </header>
+
+        <!-- Sign Up Page -->
+        <div id="signup-screen" class="screen active">
+            <div class="landing">
+                <div class="landing-content">
+                    <h1>Stop Losing Money To <span class="accent">Broken Systems</span></h1>
+                    <p>Most entrepreneurs are hemorrhaging cash because they don't have proper systems. In 10 minutes, we'll show you exactly where you're bleeding and how to stop it.</p>
+                    <p style="margin-top: 40px; font-size: 16px; color: rgba(255,255,255,0.8);"><strong>✓ Free diagnostic</strong> • <strong>No credit card</strong> • <strong>Instant results</strong></p>
+                </div>
+
+                <div class="form-container">
+                    <h2>Your Free Diagnostic</h2>
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="inputName" placeholder="Your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="inputEmail" placeholder="Your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Business Name *</label>
+                        <input type="text" id="inputBusiness" placeholder="Your business" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Mobile Number *</label>
+                        <div class="phone-group">
+                            <div class="country-select-wrapper">
+                                <input type="text" class="country-search-input" id="countrySearch" placeholder="Search country..." autocomplete="off">
+                                <div class="country-dropdown" id="countryDropdown"></div>
+                            </div>
+                            <input type="tel" id="inputPhone" placeholder="Phone number" required>
+                        </div>
+                    </div>
+                    <button class="btn" onclick="goToIntro()">Get My Free Diagnostic →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Intro Questions -->
+        <div id="intro-screen" class="screen">
+            <div class="intro-container">
+                <h2>Quick Context</h2>
+                <p>Just 4 questions so we can tailor your report perfectly</p>
+                
+                <div class="intro-group">
+                    <label>Business Type? *</label>
+                    <div class="intro-options">
+                        <div class="intro-option" onclick="selectIntro('businessType', 'B2B', this)"><input type="radio" name="businessType"><div><strong>B2B</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('businessType', 'B2C Services', this)"><input type="radio" name="businessType"><div><strong>B2C Services</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('businessType', 'E-Commerce', this)"><input type="radio" name="businessType"><div><strong>E-Commerce</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('businessType', 'Personal Brand', this)"><input type="radio" name="businessType"><div><strong>Personal Brand</strong></div></div>
+                    </div>
+                </div>
+
+                <div class="intro-group">
+                    <label>Industry? *</label>
+                    <div class="intro-options">
+                        <div class="intro-option" onclick="selectIntro('industry', 'Medical/Healthcare', this)"><input type="radio" name="industry"><div><strong>Medical</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('industry', 'Aesthetic/Beauty', this)"><input type="radio" name="industry"><div><strong>Beauty</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('industry', 'Food & Beverage', this)"><input type="radio" name="industry"><div><strong>F&B</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('industry', 'Education', this)"><input type="radio" name="industry"><div><strong>Education</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('industry', 'Real Estate', this)"><input type="radio" name="industry"><div><strong>Real Estate</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('industry', 'Tech/Software', this)"><input type="radio" name="industry"><div><strong>Tech</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('industry', 'Consulting', this)"><input type="radio" name="industry"><div><strong>Consulting</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('industry', 'Other', this)"><input type="radio" name="industry"><div><strong>Other</strong></div></div>
+                    </div>
+                </div>
+
+                <div class="intro-group">
+                    <label>How long active? *</label>
+                    <div class="intro-options" style="grid-template-columns: 1fr 1fr 1fr;">
+                        <div class="intro-option" onclick="selectIntro('businessAge', 'Less than 1 year', this)"><input type="radio" name="businessAge"><div><strong>&lt;1 year</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('businessAge', '1-3 years', this)"><input type="radio" name="businessAge"><div><strong>1-3 years</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('businessAge', '3+ years', this)"><input type="radio" name="businessAge"><div><strong>3+ years</strong></div></div>
+                    </div>
+                </div>
+
+                <div class="intro-group">
+                    <label>Annual Revenue? *</label>
+                    <div class="intro-options" style="grid-template-columns: 1fr 1fr;">
+                        <div class="intro-option" onclick="selectIntro('revenue', 'Less than $50k', this)"><input type="radio" name="revenue"><div><strong>&lt;$50k</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('revenue', '$50k-$100k', this)"><input type="radio" name="revenue"><div><strong>$50-100k</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('revenue', '$100k-$500k', this)"><input type="radio" name="revenue"><div><strong>$100-500k</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('revenue', '$500k+', this)"><input type="radio" name="revenue"><div><strong>$500k+</strong></div></div>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="goToAssessment()" id="introBtn" disabled style="margin-top: 30px;">Start Assessment →</button>
+            </div>
+        </div>
+
+        <!-- Assessment -->
+        <div id="assessment-screen" class="screen">
+            <div class="assessment">
+                <h2 id="sectionTitle">Sales Pipeline</h2>
+                <p id="sectionDesc" style="color: var(--sage); margin-bottom: 30px;">Section 1 of 5</p>
+                <div id="questionsContainer"></div>
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="prevSection()" id="prevBtn" style="display:none;">← Previous</button>
+                    <button class="btn" onclick="nextSection()" id="nextBtn">Next →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard-screen" class="screen">
+            <h1>Your Growth Diagnostic Report</h1>
+            <p class="dashboard-subtitle">Prepared for <strong id="reportName"></strong> • <span id="reportBusiness"></span></p>
+            
+            <div id="reportContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        const countryData = [
+            {code: '+1', name: 'USA', flag: '🇺🇸'},
+            {code: '+1', name: 'Canada', flag: '🇨🇦'},
+            {code: '+7', name: 'Russia', flag: '🇷🇺'},
+            {code: '+20', name: 'Egypt', flag: '🇪🇬'},
+            {code: '+27', name: 'South Africa', flag: '🇿🇦'},
+            {code: '+30', name: 'Greece', flag: '🇬🇷'},
+            {code: '+31', name: 'Netherlands', flag: '🇳🇱'},
+            {code: '+32', name: 'Belgium', flag: '🇧🇪'},
+            {code: '+33', name: 'France', flag: '🇫🇷'},
+            {code: '+34', name: 'Spain', flag: '🇪🇸'},
+            {code: '+39', name: 'Italy', flag: '🇮🇹'},
+            {code: '+41', name: 'Switzerland', flag: '🇨🇭'},
+            {code: '+44', name: 'United Kingdom', flag: '🇬🇧'},
+            {code: '+49', name: 'Germany', flag: '🇩🇪'},
+            {code: '+51', name: 'Peru', flag: '🇵🇪'},
+            {code: '+52', name: 'Mexico', flag: '🇲🇽'},
+            {code: '+54', name: 'Argentina', flag: '🇦🇷'},
+            {code: '+55', name: 'Brazil', flag: '🇧🇷'},
+            {code: '+56', name: 'Chile', flag: '🇨🇱'},
+            {code: '+60', name: 'Malaysia', flag: '🇲🇾'},
+            {code: '+61', name: 'Australia', flag: '🇦🇺'},
+            {code: '+62', name: 'Indonesia', flag: '🇮🇩'},
+            {code: '+63', name: 'Philippines', flag: '🇵🇭'},
+            {code: '+65', name: 'Singapore', flag: '🇸🇬'},
+            {code: '+81', name: 'Japan', flag: '🇯🇵'},
+            {code: '+82', name: 'South Korea', flag: '🇰🇷'},
+            {code: '+86', name: 'China', flag: '🇨🇳'},
+            {code: '+90', name: 'Turkey', flag: '🇹🇷'},
+            {code: '+91', name: 'India', flag: '🇮🇳'},
+            {code: '+212', name: 'Morocco', flag: '🇲🇦'},
+            {code: '+966', name: 'Saudi Arabia', flag: '🇸🇦'},
+            {code: '+971', name: 'United Arab Emirates', flag: '🇦🇪'},
+            {code: '+972', name: 'Israel', flag: '🇮🇱'},
+            {code: '+974', name: 'Qatar', flag: '🇶🇦'},
+            {code: '+977', name: 'Nepal', flag: '🇳🇵'},
+            {code: '+998', name: 'Uzbekistan', flag: '🇺🇿'},
+        ];
+
+        let selectedCountry = null;
+        const questions = [
+            // Sales
+            { section: 0, title: "When someone messages about your service, what actually happens to that conversation?", options: [
+                "It gets lost in messaging apps — we have no system to track it and prospects fall through the cracks",
+                "We write names and info in a spreadsheet or notebook manually — it's inconsistent and takes our time",
+                "We use a CRM or sales system that tracks every interaction automatically — nothing gets lost",
+                "We have a basic system but it's not consistent — sometimes we remember, sometimes we don't",
+                "I'm not sure / We don't have a process"
+            ]},
+            { section: 0, title: "How often do you lose actual sales because you forgot to follow up with prospects?", options: [
+                "Constantly — we know we're losing money this way but can't stop it",
+                "Regularly — it happens often enough that it frustrates us",
+                "Sometimes — it happens occasionally but we're working on it",
+                "Rarely — we have a follow-up system that catches almost everything",
+                "I'm not sure / Never measured it"
+            ]},
+            { section: 0, title: "How fast do you respond when someone inquires about your service?", options: [
+                "Hours or longer — by then they've probably contacted someone else",
+                "30 mins to a few hours — we know we're losing speed",
+                "15-30 minutes — decent response time during work hours",
+                "Within minutes — we respond so fast they're impressed",
+                "I'm not sure / Varies too much"
+            ]},
+            { section: 0, title: "Do you actually know your sales close rate? (% of leads that become customers)", options: [
+                "No idea — we just know sales are lower than they should be",
+                "We have a rough guess but never calculated the real number",
+                "We've tracked it before but don't update it regularly",
+                "Yes, we know exactly and track it every month",
+                "I'm not sure / Never thought about it"
+            ]},
+            { section: 0, title: "How much of YOUR personal time gets eaten up by sales follow-ups and customer messages?", options: [
+                "Most of my time — I'm stuck in follow-ups and can't focus on growth",
+                "Way too much — it's a major time drain that I resent",
+                "A decent amount but it's manageable — maybe a few hours a day",
+                "Minimal — my team handles it efficiently and I focus on strategy",
+                "I'm not sure / Never tracked it"
+            ]},
+            { section: 0, title: "How are you currently managing your sales process?", options: [
+                "We do it all manually — no system, just memory and hope",
+                "Using spreadsheets — we track it but it's messy and error-prone",
+                "We have a paid system (CRM) — it's working but could be better",
+                "We have a system but don't use it fully",
+                "I wish I could automate all of this — I know we're losing money"
+            ]},
+            
+            // Marketing
+            { section: 1, title: "How often do you actually create content (posts, reels, stories) for your business?", options: [
+                "Randomly or sporadically — whenever I remember or feel inspired",
+                "Once or twice a month — not planned, just when we think of something",
+                "Weekly — we have some plan but it's loose and flexible",
+                "Weekly or more with a documented content calendar — planned and consistent",
+                "I'm not sure / We don't have a system"
+            ]},
+            { section: 1, title: "When you post content, how much engagement do you actually get?", options: [
+                "Almost none — posts disappear into the void with minimal likes or comments",
+                "Very little — occasional engagement but mostly ghosted",
+                "Some engagement — inconsistent but we get some response",
+                "Good engagement — people regularly comment, share, and engage",
+                "I'm not sure / Don't track engagement"
+            ]},
+            { section: 1, title: "Does your content actually address your customers' REAL problems or is it just generic?", options: [
+                "Generic — we just post updates but nothing that speaks to customer pain points",
+                "Somewhat disconnected — we try but it doesn't really resonate with what customers need",
+                "Mixed — some content is relevant, some is filler",
+                "Yes, very targeted — every post solves a specific problem our customers have",
+                "I'm not sure / Never analyzed it"
+            ]},
+            { section: 1, title: "How much do you spend on marketing per month?", options: [
+                "We spend nothing — organic only, no paid marketing budget at all",
+                "Less than $500 — small budget, mostly testing and learning",
+                "$500-$2000 — modest budget for ads and some tools",
+                "$2000-$5000 — solid marketing investment",
+                "Over $5000 — significant budget dedicated to growth",
+                "I'm not sure / Varies too much"
+            ]},
+            { section: 1, title: "How do you handle your marketing and media buying?", options: [
+                "We do it ourselves — learning as we go, no formal training or experience",
+                "We do it ourselves with some training — we know basics but not experts",
+                "We have an in-house team member managing it — dedicated person doing ads",
+                "We work with an agency — they handle all our marketing and ads",
+                "Mix — we do some things, agency does others",
+                "I'm not sure / We haven't decided"
+            ]},
+            { section: 1, title: "How much of your marketing budget goes to ads vs. tools vs. content creation?", options: [
+                "We don't break it down — just spend and hope something works",
+                "Mostly ads, barely anything on tools or content creation",
+                "Mixed — some on ads, some on tools, some on content",
+                "We have a structured budget with clear allocation across all channels",
+                "I'm not sure / We don't track it this way"
+            ]},
+            { section: 1, title: "How are you currently managing your content & marketing?", options: [
+                "Completely manual — we think of ideas and post when we remember",
+                "Using Google Sheets/spreadsheets — tracking but it's chaotic",
+                "Using a marketing tool (Hootsuite, Buffer, etc.) — helps but still tedious",
+                "We have a system but struggle to keep it consistent",
+                "I wish I could automate content planning & posting — it's killing our consistency"
+            ]},
+            
+            // HR
+            { section: 2, title: "How clear is your team about their exact role and what success looks like for them?", options: [
+                "Very unclear — people wear many hats and don't know what they own",
+                "Somewhat clear — roles exist but there's overlap and confusion",
+                "Clear for some, unclear for others — depends on the person",
+                "Very clear — everyone knows exactly what they do and what success looks like",
+                "I'm not sure / We haven't formalized it"
+            ]},
+            { section: 2, title: "How much of YOUR day gets eaten up by tasks that your team should be doing?", options: [
+                "Most of it — I can't delegate because nothing gets done without me",
+                "Way too much — I'm trapped in operations instead of strategy",
+                "A fair amount — some things I handle, some delegated",
+                "Very little — my team is strong and I focus on leadership",
+                "I'm not sure / Never tracked it"
+            ]},
+            { section: 2, title: "How long does it take a new hire to become actually productive?", options: [
+                "2-3 months or longer — there's no process, they figure it out slowly",
+                "1-2 months — we have some guidance but it's scattered",
+                "3-4 weeks — we have a rough onboarding but it could be better",
+                "1-2 weeks — we have a structured onboarding system that works",
+                "I'm not sure / We've never hired or tracked this"
+            ]},
+            { section: 2, title: "Do important tasks constantly fall through the cracks because nobody is accountable?", options: [
+                "Constantly — we're always discovering something didn't get done",
+                "Often — it's a regular problem that we accept",
+                "Sometimes — happens occasionally but we catch most things",
+                "Rarely — clear accountability means nothing slips",
+                "I'm not sure / We don't track it"
+            ]},
+            { section: 2, title: "Do you have documented processes for your core business functions?", options: [
+                "No — everything lives in people's heads",
+                "A few things documented, but most processes are undocumented",
+                "Some key processes documented but not comprehensive",
+                "Yes, everything is documented and regularly updated",
+                "I'm not sure / Never audited this"
+            ]},
+            { section: 2, title: "How are you currently managing team operations & onboarding?", options: [
+                "Everything is manual & in people's heads — chaos",
+                "Using spreadsheets & scattered documents — messy but functional",
+                "We have some templates & processes in place",
+                "We use a system but it needs improvement",
+                "I wish I could automate team management — onboarding takes forever"
+            ]},
+            
+            // Finance
+            { section: 3, title: "Do you know exactly how much PROFIT you're making each month?", options: [
+                "No idea — I have no visibility into actual profitability",
+                "I have a rough guess but I'm not certain",
+                "I know approximately but haven't calculated precisely",
+                "Yes, I know the exact number and track it monthly",
+                "I'm not sure / Don't look at the numbers"
+            ]},
+            { section: 3, title: "Do you know how much it costs you to acquire ONE customer?", options: [
+                "No idea — we've never calculated this",
+                "Roughly, but it's not a precise number",
+                "We know it for some channels but not all",
+                "Yes, we know exactly and use it to optimize spending",
+                "I'm not sure / Seems complicated"
+            ]},
+            { section: 3, title: "How predictable is your monthly income?", options: [
+                "Completely unpredictable — one month high, next month low",
+                "Unpredictable — we never know what to expect",
+                "Somewhat predictable — roughly know the range but variations happen",
+                "Very predictable — we know what to expect most months",
+                "I'm not sure / Don't look ahead"
+            ]},
+            { section: 3, title: "Are your financial records accurate, organized, and current?", options: [
+                "No — they're messy, scattered, or months outdated",
+                "Somewhat — we track some things but there are gaps",
+                "Mostly — we have good records but not perfect",
+                "Yes, everything is organized and current",
+                "I'm not sure / Someone else manages them"
+            ]},
+            { section: 3, title: "How do you handle your own salary or income withdrawal?", options: [
+                "I take whatever is left after expenses — sometimes nothing",
+                "I pay myself when there's enough after all bills",
+                "I try to take a consistent amount but it varies",
+                "Yes, I take a consistent monthly salary separate from profit",
+                "I'm not sure / We haven't formalized it"
+            ]},
+            { section: 3, title: "How are you currently tracking your finances?", options: [
+                "Using spreadsheets/manual tracking — error-prone and time-consuming",
+                "Using basic accounting software but not fully optimized",
+                "Using professional accounting tool (QuickBooks, FreshBooks)",
+                "We have a system but don't understand the data",
+                "I wish I could automate financial tracking — I need visibility NOW"
+            ]},
+            
+            // Operations
+            { section: 4, title: "How much time per week are you spending on repetitive, manual tasks that could be automated?", options: [
+                "Hours every day — it's eating my time and energy",
+                "15-20 hours a week — way too much manual work",
+                "5-10 hours a week — some inefficiency but manageable",
+                "Less than 5 hours — most things are automated or delegated",
+                "I'm not sure / Never measured it"
+            ]},
+            { section: 4, title: "Are you using automation tools and AI in your business?", options: [
+                "No — we do everything manually",
+                "Barely — maybe one or two basic tools",
+                "Some — we use a few automation and AI tools regularly",
+                "Yes — multiple AI and automation tools integrated into our workflow",
+                "I'm not sure / Don't know what tools exist"
+            ]},
+            { section: 4, title: "How interested are you in automating more of your business?", options: [
+                "Very interested — we waste so much time on repetitive tasks",
+                "Interested but unsure how to start or what to automate",
+                "Somewhat — we see the opportunity but it's not urgent",
+                "Not urgent — we've already automated most things",
+                "I'm not sure / Never thought about it"
+            ]},
+            { section: 4, title: "What's the biggest bottleneck preventing you from scaling right now?", options: [
+                "Sales follow-up and lead management — we can't handle more inquiries",
+                "Content creation and marketing — we need more consistent visibility",
+                "Team capacity — we're maxed out and can't add more work",
+                "Financial tracking — we can't invest in growth because we don't know if we can afford it",
+                "Operational systems — everything depends on us personally",
+                "Multiple areas — we're weak in several places"
+            ]},
+            { section: 4, title: "How dependent is your entire business on YOU personally?", options: [
+                "Extremely — nothing happens without me being involved",
+                "Very — most decisions and key tasks require my input",
+                "Moderately — some things are delegated but many aren't",
+                "Minimal — my team handles most execution and I lead",
+                "I'm not sure / Never thought about it"
+            ]},
+            { section: 4, title: "How are you currently handling repetitive & manual tasks?", options: [
+                "Doing everything manually — wasting hours every week",
+                "Using spreadsheets & manual processes — inefficient",
+                "Using a few tools but most things are still manual",
+                "We use multiple tools but could do better",
+                "I wish I could automate everything — I'm drowning in manual work"
+            ]}
+        ];
+
+        const sections = [
+            { name: "Sales Pipeline", color: "#ff6b35", emoji: "🎯" },
+            { name: "Marketing & Content", color: "#ffa502", emoji: "📱" },
+            { name: "HR & Team", color: "#667eea", emoji: "👥" },
+            { name: "Financial Clarity", color: "#00b894", emoji: "💰" },
+            { name: "Operations & Automation", color: "#764ba2", emoji: "⚙️" }
+        ];
+
+        let currentSection = 0;
+        let answers = {};
+        let introAnswers = {};
+
+        function renderCountries(countries) {
+            const dropdown = document.getElementById('countryDropdown');
+            dropdown.innerHTML = countries.map(c => 
+                `<div class="country-option" onclick="selectCountry('${c.code}', '${c.name}', '${c.flag}'); return false;">${c.flag} ${c.code} ${c.name}</div>`
+            ).join('');
+        }
+
+        function selectCountry(code, name, flag) {
+            selectedCountry = { code, name, flag };
+            document.getElementById('countrySearch').value = `${flag} ${code}`;
+            document.getElementById('countryDropdown').classList.remove('active');
+        }
+
+        function initializeCountryDropdown() {
+            const dropdown = document.getElementById('countryDropdown');
+            const searchInput = document.getElementById('countrySearch');
+
+            if (!dropdown || !searchInput) {
+                setTimeout(initializeCountryDropdown, 100);
+                return;
+            }
+
+            searchInput.addEventListener('focus', () => {
+                dropdown.classList.add('active');
+                renderCountries(countryData);
+            });
+
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                if (query.length === 0) {
+                    renderCountries(countryData);
+                } else {
+                    const filtered = countryData.filter(c => 
+                        c.name.toLowerCase().includes(query) || c.code.includes(query)
+                    );
+                    renderCountries(filtered);
+                }
+                dropdown.classList.add('active');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.country-select-wrapper')) {
+                    dropdown.classList.remove('active');
+                }
+            });
+        }
+
+        function goToIntro() {
+            const name = document.getElementById('inputName').value;
+            const email = document.getElementById('inputEmail').value;
+            const business = document.getElementById('inputBusiness').value;
+            const phone = document.getElementById('inputPhone').value;
+            
+            if (!name || !email || !business || !phone || !selectedCountry) {
+                alert('Please fill all fields');
+                return;
+            }
+            
+            sessionStorage.setItem('userName', name);
+            sessionStorage.setItem('userEmail', email);
+            sessionStorage.setItem('businessName', business);
+            sessionStorage.setItem('userPhone', selectedCountry.code + phone);
+            
+            document.getElementById('signup-screen').classList.remove('active');
+            document.getElementById('intro-screen').classList.add('active');
+        }
+
+        function selectIntro(field, value, element) {
+            introAnswers[field] = value;
+            const group = element.parentElement;
+            group.querySelectorAll('.intro-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            if (introAnswers.businessType && introAnswers.industry && introAnswers.businessAge && introAnswers.revenue) {
+                document.getElementById('introBtn').disabled = false;
+            }
+        }
+
+        function goToAssessment() {
+            sessionStorage.setItem('introAnswers', JSON.stringify(introAnswers));
+            document.getElementById('intro-screen').classList.remove('active');
+            document.getElementById('assessment-screen').classList.add('active');
+            renderSection();
+        }
+
+        function renderSection() {
+            const sectionQuestions = questions.filter(q => q.section === currentSection);
+            document.getElementById('sectionTitle').textContent = sections[currentSection].emoji + " " + sections[currentSection].name;
+            document.getElementById('sectionDesc').textContent = `Section ${currentSection + 1} of 5`;
+            
+            let html = '';
+            sectionQuestions.forEach((q, idx) => {
+                const qIdx = questions.indexOf(q);
+                html += `<div class="question-block">
+                    <h3>${q.title}</h3>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <label class="option ${answers[qIdx] === i ? 'selected' : ''}">
+                                <input type="radio" name="q${qIdx}" value="${i}" ${answers[qIdx] === i ? 'checked' : ''} onchange="answers[${qIdx}]=${i}; renderSection();" style="cursor: pointer;">
+                                <span>${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+            
+            document.getElementById('questionsContainer').innerHTML = html;
+            
+            const allAnswered = sectionQuestions.every(q => answers[questions.indexOf(q)] !== undefined);
+            document.getElementById('nextBtn').disabled = !allAnswered;
+            document.getElementById('nextBtn').textContent = currentSection === 4 ? '🚀 View My Report' : 'Next →';
+            document.getElementById('prevBtn').style.display = currentSection > 0 ? 'block' : 'none';
+        }
+
+        function nextSection() {
+            if (currentSection < 4) {
+                currentSection++;
+                renderSection();
+            } else {
+                showDashboard();
+            }
+        }
+
+        function prevSection() {
+            if (currentSection > 0) {
+                currentSection--;
+                renderSection();
+            }
+        }
+
+        function calculateScore(sectionIndex) {
+            const sectionQuestions = questions.filter(q => q.section === sectionIndex);
+            const answered = sectionQuestions.filter(q => answers[questions.indexOf(q)] !== undefined);
+            if (answered.length === 0) return 0;
+            
+            let score = 0;
+            answered.forEach(q => {
+                const qIdx = questions.indexOf(q);
+                const answerIdx = answers[qIdx];
+                // Score: worst answer = 20%, best = 100%
+                score += ((answerIdx + 1) / q.options.length) * 100;
+            });
+            
+            return Math.round(score / answered.length);
+        }
+
+        function showDashboard() {
+            document.getElementById('assessment-screen').classList.remove('active');
+            document.getElementById('dashboard-screen').classList.add('active');
+            
+            document.getElementById('reportName').textContent = sessionStorage.getItem('userName');
+            document.getElementById('reportBusiness').textContent = sessionStorage.getItem('businessName');
+            
+            let html = '';
+            sections.forEach((section, idx) => {
+                const score = calculateScore(idx);
+                const progress = score;
+                
+                const problems = [
+                    ["Leads getting lost in messages", "No follow-up system", "Slow response times", "Unknown close rate", "Time stuck in follow-ups"],
+                    ["No content calendar", "Posts get no engagement", "Generic content", "No marketing budget", "Unclear media buying"],
+                    ["Unclear roles", "You're doing everything", "Poor onboarding", "Tasks falling through", "No documented processes"],
+                    ["Can't see your profit", "Unknown customer cost", "Unpredictable income", "Messy financial records", "Can't pay yourself"],
+                    ["Wasting time on manual work", "No automation/AI", "Overwhelmed with tasks", "Scaling is impossible", "Everything depends on you"]
+                ];
+
+                const solutions = [
+                    ["Implement a sales tracking system", "Create automated follow-up sequences", "Set up instant response protocols", "Track close rate metrics", "Delegate follow-ups to team"],
+                    ["Build content calendar (30-day plan)", "Create problem-solving content", "Set marketing budget", "Use content generation tools", "Track engagement metrics"],
+                    ["Document all roles clearly", "Create onboarding process", "Delegate specific tasks", "Create accountability system", "Build process documentation"],
+                    ["Monthly profit dashboard", "Calculate CAC metrics", "Financial forecasting", "Organize all records", "Setup salary system"],
+                    ["Audit all manual tasks", "Implement automation tools", "Use AI for repetitive work", "Build systems for scaling", "Create delegation structure"]
+                ];
+
+                html += `
+                    <div class="score-card">
+                        <div class="score-header">
+                            <div class="score-title">
+                                <h2>${section.emoji} ${section.name}</h2>
+                                <p>Your current health score</p>
+                            </div>
+                            <div>
+                                <div class="big-score">${score}</div>
+                                <div class="score-label">OUT OF 100</div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progress}%; background: linear-gradient(90deg, ${section.color} 0%, ${section.color}dd 100%);"></div>
+                        </div>
+
+                        <h3 style="color: var(--primary); margin-bottom: 20px; font-weight: 700; font-size: 18px;">🚨 Problems We Identified:</h3>
+                        <div class="problem-box">
+                            <ul style="margin-left: 20px;">
+                                ${problems[idx].map(p => `<li>• ${p}</li>`).join('')}
+                            </ul>
+                        </div>
+
+                        <h3 style="color: var(--primary); margin-bottom: 20px; margin-top: 30px; font-weight: 700; font-size: 18px;">✅ How Bricks Fixes This:</h3>
+                        <div class="solution-box">
+                            <ul>
+                                ${solutions[idx].map(s => `<li>✓ ${s}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            const overallScore = Math.round((calculateScore(0) + calculateScore(1) + calculateScore(2) + calculateScore(3) + calculateScore(4)) / 5);
+            
+            html += `
+                <div style="background: linear-gradient(135deg, rgba(255,107,53,0.1) 0%, rgba(102,126,234,0.1) 100%); padding: 50px; border-radius: 16px; margin-top: 50px; text-align: center; border: 2px solid rgba(255,107,53,0.2);">
+                    <h2 style="color: var(--primary); margin-bottom: 15px; font-size: 32px;">Your Overall Health Score</h2>
+                    <div style="font-size: 96px; font-weight: 900; color: var(--accent); margin: 20px 0;">${overallScore}</div>
+                    <p style="color: var(--sage); font-size: 16px; margin-bottom: 30px;">
+                        ${overallScore >= 70 ? "You're on the right track! Small optimizations can unlock massive growth." : 
+                          overallScore >= 50 ? "You have solid foundations. Let's fill the critical gaps costing you money." : 
+                          "You're hemorrhaging money and time. Let's fix this now."}
+                    </p>
+                    <p style="color: var(--primary); font-size: 16px; font-weight: 600;">💡 The gaps you identified above are EXACTLY what the Bricks Blueprint solves.</p>
+                </div>
+                
+                <div class="upsell">
+                    <div class="package">
+                        <h4>Bricks Blueprint</h4>
+                        <div class="package-price">$59</div>
+                        <div class="package-period">One-time investment</div>
+                        <ul>
+                            <li>Sales Follow-Up System (automated)</li>
+                            <li>Financial Dashboard (profit tracking)</li>
+                            <li>AI Content Plan Generator</li>
+                            <li>Team Onboarding Template</li>
+                            <li>All 5 Dashboard Templates</li>
+                            <li>Implementation video training</li>
+                        </ul>
+                        <button class="btn" style="margin-top: 30px; background: linear-gradient(135deg, #ff6b35 0%, #ff8a50 100%);">Get Bricks Blueprint Now</button>
+                    </div>
+                    
+                    <div class="package premium">
+                        <div class="premium-badge">RECOMMENDED</div>
+                        <h4>Live Consultation</h4>
+                        <div class="package-price">$199</div>
+                        <div class="package-period">Everything + personalized strategy</div>
+                        <ul>
+                            <li>Everything in Blueprint PLUS:</li>
+                            <li>90-min strategy session with Sarah</li>
+                            <li>Custom growth plan for YOUR business</li>
+                            <li>30-day implementation support</li>
+                            <li>Private WhatsApp access</li>
+                            <li>1-month group coaching calls</li>
+                            <li>Exclusive resources & templates</li>
+                        </ul>
+                        <button class="btn" style="margin-top: 30px;">Book Your Consultation Now</button>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('reportContainer').innerHTML = html;
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeCountryDropdown);
+        } else {
+            initializeCountryDropdown();
+        }
+    </script>
+</body>
+</html>
