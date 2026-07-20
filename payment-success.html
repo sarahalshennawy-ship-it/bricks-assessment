@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Successful — Bricks & Co</title>
+<style>
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#FDF8F4;min-height:100vh;display:flex;align-items:center;justify-content:center;margin:0;padding:20px}
+  .card{max-width:480px;text-align:center;background:#fff;border-radius:16px;padding:44px 32px;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
+  .check{font-size:52px;margin-bottom:10px}
+  h1{color:#2C1F17;font-size:22px;margin-bottom:12px}
+  p{color:#666;font-size:15px;line-height:1.6;margin-bottom:8px}
+  .note{font-size:13px;color:#999;margin-top:24px}
+  .badge{display:inline-block;background:#7A7D45;color:#fff;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;margin-bottom:14px}
+</style>
+</head>
+<body>
+  <div class="card" id="card">
+    <div class="check">✅</div>
+    <h1 id="title">Payment received — thank you!</h1>
+    <p id="body">We're sending your files to the email address you provided. This usually arrives within a minute or two.</p>
+    <p class="note">Didn't get it? Check your spam folder, or WhatsApp us and we'll resend it right away.</p>
+  </div>
+  <script>
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('free') === 'true') {
+      var card = document.getElementById('card');
+      var badge = document.createElement('div');
+      badge.className = 'badge';
+      badge.textContent = 'FREE ACCESS';
+      card.insertBefore(badge, card.firstChild);
+      document.getElementById('title').textContent = "You're all set — no charge!";
+      document.getElementById('body').textContent = "Your promo code was applied and this was completely free. We're sending your files to your email now.";
+    }
+  </script>
+</body>
+</html>
