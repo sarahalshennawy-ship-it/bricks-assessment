@@ -79,6 +79,13 @@ async function sendDeliveryEmail({ to, name, tier }) {
 }
 
 module.exports = async (req, res) => {
+  // Ziina (or other tools) may send a GET/HEAD request to verify this URL
+  // is real and responding before accepting webhook registration.
+  if (req.method === "GET" || req.method === "HEAD") {
+    res.status(200).json({ status: "ok" });
+    return;
+  }
+
   if (req.method !== "POST") {
     res.status(405).end();
     return;
