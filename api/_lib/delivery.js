@@ -6,6 +6,7 @@
 const crypto = require("crypto");
 
 const CONTENT_TOOL_URL = "https://bricks-content-plan.vercel.app";
+const SITE_URL = process.env.SITE_URL || "https://bricks-assessment.vercel.app";
 
 // Automatically issues a Content Plan Generator access code, valid for 30
 // days, by calling the content generator's own issue-code endpoint. Retries
@@ -88,12 +89,33 @@ async function sendDeliveryEmail({ to, name, tier, contentToolCode }) {
         ? `<p style="color:#a8402e">We're finishing setting up your Content Plan Generator access — you'll get a follow-up email with your code shortly.</p>`
         : "");
 
+  // Upgrade upsell - only shown to Blueprint buyers, since Consultation buyers
+  // already have the sessions and upgrade buyers already saw this once.
+  const upgradeUpsell = (tier === "blueprint")
+    ? `
+      <div style="background:linear-gradient(135deg,#5b3a8e,#7a4fb5);border-radius:14px;padding:28px 24px;margin:28px 0;text-align:center">
+        <p style="margin:0 0 6px 0;color:#F6C74B;font-size:12px;font-weight:bold;letter-spacing:1px;text-transform:uppercase">🚀 Ready to go further?</p>
+        <p style="margin:0 0 16px 0;color:#ffffff;font-size:22px;font-weight:900;line-height:1.3">Don't just have the tools — have someone build the plan with you.</p>
+        <table role="presentation" style="margin:0 auto 18px;text-align:left" cellpadding="0" cellspacing="0">
+          <tr><td style="color:#F6C74B;font-size:15px;padding:4px 8px 4px 0;vertical-align:top">✓</td><td style="color:#ffffff;font-size:15px;padding:4px 0">A baseline strategy session (45–60 min) — we review your actual numbers together</td></tr>
+          <tr><td style="color:#F6C74B;font-size:15px;padding:4px 8px 4px 0;vertical-align:top">✓</td><td style="color:#ffffff;font-size:15px;padding:4px 0">A progress-check session 30 days later — we adjust what's working and fix what isn't</td></tr>
+          <tr><td style="color:#F6C74B;font-size:15px;padding:4px 8px 4px 0;vertical-align:top">✓</td><td style="color:#ffffff;font-size:15px;padding:4px 0">A custom action plan built specifically for your business — not generic advice</td></tr>
+          <tr><td style="color:#F6C74B;font-size:15px;padding:4px 8px 4px 0;vertical-align:top">✓</td><td style="color:#ffffff;font-size:15px;padding:4px 0">Direct access to a real strategist who already knows your toolkit results</td></tr>
+        </table>
+        <p style="margin:0 0 4px 0"><span style="color:#cbb8e8;font-size:16px;text-decoration:line-through">$199</span> <span style="color:#F6C74B;font-size:30px;font-weight:900"> $50</span></p>
+        <p style="margin:0 0 20px 0;color:#e8ddf5;font-size:12px">Exclusive upgrade price — for Blueprint owners only</p>
+        <a href="${SITE_URL}/upgrade.html?email=${encodeURIComponent(to)}${name ? "&name=" + encodeURIComponent(name) : ""}" style="display:inline-block;background:#F6C74B;color:#3a1f5c;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:900;font-size:16px">Claim My $50 Upgrade →</a>
+      </div>
+    `
+    : "";
+
   const html = `
     <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;color:#2C1F17">
       <h2>${greeting}</h2>
       <p>Thank you for your purchase! Here is everything you need to get started:</p>
       ${filesLine}
       ${contentToolLine}
+      ${upgradeUpsell}
       ${bookingLine}
       <p>If you have any questions, just reply to this email.</p>
       <p>— The Bricks &amp; Co Team</p>
