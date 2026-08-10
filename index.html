@@ -190,6 +190,15 @@
         .goalarrow { font-size: 24px; color: var(--sage); }
         .goalsub { margin-top: 16px; font-size: 13px; color: var(--sage); }
         .emailconfirm { text-align: center; font-size: 14px; color: var(--primary); background: #f0ebe6; border-radius: 10px; padding: 12px 20px; margin: 20px auto; max-width: 480px; }
+        .otp-overlay { position: fixed; inset: 0; background: rgba(20,15,10,0.6); display: flex; align-items: center; justify-content: center; z-index: 999; padding: 20px; }
+        .otp-box { background: #fff; border-radius: 16px; padding: 32px 28px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        .otp-title { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+        .otp-sub { font-size: 13px; color: #666; margin-bottom: 18px; line-height: 1.5; }
+        .otp-input { width: 100%; padding: 14px; font-size: 24px; letter-spacing: 10px; text-align: center; border-radius: 10px; border: 1.5px solid #e0d8d3; outline: none; }
+        .otp-input:focus { border-color: var(--accent); }
+        .otp-msg { font-size: 13px; color: #C4614B; min-height: 18px; margin-top: 10px; }
+        .otp-links { display: flex; justify-content: space-between; margin-top: 18px; font-size: 12.5px; }
+        .otp-links a { color: var(--accent); text-decoration: none; cursor: pointer; }
         .emailconfirmsub { font-size: 11.5px; color: var(--sage); margin-top: 4px; }
         
         .score-card {
@@ -346,7 +355,7 @@
         .lang-btn:hover{background:rgba(255,255,255,0.2);border-color:#fff}
         .langtoggle{position:absolute;top:20px;inset-inline-end:20px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer}
         @media print {
-            .no-print, #signup-screen, #intro-screen, #assessment-screen, #lang-screen, .langtoggle { display: none !important; }
+            .no-print, #signup-screen, #intro-screen, #assessment-screen, #lang-screen, .langtoggle, #otpModal { display: none !important; }
             body { background: #fff !important; }
             .container { max-width: 100%; padding: 0; }
             #dashboard-screen { display: block !important; }
@@ -714,6 +723,9 @@
                 optRev: ["<$50k","$50-100k","$100-500k","$500k+"],
                 startAssessment: "Start Assessment →",
                 reportTitle: "Your Growth Diagnostic Report", preparedFor: "Prepared for ", downloadPdf: "Download as PDF",
+                otpTitle: "Verify your email", otpSub: "We sent a 6-digit code to", otpVerifyBtn: "Verify & Continue",
+                otpResend: "Resend code", otpCancel: "Cancel", otpResent: "Code resent - check your inbox.",
+                otpWrongCode: "That code isn't correct. Please try again.", otpExpired: "This code expired or is no longer valid. Please close this and click the button again.",
                 redeemBtn: "🎟️ Redeem Code", applyBtn: "Apply", couponPlaceholder: "Enter code",
                 couponApplying: "Checking code...", couponInvalid: "That code isn't valid.",
                 couponAppliedFree: "✓ Code applied — this is on us!", couponAppliedPct: (p) => `✓ Code applied — ${p}% off!`,
@@ -763,6 +775,9 @@
                 optRev: ["أقل من 50 ألف دولار","50-100 ألف دولار","100-500 ألف دولار","أكثر من 500 ألف دولار"],
                 startAssessment: "ابدأ التقييم ←",
                 reportTitle: "تقرير تشخيص نمو عملك", preparedFor: "أُعِدّ لـ ", downloadPdf: "تحميل كملف PDF",
+                otpTitle: "تأكيد بريدك الإلكتروني", otpSub: "أرسلنا كود مكوّن من 6 أرقام إلى", otpVerifyBtn: "تأكيد ومتابعة",
+                otpResend: "إعادة إرسال الكود", otpCancel: "إلغاء", otpResent: "تم إعادة إرسال الكود - تحقق من بريدك.",
+                otpWrongCode: "هذا الكود غير صحيح. حاول مرة أخرى.", otpExpired: "انتهت صلاحية هذا الكود. أغلق هذه النافذة واضغط على الزر مرة أخرى.",
                 redeemBtn: "🎟️ استبدال كود", applyBtn: "تطبيق", couponPlaceholder: "أدخل الكود",
                 couponApplying: "جارٍ التحقق من الكود...", couponInvalid: "هذا الكود غير صالح.",
                 couponAppliedFree: "✓ تم تفعيل الكود — هذه الباقة مجانية!", couponAppliedPct: (p) => `✓ تم تفعيل الكود — خصم ${p}%!`,
@@ -1193,39 +1208,144 @@
             document.getElementById('couponApplyBtn').onclick = applyCoupon;
         }
 
+        var otpPending = { tier: null, token: null, btnEl: null, originalText: null };
+
         async function startPayment(tier, btnEl) {
             const originalText = btnEl.textContent;
             btnEl.disabled = true;
-            btnEl.textContent = LANG === 'ar' ? 'جارٍ التحويل...' : 'Redirecting...';
+            btnEl.textContent = LANG === 'ar' ? 'جارٍ إرسال الكود...' : 'Sending code...';
+
+            const email = sessionStorage.getItem('userEmail') || '';
+
+            try {
+                const res = await fetch('/api/send-verification', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, tier: tier })
+                });
+                const data = await res.json();
+
+                if (!res.ok || !data.token) {
+                    throw new Error(data.error || 'Could not send verification code');
+                }
+
+                otpPending = { tier: tier, token: data.token, btnEl: btnEl, originalText: originalText };
+                openOtpModal();
+                btnEl.disabled = false;
+                btnEl.textContent = originalText;
+            } catch (err) {
+                console.error(err);
+                alert(LANG === 'ar' ? 'تعذر إرسال كود التحقق. حاول مرة أخرى.' : 'Could not send the verification code. Please try again.');
+                btnEl.disabled = false;
+                btnEl.textContent = originalText;
+            }
+        }
+
+        function openOtpModal() {
+            const ar = (LANG === 'ar');
+            const email = sessionStorage.getItem('userEmail') || '';
+            let modal = document.getElementById('otpModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'otpModal';
+                document.body.appendChild(modal);
+            }
+            modal.innerHTML = `
+                <div class="otp-overlay">
+                    <div class="otp-box">
+                        <div class="otp-title">${T[LANG].otpTitle}</div>
+                        <div class="otp-sub">${T[LANG].otpSub} <b>${esc(email)}</b></div>
+                        <input type="text" id="otpInput" class="otp-input" maxlength="6" inputmode="numeric" placeholder="000000">
+                        <div id="otpMsg" class="otp-msg"></div>
+                        <button type="button" class="btn" id="otpVerifyBtn" onclick="submitOtpCode()" style="width:100%;margin-top:10px">${T[LANG].otpVerifyBtn}</button>
+                        <div class="otp-links">
+                            <a href="#" onclick="resendOtpCode();return false;">${T[LANG].otpResend}</a>
+                            <a href="#" onclick="closeOtpModal();return false;">${T[LANG].otpCancel}</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            modal.style.display = 'block';
+            setTimeout(() => { const el = document.getElementById('otpInput'); if (el) el.focus(); }, 50);
+        }
+
+        function closeOtpModal() {
+            const modal = document.getElementById('otpModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        async function submitOtpCode() {
+            const ar = (LANG === 'ar');
+            const code = (document.getElementById('otpInput').value || '').trim();
+            const msgEl = document.getElementById('otpMsg');
+            const verifyBtn = document.getElementById('otpVerifyBtn');
+
+            if (!code) return;
+
+            verifyBtn.disabled = true;
+            verifyBtn.textContent = ar ? 'جارٍ التحقق...' : 'Verifying...';
+            msgEl.textContent = '';
 
             try {
                 const res = await fetch('/api/create-payment', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        tier: tier,
+                        token: otpPending.token,
+                        code: code,
+                        tier: otpPending.tier,
                         name: sessionStorage.getItem('userName') || '',
                         email: sessionStorage.getItem('userEmail') || '',
                         coupon: appliedCoupon || ''
                     })
                 });
-
                 const data = await res.json();
 
                 if (!res.ok) {
-                    throw new Error(data.error || 'Payment could not be started');
+                    const reasonMsgs = {
+                        wrong_code: T[LANG].otpWrongCode,
+                        expired: T[LANG].otpExpired,
+                        mismatch: T[LANG].otpExpired,
+                        malformed_token: T[LANG].otpExpired,
+                        invalid_signature: T[LANG].otpExpired,
+                        malformed_payload: T[LANG].otpExpired
+                    };
+                    msgEl.textContent = reasonMsgs[data.reason] || (ar ? 'حدث خطأ. حاول مرة أخرى.' : 'Something went wrong. Please try again.');
+                    verifyBtn.disabled = false;
+                    verifyBtn.textContent = T[LANG].otpVerifyBtn;
+                    return;
                 }
 
-                if (!data.redirect_url) {
-                    throw new Error('No redirect URL returned');
-                }
+                if (!data.redirect_url) throw new Error('No redirect URL returned');
 
                 window.location.href = data.redirect_url;
             } catch (err) {
                 console.error(err);
-                alert(LANG === 'ar' ? 'حدث خطأ في بدء عملية الدفع. حاول مرة أخرى.' : 'Something went wrong starting payment. Please try again.');
-                btnEl.disabled = false;
-                btnEl.textContent = originalText;
+                msgEl.textContent = ar ? 'حدث خطأ. حاول مرة أخرى.' : 'Something went wrong. Please try again.';
+                verifyBtn.disabled = false;
+                verifyBtn.textContent = T[LANG].otpVerifyBtn;
+            }
+        }
+
+        async function resendOtpCode() {
+            const ar = (LANG === 'ar');
+            const msgEl = document.getElementById('otpMsg');
+            const email = sessionStorage.getItem('userEmail') || '';
+            msgEl.style.color = '#7A7D45';
+            msgEl.textContent = ar ? 'جارٍ إعادة الإرسال...' : 'Resending...';
+            try {
+                const res = await fetch('/api/send-verification', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, tier: otpPending.tier })
+                });
+                const data = await res.json();
+                if (!res.ok || !data.token) throw new Error('resend failed');
+                otpPending.token = data.token;
+                msgEl.textContent = T[LANG].otpResent;
+            } catch (err) {
+                msgEl.style.color = '#C4614B';
+                msgEl.textContent = ar ? 'تعذر إعادة الإرسال. حاول مرة أخرى.' : 'Could not resend. Please try again.';
             }
         }
 
