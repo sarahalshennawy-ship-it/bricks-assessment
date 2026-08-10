@@ -151,6 +151,15 @@
         
         /* Assessment */
         .assessment { max-width: 900px; margin: 0 auto; background: var(--white); padding: 50px; border-radius: 16px; }
+        .break-panel { max-width: 640px; margin: 0 auto; background: var(--white); padding: 56px 44px; border-radius: 20px; text-align: center; }
+        .break-illust { width: 180px; height: 180px; margin: 0 auto 28px; }
+        .break-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+        .break-title { font-size: 24px; font-weight: 800; color: var(--primary); margin-bottom: 18px; }
+        .break-insight { font-size: 16px; color: #555; line-height: 1.7; margin-bottom: 34px; font-style: italic; }
+        .break-progress { display: flex; justify-content: center; gap: 6px; margin-bottom: 30px; }
+        .break-dot { width: 8px; height: 8px; border-radius: 50%; background: #e0e0e0; }
+        .break-dot.done { background: var(--success); }
+        .break-dot.next { background: var(--accent); }
         .assessment h2 { font-size: 32px; margin-bottom: 15px; color: var(--primary); }
         .question-block { margin-bottom: 40px; }
         .question-block h3 { font-size: 18px; font-weight: 700; margin-bottom: 25px; color: var(--primary); }
@@ -521,6 +530,11 @@
             </div>
         </div>
 
+        <!-- Break screen between sections -->
+        <div id="break-screen" class="screen">
+            <div class="break-panel" id="breakPanel"></div>
+        </div>
+
         <!-- Dashboard -->
         <div id="dashboard-screen" class="screen">
             <h1 id="txtReportTitle">Your Growth Diagnostic Report</h1>
@@ -675,6 +689,91 @@
         let currentSection = 0;
         let answers = {};
         function scrollToTop() { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); }
+
+        const BREAK_ILLUSTRATIONS = [
+            null,
+            `<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="30" y="50" width="90" height="110" rx="12" fill="var(--accent)" opacity="0.15"/>
+                <rect x="55" y="35" width="90" height="110" rx="12" fill="var(--accent)" opacity="0.35"/>
+                <rect x="80" y="20" width="90" height="110" rx="12" fill="var(--accent)"/>
+                <rect x="95" y="40" width="60" height="8" rx="4" fill="white"/>
+                <rect x="95" y="56" width="45" height="8" rx="4" fill="white" opacity="0.7"/>
+                <circle cx="165" cy="150" r="18" fill="var(--warning)"/>
+                <path d="M165 142 L167 148 L173 148 L168 152 L170 158 L165 154 L160 158 L162 152 L157 148 L163 148 Z" fill="white"/>
+            </svg>`,
+            `<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <line x1="100" y1="60" x2="55" y2="130" stroke="var(--sage)" stroke-width="4"/>
+                <line x1="100" y1="60" x2="145" y2="130" stroke="var(--sage)" stroke-width="4"/>
+                <line x1="55" y1="130" x2="145" y2="130" stroke="var(--sage)" stroke-width="4" opacity="0.4"/>
+                <circle cx="100" cy="60" r="28" fill="var(--accent)"/>
+                <circle cx="55" cy="130" r="22" fill="var(--warning)"/>
+                <circle cx="145" cy="130" r="22" fill="var(--success)"/>
+            </svg>`,
+            `<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="30" y="130" width="30" height="50" rx="6" fill="var(--sage)" opacity="0.4"/>
+                <rect x="75" y="100" width="30" height="80" rx="6" fill="var(--warning)" opacity="0.7"/>
+                <rect x="120" y="65" width="30" height="115" rx="6" fill="var(--accent)"/>
+                <path d="M35 95 L80 70 L125 45 L165 25" stroke="var(--success)" stroke-width="5" stroke-linecap="round" fill="none"/>
+                <circle cx="165" cy="25" r="8" fill="var(--success)"/>
+            </svg>`,
+            `<svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="100" cy="100" r="45" fill="var(--accent)" opacity="0.15"/>
+                <rect x="80" y="30" width="40" height="30" rx="8" fill="var(--accent)"/>
+                <rect x="80" y="140" width="40" height="30" rx="8" fill="var(--accent)"/>
+                <rect x="30" y="80" width="30" height="40" rx="8" fill="var(--sage)"/>
+                <rect x="140" y="80" width="30" height="40" rx="8" fill="var(--sage)"/>
+                <circle cx="100" cy="100" r="30" fill="white" stroke="var(--accent)" stroke-width="5"/>
+                <circle cx="100" cy="100" r="10" fill="var(--accent)"/>
+            </svg>`
+        ];
+
+        const BREAK_CONTENT = [
+            null,
+            { en: { title: "Marketing & Content", insight: "Content isn't about being everywhere — it's about being consistent where your customers already are." },
+              ar: { title: "التسويق والمحتوى", insight: "المحتوى لا يعني التواجد في كل مكان، بل الانتظام في المكان الذي يتواجد فيه عملاؤك بالفعل." } },
+            { en: { title: "Team & Operations", insight: "A business that depends entirely on its founder isn't a business yet — it's a job." },
+              ar: { title: "الفريق والعمليات", insight: "العمل الذي يعتمد بالكامل على مؤسسه ليس مشروعًا بعد، بل وظيفة." } },
+            { en: { title: "Financial Health", insight: "You can't fix what you don't measure — most business owners realize this too late." },
+              ar: { title: "الوضع المالي", insight: "لا يمكنك إصلاح ما لا تقيسه، ومعظم أصحاب الأعمال يدركون ذلك متأخرًا." } },
+            { en: { title: "Systems & Scale", insight: "The goal isn't to work harder — it's to build systems that work without you." },
+              ar: { title: "الأنظمة والتوسع", insight: "الهدف ليس العمل بجهد أكبر، بل بناء أنظمة تعمل من دونك." } }
+        ];
+
+        function showBreakScreen(idx) {
+            const ar = (LANG === 'ar');
+            const content = BREAK_CONTENT[idx][LANG];
+            const eyebrow = ar ? 'التالي' : 'Up Next';
+            const btnLabel = ar ? 'متابعة ←' : 'Continue →';
+
+            let dots = '';
+            for (let i = 0; i < 5; i++) {
+                let cls = 'break-dot';
+                if (i < idx) cls += ' done';
+                else if (i === idx) cls += ' next';
+                dots += `<span class="${cls}"></span>`;
+            }
+
+            document.getElementById('breakPanel').innerHTML = `
+                <div class="break-illust">${BREAK_ILLUSTRATIONS[idx]}</div>
+                <div class="break-eyebrow">${eyebrow}</div>
+                <div class="break-title">${esc(content.title)}</div>
+                <div class="break-insight">${esc(content.insight)}</div>
+                <div class="break-progress">${dots}</div>
+                <button type="button" class="btn" onclick="continueFromBreak()">${btnLabel}</button>
+            `;
+
+            document.getElementById('assessment-screen').classList.remove('active');
+            document.getElementById('break-screen').classList.add('active');
+            scrollToTop();
+        }
+
+        function continueFromBreak() {
+            document.getElementById('break-screen').classList.remove('active');
+            document.getElementById('assessment-screen').classList.add('active');
+            renderSection();
+            scrollToTop();
+        }
+
         function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
         let introAnswers = {};
         let LANG = 'en';
@@ -969,8 +1068,7 @@
         function nextSection() {
             if (currentSection < 4) {
                 currentSection++;
-                renderSection();
-                scrollToTop();
+                showBreakScreen(currentSection);
             } else {
                 showDashboard();
             }
