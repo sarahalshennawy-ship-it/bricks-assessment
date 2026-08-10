@@ -1,5 +1,6 @@
 const crypto = require("crypto");
 const { deliverPurchase } = require("./_lib/delivery.js");
+const { consumePendingPurchase } = require("./_lib/store.js");
 
 // Vercel gives us the raw body via req.body already parsed as an object by
 // default for JSON content-type. We need the RAW string to verify the HMAC,
@@ -88,7 +89,12 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const contentToolCode = await deliverPurchase({ email, name: null, tier });
+    const pending = await consumePendingPurchase(email);
+    const name = pending ? pending.name : null;
+    const coupon = pending ? pending.coupon : null;
+    const amountPaid = pending && typeof pending.amountFils === "number" ? pending.amountFils / 100 : null;
+
+    const contentToolCode = await deliverPurchase({ email, name, tier, coupon, amountPaid });
     res.status(200).json({ received: true, action: "delivered", tier, email, contentToolCode: contentToolCode || "manual_needed" });
   } catch (err) {
     console.error("Delivery email failed:", err);
