@@ -1118,6 +1118,32 @@
             return Math.round(score / answered.length);
         }
 
+        function trackUserData() {
+            var email = sessionStorage.getItem('userEmail');
+            if (!email) return;
+
+            var introAnswers = {};
+            try { introAnswers = JSON.parse(sessionStorage.getItem('introAnswers') || '{}'); } catch (e) {}
+
+            var sectionScores = [calculateScore(0), calculateScore(1), calculateScore(2), calculateScore(3), calculateScore(4)];
+            var overallScore = Math.round(sectionScores.reduce(function(a, b) { return a + b; }, 0) / 5);
+
+            // Fire-and-forget - never blocks or interrupts the user's experience.
+            fetch('/api/track-user', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: email,
+                    name: sessionStorage.getItem('userName') || '',
+                    businessName: sessionStorage.getItem('businessName') || '',
+                    phone: sessionStorage.getItem('userPhone') || '',
+                    introAnswers: introAnswers,
+                    overallScore: overallScore,
+                    sectionScores: sectionScores
+                })
+            }).catch(function() {});
+        }
+
         function showDashboard() {
             document.getElementById('assessment-screen').classList.remove('active');
             document.getElementById('dashboard-screen').classList.add('active');
@@ -1125,6 +1151,8 @@
             
             document.getElementById('reportName').textContent = sessionStorage.getItem('userName');
             document.getElementById('reportBusiness').textContent = sessionStorage.getItem('businessName');
+
+            trackUserData();
 
             let goalHtml = '';
             try {
