@@ -129,19 +129,18 @@ module.exports = async (req, res) => {
     return;
   }
 
-  let packed;
-  try {
-    packed = JSON.parse(intent.message);
-  } catch (e) {
+  const TIER_CODE_REVERSE = { b: "blueprint", c: "consultation", u: "upgrade" };
+  const [tierCode, email] = (intent.message || "").split("|");
+  const tier = TIER_CODE_REVERSE[tierCode];
+
+  if (!tier || !email) {
     console.error("Ziina webhook: could not parse packed message", intent.message);
     res.status(200).json({ received: true, action: "error", detail: "unparseable message" });
     return;
   }
 
-  const { tier, email, name } = packed;
-
   try {
-    await sendDeliveryEmail({ to: email, name, tier });
+    await sendDeliveryEmail({ to: email, name: null, tier });
     res.status(200).json({ received: true, action: "delivered", tier, email });
   } catch (err) {
     console.error("Delivery email failed:", err);

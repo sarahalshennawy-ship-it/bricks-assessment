@@ -63,10 +63,15 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // We pack tier + email + name into the "message" field so the webhook
-    // can identify who bought what once payment succeeds (Ziina's payment
-    // intent object doesn't have a separate metadata field).
-    const packedMessage = JSON.stringify({ tier, email, name: name || "" }).slice(0, 500);
+    // Pack tier + email into a short code so the webhook can identify who
+    // bought what once payment succeeds (Ziina's payment intent has no
+    // separate metadata field, and the "message" field has a real length
+    // limit we hit with the previous full-JSON approach). We drop the name
+    // here to stay safely short - the delivery email just won't be personalized
+    // by name. This is a stopgap; a Redis-backed reference code would be more
+    // robust for edge cases with very long email addresses.
+    const TIER_CODE = { blueprint: "b", consultation: "c", upgrade: "u" };
+    const packedMessage = `${TIER_CODE[tier]}|${email}`.slice(0, 60);
 
     const ziinaRes = await fetch("https://api-v2.ziina.com/api/payment_intent", {
       method: "POST",
