@@ -674,6 +674,7 @@
 
         let currentSection = 0;
         let answers = {};
+        function scrollToTop() { window.scrollTo({ top: 0, left: 0, behavior: 'instant' }); }
         function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
         let introAnswers = {};
         let LANG = 'en';
@@ -835,6 +836,7 @@
             document.getElementById('mainHeader').style.display = '';
             document.getElementById('lang-screen').classList.remove('active');
             document.getElementById('signup-screen').classList.add('active');
+            scrollToTop();
         }
 
         function switchLang() {
@@ -912,6 +914,7 @@
             
             document.getElementById('signup-screen').classList.remove('active');
             document.getElementById('intro-screen').classList.add('active');
+            scrollToTop();
         }
 
         function selectIntro(field, value, element) {
@@ -929,6 +932,7 @@
             sessionStorage.setItem('introAnswers', JSON.stringify(introAnswers));
             document.getElementById('intro-screen').classList.remove('active');
             document.getElementById('assessment-screen').classList.add('active');
+            scrollToTop();
             renderSection();
         }
 
@@ -966,6 +970,7 @@
             if (currentSection < 4) {
                 currentSection++;
                 renderSection();
+                scrollToTop();
             } else {
                 showDashboard();
             }
@@ -975,6 +980,7 @@
             if (currentSection > 0) {
                 currentSection--;
                 renderSection();
+                scrollToTop();
             }
         }
 
@@ -997,6 +1003,7 @@
         function showDashboard() {
             document.getElementById('assessment-screen').classList.remove('active');
             document.getElementById('dashboard-screen').classList.add('active');
+            scrollToTop();
             
             document.getElementById('reportName').textContent = sessionStorage.getItem('userName');
             document.getElementById('reportBusiness').textContent = sessionStorage.getItem('businessName');
