@@ -7,10 +7,17 @@ const crypto = require("crypto");
 const { deliverPurchase } = require("./_lib/delivery.js");
 
 // Pricing in fils (1 AED = 100 fils). Update these if pricing changes.
+//
+// *** LAUNCH DISCOUNT ACTIVE (50% off, since Aug 2026, manual toggle) ***
+// blueprint and consultation are currently HALVED from their normal price.
+// ORIGINAL_blueprint: 21900 fils (219 AED, ~$59)
+// ORIGINAL_consultation: 72900 fils (729 AED, ~$199)
+// To revert: change amountFils below back to the ORIGINAL_ values above,
+// and also revert the pricing display in index.html (search "LAUNCH DISCOUNT").
 const TIER_PRICING = {
-  blueprint: { amountFils: 21900, label: "Bricks Blueprint" },      // 219 AED (~$59)
-  consultation: { amountFils: 72900, label: "Bricks Consultation Package" }, // 729 AED (~$199)
-  upgrade: { amountFils: 36500, label: "Consultation Upgrade" }     // 365 AED (~$99) - hidden upgrade, not linked publicly
+  blueprint: { amountFils: 10950, label: "Bricks Blueprint" },      // 109.50 AED (~$29.50) - 50% off
+  consultation: { amountFils: 36450, label: "Bricks Consultation Package" }, // 364.50 AED (~$99.50) - 50% off
+  upgrade: { amountFils: 36500, label: "Consultation Upgrade" }     // 365 AED (~$99) - hidden upgrade, NOT discounted, not linked publicly
 };
 
 // Coupon codes live in the COUPON_CODES environment variable as JSON, e.g.:
