@@ -4,6 +4,7 @@
 // means both paths stay in sync automatically.
 
 const crypto = require("crypto");
+const { upsertUser } = require("./store.js");
 
 const CONTENT_TOOL_URL = "https://bricks-content-plan.vercel.app";
 const SITE_URL = process.env.SITE_URL || "https://bricks-assessment.vercel.app";
@@ -143,9 +144,12 @@ async function sendDeliveryEmail({ to, name, tier, contentToolCode }) {
 }
 
 // One convenience function that does the whole delivery: issue a content
-// tool code (if this tier needs one) and send the email. Used identically
-// by both the webhook (real payments) and create-payment.js (free coupons).
-async function deliverPurchase({ email, name, tier }) {
+// tool code (if this tier needs one), send the email, and record the sale
+// against this person's tracked profile. Used identically by both the
+// webhook (real payments) and create-payment.js (free coupons).
+const TIER_TO_STATUS = { blueprint: "purchased_blueprint", consultation: "purchased_consultation", upgrade: "purchased_upgrade" };
+
+async function deliverPurchase({ email, name, tier, coupon, amountPaid }) {
   let contentToolCode = null;
   if (TIER_CONTENT[tier] && TIER_CONTENT[tier].includeContentTool) {
     contentToolCode = await issueContentToolCode();
@@ -154,6 +158,22 @@ async function deliverPurchase({ email, name, tier }) {
     }
   }
   await sendDeliveryEmail({ to: email, name, tier, contentToolCode });
+
+  try {
+    await upsertUser(email, {
+      email,
+      name: name || null,
+      status: TIER_TO_STATUS[tier] || "free_only",
+      couponUsed: coupon || null,
+      amountPaidAED: typeof amountPaid === "number" ? amountPaid : null,
+      purchasedTier: tier,
+      purchasedAt: new Date().toISOString()
+    });
+  } catch (err) {
+    // Never let a tracking failure block actual delivery - just log it loudly.
+    console.error(`Failed to record purchase for ${email}:`, err);
+  }
+
   return contentToolCode;
 }
 
