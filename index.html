@@ -180,6 +180,15 @@
         .dashboard { max-width: 1200px; margin: 0 auto; }
         .dashboard h1 { font-size: 42px; font-weight: 800; color: var(--white); margin-bottom: 10px; }
         .dashboard-subtitle { color: rgba(255,255,255,0.9); font-size: 18px; margin-bottom: 50px; }
+        .goalbox { background: linear-gradient(135deg, rgba(255,107,53,0.08) 0%, rgba(102,126,234,0.08) 100%); border: 2px solid rgba(255,107,53,0.25); border-radius: 16px; padding: 28px 32px; margin-bottom: 36px; text-align: center; }
+        .goalt { font-size: 15px; font-weight: 700; color: var(--primary); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 16px; }
+        .goalrow { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; }
+        .goalcol { min-width: 120px; }
+        .goallbl { font-size: 12px; color: var(--sage); margin-bottom: 4px; }
+        .goalval { font-size: 22px; font-weight: 800; color: var(--primary); }
+        .goalval.accent { color: #ff6b35; }
+        .goalarrow { font-size: 24px; color: var(--sage); }
+        .goalsub { margin-top: 16px; font-size: 13px; color: var(--sage); }
         
         .score-card {
             background: var(--white);
@@ -397,7 +406,7 @@
         <div id="intro-screen" class="screen">
             <div class="intro-container">
                 <h2 id="txtQuickContext">Quick Context</h2>
-                <p id="txtQuickContextSub">Just 4 questions so we can tailor your report perfectly</p>
+                <p id="txtQuickContextSub">Just a few quick questions so we can tailor your report perfectly</p>
                 
                 <div class="intro-group">
                     <label id="lblBizType">Business Type? *</label>
@@ -439,6 +448,35 @@
                         <div class="intro-option" onclick="selectIntro('revenue', '$50k-$100k', this)"><input type="radio" name="revenue"><div><strong id="optRev1">$50-100k</strong></div></div>
                         <div class="intro-option" onclick="selectIntro('revenue', '$100k-$500k', this)"><input type="radio" name="revenue"><div><strong id="optRev2">$100-500k</strong></div></div>
                         <div class="intro-option" onclick="selectIntro('revenue', '$500k+', this)"><input type="radio" name="revenue"><div><strong id="optRev3">$500k+</strong></div></div>
+                    </div>
+                </div>
+
+                <div class="intro-group">
+                    <label id="lblTargetRevenue">What annual revenue are you aiming for? *</label>
+                    <div class="intro-options" style="grid-template-columns: 1fr 1fr;">
+                        <div class="intro-option" onclick="selectIntro('targetRevenue', 'Less than $50k', this)"><input type="radio" name="targetRevenue"><div><strong id="optTRev0">&lt;$50k</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('targetRevenue', '$50k-$100k', this)"><input type="radio" name="targetRevenue"><div><strong id="optTRev1">$50-100k</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('targetRevenue', '$100k-$500k', this)"><input type="radio" name="targetRevenue"><div><strong id="optTRev2">$100-500k</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('targetRevenue', '$500k+', this)"><input type="radio" name="targetRevenue"><div><strong id="optTRev3">$500k+</strong></div></div>
+                    </div>
+                </div>
+
+                <div class="intro-group">
+                    <label id="lblTimeframe">By when do you want to hit that target? *</label>
+                    <div class="intro-options" style="grid-template-columns: 1fr 1fr 1fr;">
+                        <div class="intro-option" onclick="selectIntro('timeframe', '6 months', this)"><input type="radio" name="timeframe"><div><strong id="optTf0">6 months</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('timeframe', '1 year', this)"><input type="radio" name="timeframe"><div><strong id="optTf1">1 year</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('timeframe', '2+ years', this)"><input type="radio" name="timeframe"><div><strong id="optTf2">2+ years</strong></div></div>
+                    </div>
+                </div>
+
+                <div class="intro-group">
+                    <label id="lblTeamSize">Team size (including you)? *</label>
+                    <div class="intro-options" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
+                        <div class="intro-option" onclick="selectIntro('teamSize', 'Just me', this)"><input type="radio" name="teamSize"><div><strong id="optTs0">Just me</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('teamSize', '2-5', this)"><input type="radio" name="teamSize"><div><strong id="optTs1">2-5</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('teamSize', '6-15', this)"><input type="radio" name="teamSize"><div><strong id="optTs2">6-15</strong></div></div>
+                        <div class="intro-option" onclick="selectIntro('teamSize', '16+', this)"><input type="radio" name="teamSize"><div><strong id="optTs3">16+</strong></div></div>
                     </div>
                 </div>
 
@@ -622,6 +660,7 @@
                 currentHealthScore: "Your current health score", outOf100: "OUT OF 100",
                 problemsIdentified: "Problems We Identified:", howBricksFixes: "How Bricks Fixes This:",
                 overallScore: "Your Overall Health Score",
+                growthGap: "Your Growth Gap", currentRevenue: "Current Revenue", targetRevenueLbl: "Target Revenue", timeframeLbl: "Timeframe", teamSizeLbl: "Team Size",
                 scoreHigh: "You're on the right track! Small optimizations can unlock massive growth.",
                 scoreMid: "You have solid foundations. Let's fill the critical gaps costing you money.",
                 scoreLow: "You're hemorrhaging money and time. Let's fix this now.",
@@ -646,8 +685,12 @@
                 lblName: "Full Name *", lblEmail: "Email *", lblBusiness: "Business Name *", lblPhone: "Mobile Number *",
                 phName: "Your name", phEmail: "Your email", phBusiness: "Your business", phSearch: "Search country...", phPhone: "Phone number",
                 btnDiagnostic: "Get My Free Diagnostic →",
-                quickContext: "Quick Context", quickContextSub: "Just 4 questions so we can tailor your report perfectly",
+                quickContext: "Quick Context", quickContextSub: "Just a few quick questions so we can tailor your report perfectly",
                 lblBizType: "Business Type? *", lblIndustry: "Industry? *", lblAge: "How long active? *", lblRevenue: "Annual Revenue? *",
+                lblTargetRevenue: "What annual revenue are you aiming for? *", lblTimeframe: "By when do you want to hit that target? *", lblTeamSize: "Team size (including you)? *",
+                optTRev: ["<$50k","$50-100k","$100-500k","$500k+"],
+                optTf: ["6 months","1 year","2+ years"],
+                optTs: ["Just me","2-5","6-15","16+"],
                 optBizType: ["B2B","B2C Services","E-Commerce","Personal Brand"],
                 optInd: ["Medical","Beauty","F&B","Education","Real Estate","Tech","Consulting","Other"],
                 optAge: ["<1 year","1-3 years","3+ years"],
@@ -666,6 +709,7 @@
                 currentHealthScore: "درجة الصحة الحالية لهذا القسم", outOf100: "من 100",
                 problemsIdentified: "المشكلات التي تم رصدها:", howBricksFixes: "كيف تعالج Bricks هذا الأمر:",
                 overallScore: "درجة الصحة العامة لعملك",
+                growthGap: "فجوة النمو", currentRevenue: "الإيراد الحالي", targetRevenueLbl: "الإيراد المستهدف", timeframeLbl: "الإطار الزمني", teamSizeLbl: "حجم الفريق",
                 scoreHigh: "أنت على المسار الصحيح! تحسينات بسيطة يمكن أن تحقق نمواً كبيراً.",
                 scoreMid: "لديك أسس جيدة. دعنا نسد الفجوات الجوهرية التي تكلفك المال.",
                 scoreLow: "أنت تخسر المال والوقت. دعنا نعالج هذا الأمر الآن.",
@@ -690,8 +734,12 @@
                 lblName: "الاسم الكامل *", lblEmail: "البريد الإلكتروني *", lblBusiness: "اسم النشاط التجاري *", lblPhone: "رقم الجوال *",
                 phName: "اسمك", phEmail: "بريدك الإلكتروني", phBusiness: "اسم نشاطك التجاري", phSearch: "ابحث عن الدولة...", phPhone: "رقم الهاتف",
                 btnDiagnostic: "احصل على تشخيصي المجاني ←",
-                quickContext: "سياق سريع", quickContextSub: "أربعة أسئلة فقط لنُخصص تقريرك بدقة",
+                quickContext: "سياق سريع", quickContextSub: "بضعة أسئلة سريعة فقط لنُخصص تقريرك بدقة",
                 lblBizType: "نوع النشاط التجاري؟ *", lblIndustry: "المجال؟ *", lblAge: "منذ متى تعمل؟ *", lblRevenue: "الإيراد السنوي؟ *",
+                lblTargetRevenue: "ما الإيراد السنوي الذي تطمح إليه؟ *", lblTimeframe: "خلال متى تريد الوصول لهذا الهدف؟ *", lblTeamSize: "حجم الفريق (بما فيهم أنت)؟ *",
+                optTRev: ["أقل من 50 ألف دولار","50-100 ألف دولار","100-500 ألف دولار","أكثر من 500 ألف دولار"],
+                optTf: ["6 أشهر","سنة واحدة","سنتان أو أكثر"],
+                optTs: ["أنا فقط","2-5","6-15","16+"],
                 optBizType: ["أعمال بين الشركات (B2B)","خدمات للمستهلك","تجارة إلكترونية","علامة شخصية"],
                 optInd: ["طبي","تجميل","مطاعم ومقاهي","تعليم","عقارات","تقنية","استشارات","أخرى"],
                 optAge: ["أقل من سنة","1-3 سنوات","أكثر من 3 سنوات"],
@@ -728,10 +776,16 @@
             document.getElementById('lblIndustry').textContent = t.lblIndustry;
             document.getElementById('lblAge').textContent = t.lblAge;
             document.getElementById('lblRevenue').textContent = t.lblRevenue;
+            document.getElementById('lblTargetRevenue').textContent = t.lblTargetRevenue;
+            document.getElementById('lblTimeframe').textContent = t.lblTimeframe;
+            document.getElementById('lblTeamSize').textContent = t.lblTeamSize;
             t.optBizType.forEach((v,i)=>document.getElementById('optBizType'+i).textContent = v);
             t.optInd.forEach((v,i)=>document.getElementById('optInd'+i).textContent = v);
             t.optAge.forEach((v,i)=>document.getElementById('optAge'+i).textContent = v);
             t.optRev.forEach((v,i)=>document.getElementById('optRev'+i).textContent = v);
+            t.optTRev.forEach((v,i)=>document.getElementById('optTRev'+i).textContent = v);
+            t.optTf.forEach((v,i)=>document.getElementById('optTf'+i).textContent = v);
+            t.optTs.forEach((v,i)=>document.getElementById('optTs'+i).textContent = v);
             document.getElementById('introBtn').textContent = t.startAssessment;
             document.getElementById('txtReportTitle').textContent = t.reportTitle;
             document.getElementById('txtPreparedFor').childNodes[0].textContent = t.preparedFor;
@@ -827,7 +881,7 @@
             group.querySelectorAll('.intro-option').forEach(opt => opt.classList.remove('selected'));
             element.classList.add('selected');
             
-            if (introAnswers.businessType && introAnswers.industry && introAnswers.businessAge && introAnswers.revenue) {
+            if (introAnswers.businessType && introAnswers.industry && introAnswers.businessAge && introAnswers.revenue && introAnswers.targetRevenue && introAnswers.timeframe && introAnswers.teamSize) {
                 document.getElementById('introBtn').disabled = false;
             }
         }
@@ -907,6 +961,24 @@
             
             document.getElementById('reportName').textContent = sessionStorage.getItem('userName');
             document.getElementById('reportBusiness').textContent = sessionStorage.getItem('businessName');
+
+            let goalHtml = '';
+            try {
+                const ia = JSON.parse(sessionStorage.getItem('introAnswers') || '{}');
+                if (ia.revenue && ia.targetRevenue) {
+                    goalHtml = `
+                        <div class="goalbox">
+                            <div class="goalt">${T[LANG].growthGap}</div>
+                            <div class="goalrow">
+                                <div class="goalcol"><div class="goallbl">${T[LANG].currentRevenue}</div><div class="goalval">${esc(ia.revenue)}</div></div>
+                                <div class="goalarrow">→</div>
+                                <div class="goalcol"><div class="goallbl">${T[LANG].targetRevenueLbl}</div><div class="goalval accent">${esc(ia.targetRevenue)}</div></div>
+                            </div>
+                            <div class="goalsub">${T[LANG].timeframeLbl}: <b>${esc(ia.timeframe || '-')}</b> &nbsp;•&nbsp; ${T[LANG].teamSizeLbl}: <b>${esc(ia.teamSize || '-')}</b></div>
+                        </div>
+                    `;
+                }
+            } catch(e) {}
             
             let html = '';
             sections.forEach((section, idx) => {
@@ -932,18 +1004,18 @@
 
                 const solutions = {
                     en: [
-                        ["Set up a live lead tracking system","Build automated follow-up sequences","Track close rate monthly","Delegate follow-ups with a clear system"],
+                        ["Set up a live lead tracking system","Follow up faster using the Sales System tracker","Track close rate monthly","Delegate follow-ups with a clear system"],
                         ["Build a 30-day content calendar","Create content tied to real customer pain points","Track cost-per-result on marketing spend","Use AI-assisted content generation"],
-                        ["Document every role clearly","Build a repeatable onboarding process","Create an accountability system","Document your core processes"],
+                        ["Document every role clearly","Set clear expectations with each team member early","Review your team structure in your consultation session","Document your core processes"],
                         ["Build a monthly profit dashboard","Calculate your real customer acquisition cost","Set up income forecasting","Organize your financial records"],
-                        ["Audit and list all manual tasks","Introduce automation tools","Use AI for repetitive work","Build systems that don't depend on you"]
+                        ["Audit and list all manual tasks","Save hours monthly with the ready-made Content Plan Generator","Replace manual tracking with the Finance and Sales templates","Build systems that don't depend on you"]
                     ],
                     ar: [
-                        ["نظام متابعة عملاء فعلي","خطوات متابعة تلقائية للعملاء","متابعة نسبة الإغلاق شهرياً","تفويض المتابعة بنظام واضح"],
+                        ["نظام متابعة عملاء فعلي","متابعة أسرع باستخدام نظام تتبع المبيعات","متابعة نسبة الإغلاق شهرياً","تفويض المتابعة بنظام واضح"],
                         ["خطة محتوى لمدة 30 يوم","محتوى يعالج مشاكل العميل الحقيقية","متابعة تكلفة كل نتيجة من التسويق","استخدام أدوات ذكاء اصطناعي لتوليد المحتوى"],
-                        ["توثيق كل دور بوضوح","نظام تدريب موظفين قابل للتكرار","نظام مساءلة واضح","توثيق العمليات الأساسية"],
+                        ["توثيق كل دور بوضوح","تحديد توقعات واضحة مع كل فرد من الفريق من البداية","مراجعة هيكل فريقك ضمن جلسة الاستشارة","توثيق العمليات الأساسية"],
                         ["لوحة متابعة ربح شهرية","حساب تكلفة اكتساب العميل الحقيقية","نظام توقع للدخل","تنظيم السجلات المالية"],
-                        ["حصر كل المهام اليدوية","إدخال أدوات ميكنة (Automation)","استخدام الذكاء الاصطناعي للمهام المتكررة","بناء أنظمة لا تعتمد عليك وحدك"]
+                        ["حصر كل المهام اليدوية","توفير ساعات شهرياً باستخدام مولّد خطة المحتوى الجاهز","استبدال المتابعة اليدوية بقوالب المالية والمبيعات الجاهزة","بناء أنظمة لا تعتمد عليك وحدك"]
                     ]
                 };
 
@@ -1035,7 +1107,7 @@
                 </div>
             `;
             
-            document.getElementById('reportContainer').innerHTML = html;
+            document.getElementById('reportContainer').innerHTML = goalHtml + html;
         }
 
         var appliedCoupon = null;
