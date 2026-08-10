@@ -14,10 +14,14 @@ const { deliverPurchase } = require("./_lib/delivery.js");
 // ORIGINAL_consultation: 72900 fils (729 AED, ~$199)
 // To revert: change amountFils below back to the ORIGINAL_ values above,
 // and also revert the pricing display in index.html (search "LAUNCH DISCOUNT").
+//
+// *** UPGRADE PRICE: $50 flat (was $99) - set Aug 2026 ***
+// Special in-email upsell price for existing Blueprint buyers to add the
+// Consultation sessions, framed against the full $199 sticker price.
 const TIER_PRICING = {
   blueprint: { amountFils: 10950, label: "Bricks Blueprint" },      // 109.50 AED (~$29.50) - 50% off
   consultation: { amountFils: 36450, label: "Bricks Consultation Package" }, // 364.50 AED (~$99.50) - 50% off
-  upgrade: { amountFils: 36500, label: "Consultation Upgrade" }     // 365 AED (~$99) - hidden upgrade, NOT discounted, not linked publicly
+  upgrade: { amountFils: 18500, label: "Consultation Upgrade" }     // 185.00 AED (~$50) - email upsell offer
 };
 
 // Coupon codes live in the COUPON_CODES environment variable as JSON, e.g.:
