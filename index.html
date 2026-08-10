@@ -318,11 +318,31 @@
         }
         
         .package h4 { font-size: 24px; font-weight: 800; margin-bottom: 15px; color: var(--primary); }
+        .package-price-orig {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--sage);
+            text-decoration: line-through;
+            margin-bottom: 2px;
+        }
         .package-price { 
-            font-size: 48px; 
+            font-size: 44px; 
             font-weight: 900; 
             color: var(--accent); 
             margin-bottom: 10px;
+        }
+        .discount-badge {
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: linear-gradient(135deg, #00b894 0%, #00967a 100%);
+            color: var(--white);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .package-period { color: var(--sage); font-size: 14px; margin-bottom: 30px; }
@@ -791,7 +811,7 @@
                 scoreMid: "You have solid foundations. Let's fill the critical gaps costing you money.",
                 scoreLow: "You're hemorrhaging money and time. Let's fix this now.",
                 gapsIntro: "The gaps you identified above are EXACTLY what the Bricks Blueprint solves.", sendingTo: "Your files will be sent to:", emailWrongHint: "Is this correct? If not, go back and re-check your email above before purchasing.",
-                blueprintName: "Bricks Blueprint", oneTime: "One-time investment",
+                blueprintName: "Bricks Blueprint", oneTime: "One-time investment", limitedTime: "Limited Time \u2014 50% Off",
                 blueprintItem1: "Sales System (lead & follow-up tracker)",
                 blueprintItem2: "Finance Break-Even toolkit",
                 blueprintItem3: "AI Content Plan Generator",
@@ -843,7 +863,7 @@
                 scoreMid: "لديك أسس جيدة. دعنا نسد الفجوات الجوهرية التي تكلفك المال.",
                 scoreLow: "أنت تخسر المال والوقت. دعنا نعالج هذا الأمر الآن.",
                 gapsIntro: "الفجوات الظاهرة أعلاه هي بالضبط ما تعالجه Bricks Blueprint.", sendingTo: "سيتم إرسال ملفاتك إلى:", emailWrongHint: "هل هذا صحيح؟ إذا لم يكن كذلك، ارجع وتأكد من بريدك الإلكتروني قبل الشراء.",
-                blueprintName: "Bricks Blueprint", oneTime: "دفعة واحدة",
+                blueprintName: "Bricks Blueprint", oneTime: "دفعة واحدة", limitedTime: "لفترة محدودة \u2014 خصم 50%",
                 blueprintItem1: "نظام المبيعات (متابعة العملاء)",
                 blueprintItem2: "أداة نقطة التعادل المالية",
                 blueprintItem3: "مولّد خطة المحتوى بالذكاء الاصطناعي",
@@ -1226,10 +1246,17 @@
                         <div id="couponMsg" style="font-size:12px;margin-top:6px"></div>
                     </div>
                 </div>
+                <!-- LAUNCH DISCOUNT: 50% off, active as of Aug 2026, manual toggle.
+                     To revert to full price: change package-price-orig/package-price
+                     values back to a single $59 / $199 line and remove the two
+                     discount-badge divs below. Also revert TIER_PRICING amounts
+                     in api/create-payment.js back to the ORIGINAL_ comments there. -->
                 <div class="upsell">
                     <div class="package">
+                        <div class="discount-badge">${T[LANG].limitedTime}</div>
                         <h4>${T[LANG].blueprintName}</h4>
-                        <div class="package-price">$59</div>
+                        <div class="package-price-orig">$59</div>
+                        <div class="package-price">$29.50</div>
                         <div class="package-period">${T[LANG].oneTime}</div>
                         <ul>
                             <li>${T[LANG].blueprintItem1}</li>
@@ -1242,8 +1269,10 @@
                     
                     <div class="package premium">
                         <div class="premium-badge">${T[LANG].recommended}</div>
+                        <div class="discount-badge">${T[LANG].limitedTime}</div>
                         <h4>${T[LANG].consultName}</h4>
-                        <div class="package-price">$199</div>
+                        <div class="package-price-orig">$199</div>
+                        <div class="package-price">$99.50</div>
                         <div class="package-period">${T[LANG].consultPeriod}</div>
                         <ul>
                             <li>${T[LANG].consultItem0}</li>
