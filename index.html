@@ -189,6 +189,8 @@
         .goalval.accent { color: #ff6b35; }
         .goalarrow { font-size: 24px; color: var(--sage); }
         .goalsub { margin-top: 16px; font-size: 13px; color: var(--sage); }
+        .emailconfirm { text-align: center; font-size: 14px; color: var(--primary); background: #f0ebe6; border-radius: 10px; padding: 12px 20px; margin: 20px auto; max-width: 480px; }
+        .emailconfirmsub { font-size: 11.5px; color: var(--sage); margin-top: 4px; }
         
         .score-card {
             background: var(--white);
@@ -343,6 +345,19 @@
         .lang-btn{padding:22px 34px;border-radius:14px;border:2px solid rgba(255,255,255,0.35);background:rgba(255,255,255,0.08);color:#fff;font-size:18px;font-weight:700;cursor:pointer;transition:all 0.15s}
         .lang-btn:hover{background:rgba(255,255,255,0.2);border-color:#fff}
         .langtoggle{position:absolute;top:20px;inset-inline-end:20px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:8px;padding:6px 12px;font-size:12px;cursor:pointer}
+        @media print {
+            .no-print, #signup-screen, #intro-screen, #assessment-screen, #lang-screen, .langtoggle { display: none !important; }
+            body { background: #fff !important; }
+            .container { max-width: 100%; padding: 0; }
+            #dashboard-screen { display: block !important; }
+            h1#txtReportTitle { color: var(--primary); font-size: 26px; }
+            .dashboard-subtitle { color: #555 !important; font-size: 14px; margin-bottom: 24px; }
+            .score-card { break-inside: avoid; page-break-inside: avoid; box-shadow: none !important; border: 1px solid #e0e0e0; }
+            .goalbox { break-inside: avoid; page-break-inside: avoid; }
+            .upsell { break-inside: avoid; page-break-inside: avoid; }
+            .package { box-shadow: none !important; border: 1px solid #e0e0e0 !important; }
+            a[href]:after { content: ""; }
+        }
     </style>
 </head>
 <body>
@@ -501,6 +516,7 @@
         <div id="dashboard-screen" class="screen">
             <h1 id="txtReportTitle">Your Growth Diagnostic Report</h1>
             <p class="dashboard-subtitle" id="txtPreparedFor">Prepared for <strong id="reportName"></strong> • <span id="reportBusiness"></span></p>
+            <button type="button" class="no-print" id="downloadPdfBtn" onclick="window.print()" style="display:block;margin:0 auto 30px;padding:10px 24px;border-radius:8px;border:1.5px solid rgba(255,255,255,0.5);background:rgba(255,255,255,0.12);color:#fff;font-size:14px;font-weight:600;cursor:pointer">📄 <span id="txtDownloadPdf">Download as PDF</span></button>
             
             <div id="reportContainer"></div>
         </div>
@@ -649,12 +665,13 @@
 
         let currentSection = 0;
         let answers = {};
+        function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
         let introAnswers = {};
         let LANG = 'en';
 
         const T = {
             en: {
-                fillAllFields: "Please fill all fields",
+                fillAllFields: "Please fill all fields", invalidEmail: "Please double-check your email address - it looks incomplete or incorrectly formatted.",
                 sectionOf: (n) => `Section ${n} of 5`,
                 next: "Next →", previous: "← Previous", viewReport: "🚀 View My Report",
                 currentHealthScore: "Your current health score", outOf100: "OUT OF 100",
@@ -664,7 +681,7 @@
                 scoreHigh: "You're on the right track! Small optimizations can unlock massive growth.",
                 scoreMid: "You have solid foundations. Let's fill the critical gaps costing you money.",
                 scoreLow: "You're hemorrhaging money and time. Let's fix this now.",
-                gapsIntro: "The gaps you identified above are EXACTLY what the Bricks Blueprint solves.",
+                gapsIntro: "The gaps you identified above are EXACTLY what the Bricks Blueprint solves.", sendingTo: "Your files will be sent to:", emailWrongHint: "Is this correct? If not, go back and re-check your email above before purchasing.",
                 blueprintName: "Bricks Blueprint", oneTime: "One-time investment",
                 blueprintItem1: "Sales System (lead & follow-up tracker)",
                 blueprintItem2: "Finance Break-Even toolkit",
@@ -696,14 +713,14 @@
                 optAge: ["<1 year","1-3 years","3+ years"],
                 optRev: ["<$50k","$50-100k","$100-500k","$500k+"],
                 startAssessment: "Start Assessment →",
-                reportTitle: "Your Growth Diagnostic Report", preparedFor: "Prepared for ",
+                reportTitle: "Your Growth Diagnostic Report", preparedFor: "Prepared for ", downloadPdf: "Download as PDF",
                 redeemBtn: "🎟️ Redeem Code", applyBtn: "Apply", couponPlaceholder: "Enter code",
                 couponApplying: "Checking code...", couponInvalid: "That code isn't valid.",
                 couponAppliedFree: "✓ Code applied — this is on us!", couponAppliedPct: (p) => `✓ Code applied — ${p}% off!`,
                 couponRemove: "Remove code"
             },
             ar: {
-                fillAllFields: "يرجى تعبئة جميع الحقول",
+                fillAllFields: "يرجى تعبئة جميع الحقول", invalidEmail: "يرجى التأكد من بريدك الإلكتروني - يبدو غير مكتمل أو بصيغة غير صحيحة.",
                 sectionOf: (n) => `القسم ${n} من 5`,
                 next: "التالي ←", previous: "→ السابق", viewReport: "🚀 عرض التقرير",
                 currentHealthScore: "درجة الصحة الحالية لهذا القسم", outOf100: "من 100",
@@ -713,7 +730,7 @@
                 scoreHigh: "أنت على المسار الصحيح! تحسينات بسيطة يمكن أن تحقق نمواً كبيراً.",
                 scoreMid: "لديك أسس جيدة. دعنا نسد الفجوات الجوهرية التي تكلفك المال.",
                 scoreLow: "أنت تخسر المال والوقت. دعنا نعالج هذا الأمر الآن.",
-                gapsIntro: "الفجوات الظاهرة أعلاه هي بالضبط ما تعالجه Bricks Blueprint.",
+                gapsIntro: "الفجوات الظاهرة أعلاه هي بالضبط ما تعالجه Bricks Blueprint.", sendingTo: "سيتم إرسال ملفاتك إلى:", emailWrongHint: "هل هذا صحيح؟ إذا لم يكن كذلك، ارجع وتأكد من بريدك الإلكتروني قبل الشراء.",
                 blueprintName: "Bricks Blueprint", oneTime: "دفعة واحدة",
                 blueprintItem1: "نظام المبيعات (متابعة العملاء)",
                 blueprintItem2: "أداة نقطة التعادل المالية",
@@ -745,7 +762,7 @@
                 optAge: ["أقل من سنة","1-3 سنوات","أكثر من 3 سنوات"],
                 optRev: ["أقل من 50 ألف دولار","50-100 ألف دولار","100-500 ألف دولار","أكثر من 500 ألف دولار"],
                 startAssessment: "ابدأ التقييم ←",
-                reportTitle: "تقرير تشخيص نمو عملك", preparedFor: "أُعِدّ لـ ",
+                reportTitle: "تقرير تشخيص نمو عملك", preparedFor: "أُعِدّ لـ ", downloadPdf: "تحميل كملف PDF",
                 redeemBtn: "🎟️ استبدال كود", applyBtn: "تطبيق", couponPlaceholder: "أدخل الكود",
                 couponApplying: "جارٍ التحقق من الكود...", couponInvalid: "هذا الكود غير صالح.",
                 couponAppliedFree: "✓ تم تفعيل الكود — هذه الباقة مجانية!", couponAppliedPct: (p) => `✓ تم تفعيل الكود — خصم ${p}%!`,
@@ -788,6 +805,7 @@
             t.optTs.forEach((v,i)=>document.getElementById('optTs'+i).textContent = v);
             document.getElementById('introBtn').textContent = t.startAssessment;
             document.getElementById('txtReportTitle').textContent = t.reportTitle;
+            document.getElementById('txtDownloadPdf').textContent = t.downloadPdf;
             document.getElementById('txtPreparedFor').childNodes[0].textContent = t.preparedFor;
             const toggle = document.getElementById('langToggleBtn');
             toggle.style.display = 'block';
@@ -857,12 +875,18 @@
 
         function goToIntro() {
             const name = document.getElementById('inputName').value;
-            const email = document.getElementById('inputEmail').value;
+            const email = document.getElementById('inputEmail').value.trim();
             const business = document.getElementById('inputBusiness').value;
             const phone = document.getElementById('inputPhone').value;
             
             if (!name || !email || !business || !phone || !selectedCountry) {
                 alert(T[LANG].fillAllFields);
+                return;
+            }
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                alert(T[LANG].invalidEmail);
                 return;
             }
             
@@ -1066,8 +1090,13 @@
                     <p style="color: var(--sage); font-size: 16px; margin-bottom: 30px;">${scoreMsg}</p>
                     <p style="color: var(--primary); font-size: 16px; font-weight: 600;">💡 ${T[LANG].gapsIntro}</p>
                 </div>
+
+                <div class="emailconfirm">
+                    ${T[LANG].sendingTo} <b>${esc(sessionStorage.getItem('userEmail') || '')}</b>
+                    <div class="emailconfirmsub">${T[LANG].emailWrongHint}</div>
+                </div>
                 
-                <div style="text-align:center;margin-top:30px;margin-bottom:10px">
+                <div class="no-print" style="text-align:center;margin-top:30px;margin-bottom:10px">
                     <button type="button" id="couponToggle" onclick="toggleCoupon()" class="btn btn-secondary" style="display:inline-block;width:auto;padding:8px 20px;font-size:13px">${T[LANG].redeemBtn}</button>
                     <div id="couponBox" style="display:none;max-width:340px;margin:14px auto 0">
                         <div style="display:flex;gap:8px">

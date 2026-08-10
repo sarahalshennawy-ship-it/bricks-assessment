@@ -19,10 +19,15 @@
     <div class="check">✅</div>
     <h1 id="title">Payment received — thank you!</h1>
     <p id="body">We're sending your files to the email address you provided. This usually arrives within a minute or two.</p>
+    <p id="emailShown" style="font-weight:600;color:#2C1F17"></p>
     <p class="note">Didn't get it? Check your spam folder, or contact us at <a href="mailto:Info@bricksmedia.org" style="color:#C4614B">Info@bricksmedia.org</a> and we'll resend it right away.</p>
   </div>
   <script>
     var params = new URLSearchParams(window.location.search);
+    var storedEmail = sessionStorage.getItem('userEmail');
+    if (storedEmail) {
+      document.getElementById('emailShown').textContent = 'Sent to: ' + storedEmail;
+    }
     if (params.get('free') === 'true') {
       var card = document.getElementById('card');
       var badge = document.createElement('div');
