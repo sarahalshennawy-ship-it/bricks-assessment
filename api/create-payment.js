@@ -5,7 +5,6 @@
 
 const crypto = require("crypto");
 const { deliverPurchase } = require("./_lib/delivery.js");
-const { savePendingPurchase } = require("./_lib/store.js");
 
 // Pricing in fils (1 AED = 100 fils). Update these if pricing changes.
 //
@@ -114,7 +113,7 @@ module.exports = async (req, res) => {
     // Ziina payment and therefore the webhook will never fire for this one.
     if (discountPct === 100) {
       try {
-        await deliverPurchase({ email, name: name || null, tier, coupon: coupon || null, amountPaid: 0 });
+        await deliverPurchase({ email, name: name || null, tier });
       } catch (err) {
         console.error("Free-coupon delivery failed:", err);
         // Still send them to the success page - but this is logged loudly
@@ -127,17 +126,27 @@ module.exports = async (req, res) => {
       return;
     }
 
+    // Ziina refuses any charge under 2 AED (200 fils). This can happen if a
+    // coupon is applied on top of an already-discounted launch price (e.g.
+    // 50% launch discount + a steep test coupon stacking together). Catch
+    // this BEFORE calling Ziina, so the customer/admin gets a clear message
+    // instead of Ziina's raw "TRANSFER_UNDER_MINIMUM" error surfacing as a
+    // generic "something went wrong".
+    const ZIINA_MIN_FILS = 200; // 2 AED
+    if (amountFils < ZIINA_MIN_FILS) {
+      res.status(400).json({
+        error: "amount_below_minimum",
+        message: `This discount brings the price to ${(amountFils / 100).toFixed(2)} AED, below Ziina's 2 AED minimum charge. Please use a smaller discount or a 100%-off coupon instead.`
+      });
+      return;
+    }
+
     // Pack tier + email into a short code so the webhook can identify who
     // bought what once payment succeeds (Ziina's payment intent has no
     // separate metadata field, and the "message" field has a real length
     // limit). We drop the name here to stay safely short.
     const TIER_CODE = { blueprint: "b", consultation: "c", upgrade: "u" };
     const packedMessage = `${TIER_CODE[tier]}|${email}`.slice(0, 60);
-
-    // The webhook only learns the payment succeeded later, with no access
-    // to this request's context - stash the coupon + amount here so it can
-    // be picked up and included when we actually deliver + track this sale.
-    await savePendingPurchase(email, { tier, coupon: coupon || null, amountFils, name: name || null });
 
     const ziinaRes = await fetch("https://api-v2.ziina.com/api/payment_intent", {
       method: "POST",
