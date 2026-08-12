@@ -136,6 +136,9 @@
         .intro-group { margin-bottom: 45px; }
         .intro-group label { display: block; margin-bottom: 20px; font-weight: 700; font-size: 16px; color: var(--primary); }
         .intro-options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .intro-options[data-cols="2"] { grid-template-columns: 1fr 1fr; }
+        .intro-options[data-cols="3"] { grid-template-columns: 1fr 1fr 1fr; }
+        .intro-options[data-cols="4"] { grid-template-columns: 1fr 1fr 1fr 1fr; }
         .intro-option { 
             padding: 20px; 
             border: 2px solid #e0e0e0; 
@@ -367,11 +370,63 @@
         .package .btn { margin-top: 30px; }
         
         @media (max-width: 768px) {
-            .landing { grid-template-columns: 1fr; gap: 40px; }
-            .upsell { grid-template-columns: 1fr; }
-            .intro-options { grid-template-columns: 1fr; }
-            .score-header { flex-direction: column; }
-            .big-score { font-size: 48px; }
+            .container { padding: 16px; }
+            .landing { grid-template-columns: 1fr; gap: 32px; min-height: auto; }
+            .landing-content h1 { font-size: 34px; margin-bottom: 18px; }
+            .landing-content p { font-size: 16px; }
+            .form-container { padding: 26px 20px; }
+            .form-container h2 { font-size: 22px; margin-bottom: 20px; }
+            .phone-group { grid-template-columns: 110px 1fr; gap: 8px; }
+            .country-select-wrapper { width: 110px; }
+
+            .intro-container { padding: 26px 18px; }
+            .intro-container h2 { font-size: 24px; }
+            .intro-container > p { margin-bottom: 30px; font-size: 14px; }
+            .intro-group { margin-bottom: 30px; }
+            .intro-group label { font-size: 14px; margin-bottom: 14px; }
+            .intro-option { padding: 14px 10px; font-size: 13px; }
+            .intro-options,
+            .intro-options[data-cols="2"],
+            .intro-options[data-cols="3"],
+            .intro-options[data-cols="4"] { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+            .assessment { padding: 26px 18px; }
+            .assessment h2 { font-size: 22px; }
+            .question-block h3 { font-size: 16px; margin-bottom: 18px; }
+            .nav-buttons { gap: 10px; margin-top: 30px; }
+            .nav-buttons button { padding: 12px; font-size: 14px; }
+
+            .break-panel { padding: 36px 22px; }
+            .break-illust { width: 130px; height: 130px; }
+            .break-title { font-size: 19px; }
+            .break-insight { font-size: 14px; }
+
+            .dashboard h1 { font-size: 28px; }
+            .dashboard-subtitle { font-size: 15px; margin-bottom: 30px; }
+            .goalbox { padding: 20px 16px; }
+            .goalrow { gap: 16px; }
+            .goalval { font-size: 18px; }
+
+            .score-card { padding: 24px 18px; }
+            .score-header { flex-direction: column; gap: 14px; }
+            .big-score { font-size: 44px; }
+            .score-title h2 { font-size: 22px; }
+
+            .upsell { grid-template-columns: 1fr; gap: 20px; }
+            .package { padding: 26px 20px; }
+            .package h4 { font-size: 20px; }
+            .package-price { font-size: 34px; }
+
+            .otp-box { padding: 24px 18px; }
+        }
+
+        @media (max-width: 400px) {
+            .intro-options,
+            .intro-options[data-cols="2"],
+            .intro-options[data-cols="3"],
+            .intro-options[data-cols="4"] { grid-template-columns: 1fr; }
+            .landing-content h1 { font-size: 28px; }
+            .big-score { font-size: 36px; }
         }
         [dir="rtl"] .solution-box ul,[dir="rtl"] .problem-box ul{margin-left:0;margin-right:20px}
         [dir="rtl"] .package ul{margin-left:0;margin-right:0;padding-right:24px;padding-left:0}
@@ -487,7 +542,7 @@
 
                 <div class="intro-group">
                     <label id="lblAge">How long active? *</label>
-                    <div class="intro-options" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <div class="intro-options" data-cols="3">
                         <div class="intro-option" onclick="selectIntro('businessAge', 'Less than 1 year', this)"><input type="radio" name="businessAge"><div><strong id="optAge0">&lt;1 year</strong></div></div>
                         <div class="intro-option" onclick="selectIntro('businessAge', '1-3 years', this)"><input type="radio" name="businessAge"><div><strong id="optAge1">1-3 years</strong></div></div>
                         <div class="intro-option" onclick="selectIntro('businessAge', '3+ years', this)"><input type="radio" name="businessAge"><div><strong id="optAge2">3+ years</strong></div></div>
@@ -496,7 +551,7 @@
 
                 <div class="intro-group">
                     <label id="lblRevenue">Annual Revenue? *</label>
-                    <div class="intro-options" style="grid-template-columns: 1fr 1fr;">
+                    <div class="intro-options" data-cols="2">
                         <div class="intro-option" onclick="selectIntro('revenue', 'Less than $50k', this)"><input type="radio" name="revenue"><div><strong id="optRev0">&lt;$50k</strong></div></div>
                         <div class="intro-option" onclick="selectIntro('revenue', '$50k-$100k', this)"><input type="radio" name="revenue"><div><strong id="optRev1">$50-100k</strong></div></div>
                         <div class="intro-option" onclick="selectIntro('revenue', '$100k-$500k', this)"><input type="radio" name="revenue"><div><strong id="optRev2">$100-500k</strong></div></div>
@@ -506,7 +561,7 @@
 
                 <div class="intro-group">
                     <label id="lblTargetRevenue">What annual revenue are you aiming for? *</label>
-                    <div class="intro-options" style="grid-template-columns: 1fr 1fr;">
+                    <div class="intro-options" data-cols="2">
                         <div class="intro-option" onclick="selectIntro('targetRevenue', 'Less than $50k', this)"><input type="radio" name="targetRevenue"><div><strong id="optTRev0">&lt;$50k</strong></div></div>
                         <div class="intro-option" onclick="selectIntro('targetRevenue', '$50k-$100k', this)"><input type="radio" name="targetRevenue"><div><strong id="optTRev1">$50-100k</strong></div></div>
                         <div class="intro-option" onclick="selectIntro('targetRevenue', '$100k-$500k', this)"><input type="radio" name="targetRevenue"><div><strong id="optTRev2">$100-500k</strong></div></div>
@@ -516,7 +571,7 @@
 
                 <div class="intro-group">
                     <label id="lblTimeframe">By when do you want to hit that target? *</label>
-                    <div class="intro-options" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <div class="intro-options" data-cols="3">
                         <div class="intro-option" onclick="selectIntro('timeframe', '6 months', this)"><input type="radio" name="timeframe"><div><strong id="optTf0">6 months</strong></div></div>
                         <div class="intro-option" onclick="selectIntro('timeframe', '1 year', this)"><input type="radio" name="timeframe"><div><strong id="optTf1">1 year</strong></div></div>
                         <div class="intro-option" onclick="selectIntro('timeframe', '2+ years', this)"><input type="radio" name="timeframe"><div><strong id="optTf2">2+ years</strong></div></div>
@@ -525,7 +580,7 @@
 
                 <div class="intro-group">
                     <label id="lblTeamSize">Team size (including you)? *</label>
-                    <div class="intro-options" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
+                    <div class="intro-options" data-cols="4">
                         <div class="intro-option" onclick="selectIntro('teamSize', 'Just me', this)"><input type="radio" name="teamSize"><div><strong id="optTs0">Just me</strong></div></div>
                         <div class="intro-option" onclick="selectIntro('teamSize', '2-5', this)"><input type="radio" name="teamSize"><div><strong id="optTs1">2-5</strong></div></div>
                         <div class="intro-option" onclick="selectIntro('teamSize', '6-15', this)"><input type="radio" name="teamSize"><div><strong id="optTs2">6-15</strong></div></div>
