@@ -371,6 +371,12 @@
         
         @media (max-width: 768px) {
             .container { padding: 16px; }
+            .header-logo { height: 110px !important; }
+            .corner-logo { height: 80px; top: 10px; left: 10px; }
+            .lang-screen { padding: 130px 20px 30px; }
+            .checkup-title { font-size: 26px; margin-bottom: 14px; }
+            .lang-title { font-size: 18px; margin-bottom: 20px; }
+            .lang-btn { padding: 16px 22px; font-size: 15px; }
             .landing { grid-template-columns: 1fr; gap: 32px; min-height: auto; }
             .landing-content h1 { font-size: 34px; margin-bottom: 18px; }
             .landing-content p { font-size: 16px; }
@@ -421,6 +427,10 @@
         }
 
         @media (max-width: 400px) {
+            .header-logo { height: 80px !important; }
+            .corner-logo { height: 60px; top: 8px; left: 8px; }
+            .lang-screen { padding: 100px 16px 24px; }
+            .checkup-title { font-size: 21px; }
             .intro-options,
             .intro-options[data-cols="2"],
             .intro-options[data-cols="3"],
@@ -432,7 +442,9 @@
         [dir="rtl"] .package ul{margin-left:0;margin-right:0;padding-right:24px;padding-left:0}
         [dir="rtl"] .option input{margin-right:0;margin-left:14px}
         [dir="rtl"] body{font-family:'Segoe UI',Tahoma,Arial,sans-serif}
-        .lang-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;padding:150px 20px 40px}
+        .lang-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;padding:220px 20px 40px}
+        .corner-logo{position:absolute; top:12px; left:12px; height:150px; object-fit:contain;}
+        .checkup-title{font-size:40px;font-weight:800;color:#fff;margin-bottom:20px;line-height:1.25}
         .lang-title{font-size:26px;font-weight:800;margin-bottom:30px}
         .lang-opts{display:flex;gap:16px}
         .lang-btn{padding:22px 34px;border-radius:14px;border:2px solid rgba(255,255,255,0.35);background:rgba(255,255,255,0.08);color:#fff;font-size:18px;font-weight:700;cursor:pointer;transition:all 0.15s}
@@ -457,15 +469,15 @@
     <div class="container" style="position:relative">
         <button class="langtoggle" id="langToggleBtn" style="display:none" onclick="switchLang()"></button>
         <header style="display:none" id="mainHeader">
-            <img src="BRICKS_LOGO.png" alt="Bricks & Co" style="height: 200px; object-fit: contain;">
+            <img src="BRICKS_LOGO.png" alt="Bricks & Co" class="header-logo" style="height: 200px; object-fit: contain;">
         </header>
 
-        <img src="BRICKS_LOGO_WHITE.png" alt="Bricks & Co" style="position:absolute; top:24px; left:24px; height:90px; object-fit:contain;">
+        <img src="BRICKS_LOGO_WHITE.png" alt="Bricks & Co" class="corner-logo">
 
         <!-- Language Selection -->
         <div id="lang-screen" class="screen active">
             <div class="lang-screen">
-                <div style="font-size:40px;font-weight:800;color:#fff;margin-bottom:20px;line-height:1.25">Bricks Business Checkup</div>
+                <div class="checkup-title">Bricks Business Checkup</div>
                 <div class="lang-title">Choose your language / اختار لغتك</div>
                 <div class="lang-opts">
                     <button class="lang-btn" onclick="selectLang('en')">English</button>
