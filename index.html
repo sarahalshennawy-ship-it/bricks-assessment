@@ -9,15 +9,15 @@
         
         :root {
             --primary: #1a1a1a;
-            --accent: #ff6b35;
-            --accent-dark: #d84315;
+            --accent: #764ba2;
+            --accent-dark: #5b3d82;
             --success: #00b894;
-            --warning: #ffa502;
+            --warning: #ffd700;
             --danger: #ff4757;
-            --sage: #7a8f8f;
-            --bg: #f0f4f8;
+            --sage: #7d739a;
+            --bg: #f4f2fa;
             --white: #ffffff;
-            --card-bg: #fafbfc;
+            --card-bg: #fdfcff;
         }
         
         body {
@@ -55,7 +55,7 @@
         .form-group { margin-bottom: 22px; }
         .form-group label { display: block; margin-bottom: 10px; font-weight: 600; font-size: 14px; color: var(--primary); }
         .form-group input { width: 100%; padding: 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; transition: all 0.3s; }
-        .form-group input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(255,107,53,0.1); }
+        .form-group input:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(118,75,162,0.1); }
         
         .phone-group { display: grid; grid-template-columns: 150px 1fr; gap: 12px; }
         
@@ -76,7 +76,7 @@
         
         .country-search-input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(255,107,53,0.1);
+            box-shadow: 0 0 0 3px rgba(118,75,162,0.1);
         }
         
         .country-dropdown {
@@ -92,7 +92,7 @@
             overflow-y: auto;
             z-index: 1000;
             margin-top: 6px;
-            box-shadow: 0 10px 30px rgba(255,107,53,0.15);
+            box-shadow: 0 10px 30px rgba(118,75,162,0.15);
         }
         
         .country-dropdown.active { display: block; }
@@ -106,7 +106,7 @@
         }
         
         .country-option:hover {
-            background-color: rgba(255,107,53,0.05);
+            background-color: rgba(118,75,162,0.05);
             color: var(--accent);
             padding-left: 20px;
         }
@@ -126,7 +126,7 @@
             letter-spacing: 1px;
         }
         
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(255,107,53,0.3); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(118,75,162,0.3); }
         .btn:disabled { background: #ccc; cursor: not-allowed; }
         
         /* Intro Questions */
@@ -149,7 +149,7 @@
             background: var(--white);
         }
         .intro-option:hover { border-color: var(--accent); transform: translateY(-3px); }
-        .intro-option.selected { border-color: var(--accent); background: rgba(255,107,53,0.08); color: var(--accent); }
+        .intro-option.selected { border-color: var(--accent); background: rgba(118,75,162,0.08); color: var(--accent); }
         .intro-option input { display: none; }
         
         /* Assessment */
@@ -177,8 +177,8 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        .option:hover { border-color: var(--accent); background: rgba(255,107,53,0.05); transform: translateX(4px); }
-        .option.selected { border-color: var(--accent); background: rgba(255,107,53,0.1); }
+        .option:hover { border-color: var(--accent); background: rgba(118,75,162,0.05); transform: translateX(4px); }
+        .option.selected { border-color: var(--accent); background: rgba(118,75,162,0.1); }
         .option input { margin-right: 14px; margin-top: 3px; cursor: pointer; accent-color: var(--accent); }
         .option label { cursor: pointer; flex: 1; font-weight: 500; }
         
@@ -186,29 +186,29 @@
         .nav-buttons button { flex: 1; padding: 14px; }
         
         .btn-secondary { background: transparent; color: var(--accent); border: 2px solid var(--accent); }
-        .btn-secondary:hover { background: rgba(255,107,53,0.1); }
+        .btn-secondary:hover { background: rgba(118,75,162,0.1); }
         
         /* Dashboard */
         .dashboard { max-width: 1200px; margin: 0 auto; }
         .dashboard h1 { font-size: 42px; font-weight: 800; color: var(--white); margin-bottom: 10px; }
         .dashboard-subtitle { color: rgba(255,255,255,0.9); font-size: 18px; margin-bottom: 50px; }
-        .goalbox { background: linear-gradient(135deg, rgba(255,107,53,0.08) 0%, rgba(102,126,234,0.08) 100%); border: 2px solid rgba(255,107,53,0.25); border-radius: 16px; padding: 28px 32px; margin-bottom: 36px; text-align: center; }
+        .goalbox { background: linear-gradient(135deg, rgba(118,75,162,0.08) 0%, rgba(102,126,234,0.08) 100%); border: 2px solid rgba(118,75,162,0.25); border-radius: 16px; padding: 28px 32px; margin-bottom: 36px; text-align: center; }
         .goalt { font-size: 15px; font-weight: 700; color: var(--primary); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 16px; }
         .goalrow { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; }
         .goalcol { min-width: 120px; }
         .goallbl { font-size: 12px; color: var(--sage); margin-bottom: 4px; }
         .goalval { font-size: 22px; font-weight: 800; color: var(--primary); }
-        .goalval.accent { color: #ff6b35; }
+        .goalval.accent { color: #764ba2; }
         .goalarrow { font-size: 24px; color: var(--sage); }
         .goalsub { margin-top: 16px; font-size: 13px; color: var(--sage); }
-        .emailconfirm { text-align: center; font-size: 14px; color: var(--primary); background: #f0ebe6; border-radius: 10px; padding: 12px 20px; margin: 20px auto; max-width: 480px; }
+        .emailconfirm { text-align: center; font-size: 14px; color: var(--primary); background: #f1ecfa; border-radius: 10px; padding: 12px 20px; margin: 20px auto; max-width: 480px; }
         .otp-overlay { position: fixed; inset: 0; background: rgba(20,15,10,0.6); display: flex; align-items: center; justify-content: center; z-index: 999; padding: 20px; }
         .otp-box { background: #fff; border-radius: 16px; padding: 32px 28px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
         .otp-title { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
         .otp-sub { font-size: 13px; color: #666; margin-bottom: 18px; line-height: 1.5; }
-        .otp-input { width: 100%; padding: 14px; font-size: 24px; letter-spacing: 10px; text-align: center; border-radius: 10px; border: 1.5px solid #e0d8d3; outline: none; }
+        .otp-input { width: 100%; padding: 14px; font-size: 24px; letter-spacing: 10px; text-align: center; border-radius: 10px; border: 1.5px solid #e2e0ea; outline: none; }
         .otp-input:focus { border-color: var(--accent); }
-        .otp-msg { font-size: 13px; color: #C4614B; min-height: 18px; margin-top: 10px; }
+        .otp-msg { font-size: 13px; color: #764ba2; min-height: 18px; margin-top: 10px; }
         .otp-links { display: flex; justify-content: space-between; margin-top: 18px; font-size: 12.5px; }
         .otp-links a { color: var(--accent); text-decoration: none; cursor: pointer; }
         .emailconfirmsub { font-size: 11.5px; color: var(--sage); margin-top: 4px; }
@@ -252,12 +252,12 @@
         
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--accent) 0%, #ff8a50 100%);
+            background: linear-gradient(90deg, var(--accent) 0%, #667eea 100%);
             transition: width 0.3s ease;
         }
         
         .problem-box {
-            background: linear-gradient(135deg, #ffe5e5 0%, #ffe0e0 100%);
+            background: linear-gradient(135deg, #f1ecfa 0%, #ece5f7 100%);
             border-left: 4px solid var(--danger);
             padding: 20px;
             border-radius: 8px;
@@ -268,7 +268,7 @@
         .problem-box p { color: #333; font-size: 14px; line-height: 1.6; }
         
         .solution-box {
-            background: linear-gradient(135deg, #e5f5ff 0%, #e0f2ff 100%);
+            background: linear-gradient(135deg, #eaf0fe 0%, #e3ebfd 100%);
             border-left: 4px solid var(--success);
             padding: 20px;
             border-radius: 8px;
@@ -298,12 +298,12 @@
         .package:hover {
             border-color: var(--accent);
             transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(255,107,53,0.2);
+            box-shadow: 0 20px 50px rgba(118,75,162,0.2);
         }
         
         .package.premium {
             border-color: var(--accent);
-            background: linear-gradient(135deg, rgba(255,107,53,0.05) 0%, rgba(255,107,53,0.02) 100%);
+            background: linear-gradient(135deg, rgba(118,75,162,0.05) 0%, rgba(118,75,162,0.02) 100%);
         }
         
         .premium-badge {
@@ -754,11 +754,11 @@
         ];
 
         const sections = [
-            { name: {en:"Sales Pipeline",ar:"مسار المبيعات"}, color: "#ff6b35", emoji: "🎯" },
-            { name: {en:"Marketing & Content",ar:"التسويق والمحتوى"}, color: "#ffa502", emoji: "📱" },
+            { name: {en:"Sales Pipeline",ar:"مسار المبيعات"}, color: "#5b3d82", emoji: "🎯" },
+            { name: {en:"Marketing & Content",ar:"التسويق والمحتوى"}, color: "#ffd700", emoji: "📱" },
             { name: {en:"Team & Operations",ar:"الفريق والعمليات"}, color: "#667eea", emoji: "👥" },
-            { name: {en:"Financial Health",ar:"الوضع المالي"}, color: "#00b894", emoji: "💰" },
-            { name: {en:"Systems & Scale",ar:"الأنظمة والتوسع"}, color: "#764ba2", emoji: "⚙️" }
+            { name: {en:"Financial Health",ar:"الوضع المالي"}, color: "#4a5fc7", emoji: "💰" },
+            { name: {en:"Systems & Scale",ar:"الأنظمة والتوسع"}, color: "#9a6fd1", emoji: "⚙️" }
         ];
 
         let currentSection = 0;
@@ -1307,7 +1307,7 @@
                               T[LANG].scoreLow;
 
             html += `
-                <div style="background: linear-gradient(135deg, rgba(255,107,53,0.1) 0%, rgba(102,126,234,0.1) 100%); padding: 50px; border-radius: 16px; margin-top: 50px; text-align: center; border: 2px solid rgba(255,107,53,0.2);">
+                <div style="background: linear-gradient(135deg, rgba(118,75,162,0.1) 0%, rgba(102,126,234,0.1) 100%); padding: 50px; border-radius: 16px; margin-top: 50px; text-align: center; border: 2px solid rgba(118,75,162,0.2);">
                     <h2 style="color: var(--primary); margin-bottom: 15px; font-size: 32px;">${T[LANG].overallScore}</h2>
                     <div style="font-size: 96px; font-weight: 900; color: var(--accent); margin: 20px 0;">${overallScore}</div>
                     <p style="color: var(--sage); font-size: 16px; margin-bottom: 30px;">${scoreMsg}</p>
@@ -1323,7 +1323,7 @@
                     <button type="button" id="couponToggle" onclick="toggleCoupon()" class="btn btn-secondary" style="display:inline-block;width:auto;padding:8px 20px;font-size:13px">${T[LANG].redeemBtn}</button>
                     <div id="couponBox" style="display:none;max-width:340px;margin:14px auto 0">
                         <div style="display:flex;gap:8px">
-                            <input type="text" id="couponInput" placeholder="${T[LANG].couponPlaceholder}" style="flex:1;padding:10px 12px;border-radius:8px;border:1.5px solid #e0d8d3;font-size:13px;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+                            <input type="text" id="couponInput" placeholder="${T[LANG].couponPlaceholder}" style="flex:1;padding:10px 12px;border-radius:8px;border:1.5px solid #e2e0ea;font-size:13px;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
                             <button type="button" id="couponApplyBtn" onclick="applyCoupon()" class="btn" style="width:auto;padding:10px 16px;font-size:13px">${T[LANG].applyBtn}</button>
                         </div>
                         <div id="couponMsg" style="font-size:12px;margin-top:6px"></div>
@@ -1347,7 +1347,7 @@
                             <li>${T[LANG].blueprintItem3}</li>
                             <li>${T[LANG].blueprintItem4}</li>
                         </ul>
-                        <button class="btn" id="blueprintBtn" onclick="startPayment('blueprint', this)" style="margin-top: 30px; background: linear-gradient(135deg, #ff6b35 0%, #ff8a50 100%);">${T[LANG].getBlueprint}</button>
+                        <button class="btn" id="blueprintBtn" onclick="startPayment('blueprint', this)" style="margin-top: 30px; background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);">${T[LANG].getBlueprint}</button>
                     </div>
                     
                     <div class="package premium">
@@ -1397,20 +1397,20 @@
 
                 if (data.valid) {
                     appliedCoupon = code.toUpperCase();
-                    msg.style.color = '#7A7D45';
+                    msg.style.color = '#667eea';
                     msg.textContent = data.discount === 100 ? T[LANG].couponAppliedFree : T[LANG].couponAppliedPct(data.discount);
                     input.disabled = true;
                     document.getElementById('couponApplyBtn').textContent = T[LANG].couponRemove;
                     document.getElementById('couponApplyBtn').onclick = removeCoupon;
                 } else {
                     appliedCoupon = null;
-                    msg.style.color = '#C4614B';
+                    msg.style.color = '#764ba2';
                     msg.textContent = T[LANG].couponInvalid;
                 }
             } catch (err) {
                 console.error(err);
                 appliedCoupon = null;
-                msg.style.color = '#C4614B';
+                msg.style.color = '#764ba2';
                 msg.textContent = T[LANG].couponInvalid;
             }
         }
@@ -1548,7 +1548,7 @@
             const ar = (LANG === 'ar');
             const msgEl = document.getElementById('otpMsg');
             const email = sessionStorage.getItem('userEmail') || '';
-            msgEl.style.color = '#7A7D45';
+            msgEl.style.color = '#667eea';
             msgEl.textContent = ar ? 'جارٍ إعادة الإرسال...' : 'Resending...';
             try {
                 const res = await fetch('/api/send-verification', {
@@ -1561,7 +1561,7 @@
                 otpPending.token = data.token;
                 msgEl.textContent = T[LANG].otpResent;
             } catch (err) {
-                msgEl.style.color = '#C4614B';
+                msgEl.style.color = '#764ba2';
                 msgEl.textContent = ar ? 'تعذر إعادة الإرسال. حاول مرة أخرى.' : 'Could not resend. Please try again.';
             }
         }
