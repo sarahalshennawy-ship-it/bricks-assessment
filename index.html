@@ -445,6 +445,24 @@
         .lang-screen{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;padding:40px 20px}
         .checkup-logo{height:300px; object-fit:contain; margin-bottom:20px;}
         .checkup-title{font-size:40px;font-weight:800;color:#fff;margin-bottom:20px;line-height:1.25}
+
+        .preview-section { max-width: 1000px; margin: 60px auto 40px; padding: 0 20px; }
+        .preview-title { font-size: 32px; font-weight: 800; color: var(--primary); text-align: center; margin-bottom: 10px; }
+        .preview-subtitle { font-size: 16px; color: var(--sage); text-align: center; margin-bottom: 50px; }
+        .preview-row { display: flex; align-items: center; gap: 40px; margin-bottom: 60px; }
+        .preview-row.reverse { flex-direction: row-reverse; }
+        .preview-img { width: 58%; border-radius: 12px; box-shadow: 0 10px 30px rgba(118,75,162,0.15); background: #000; }
+        video.preview-img { display: block; }
+        .preview-text { width: 42%; }
+        .preview-text h3 { font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 12px; }
+        .preview-text p { font-size: 15px; color: #555; line-height: 1.6; }
+        .pre-cta-line { text-align: center; font-size: 18px; font-weight: 700; color: var(--accent); margin-top: 20px; }
+        @media (max-width: 768px) {
+            .preview-row, .preview-row.reverse { flex-direction: column; gap: 16px; margin-bottom: 40px; }
+            .preview-img, .preview-text { width: 100%; }
+            .preview-title { font-size: 24px; }
+            .preview-subtitle { font-size: 14px; margin-bottom: 30px; }
+        }
         .lang-title{font-size:26px;font-weight:800;margin-bottom:30px}
         .lang-opts{display:flex;gap:16px}
         .lang-btn{padding:22px 34px;border-radius:14px;border:2px solid rgba(255,255,255,0.35);background:rgba(255,255,255,0.08);color:#fff;font-size:18px;font-weight:700;cursor:pointer;transition:all 0.15s}
@@ -879,6 +897,15 @@
                 scoreMid: "You have solid foundations. Let's fill the critical gaps costing you money.",
                 scoreLow: "You're hemorrhaging money and time. Let's fix this now.",
                 gapsIntro: "The gaps you identified above are EXACTLY what the Bricks Blueprint solves.", sendingTo: "Your files will be sent to:", emailWrongHint: "Is this correct? If not, go back and re-check your email above before purchasing.",
+                previewTitle: "Here's exactly what you get",
+                previewSubtitle: "Real tools, not a generic PDF. Everything is built and ready to use the moment you buy.",
+                preview1Title: "AI Content Plan Generator",
+                preview1Desc: "Answer a few questions about your business and get a full 30-day content calendar — hooks, captions, and CTAs written for you, tailored to your industry and audience.",
+                preview2Title: "Finance Break-Even Toolkit",
+                preview2Desc: "Log your costs and services once. The calculator shows you exactly how many sales you need every week just to break even — and a live dashboard that updates automatically.",
+                preview3Title: "Sales System (Lead & Follow-Up Tracker)",
+                preview3Desc: "Every inquiry logged in one place, response times tracked automatically, and a recovery system so no lead goes silent without a structured follow-up.",
+                preCtaLine: "No fluff, no theory — just the exact tools to fix what your Checkup found.",
                 blueprintName: "Bricks Blueprint", oneTime: "One-time investment", limitedTime: "Limited Time \u2014 50% Off",
                 blueprintItem1: "Sales System (lead & follow-up tracker)",
                 blueprintItem2: "Finance Break-Even toolkit",
@@ -931,6 +958,15 @@
                 scoreMid: "لديك أسس جيدة. دعنا نسد الفجوات الجوهرية التي تكلفك المال.",
                 scoreLow: "أنت تخسر المال والوقت. دعنا نعالج هذا الأمر الآن.",
                 gapsIntro: "الفجوات الظاهرة أعلاه هي بالضبط ما تعالجه Bricks Blueprint.", sendingTo: "سيتم إرسال ملفاتك إلى:", emailWrongHint: "هل هذا صحيح؟ إذا لم يكن كذلك، ارجع وتأكد من بريدك الإلكتروني قبل الشراء.",
+                previewTitle: "إليك بالضبط ما ستحصل عليه",
+                previewSubtitle: "أدوات حقيقية، وليست ملف PDF عام. كل شيء جاهز للاستخدام فور الشراء.",
+                preview1Title: "مولّد خطة المحتوى بالذكاء الاصطناعي",
+                preview1Desc: "أجب عن بعض الأسئلة حول عملك واحصل على تقويم محتوى كامل لمدة 30 يوماً — عناوين جذابة، نصوص، ودعوات لاتخاذ إجراء مُعدة خصيصاً لمجالك وجمهورك.",
+                preview2Title: "أداة نقطة التعادل المالية",
+                preview2Desc: "سجّل تكاليفك وخدماتك مرة واحدة. تُظهر لك الأداة بالضبط عدد المبيعات التي تحتاجها أسبوعياً لتغطية التكاليف — مع لوحة بيانات تتحدث تلقائياً.",
+                preview3Title: "نظام المبيعات (متابعة العملاء)",
+                preview3Desc: "كل استفسار يُسجَّل في مكان واحد، وقت الاستجابة يُتابع تلقائياً، ونظام متابعة يضمن عدم فقدان أي عميل محتمل دون متابعة منظمة.",
+                preCtaLine: "لا حشو ولا نظريات — فقط الأدوات الدقيقة لمعالجة ما كشفه تقييمك.",
                 blueprintName: "Bricks Blueprint", oneTime: "دفعة واحدة", limitedTime: "لفترة محدودة \u2014 خصم 50%",
                 blueprintItem1: "نظام المبيعات (متابعة العملاء)",
                 blueprintItem2: "أداة نقطة التعادل المالية",
@@ -1347,6 +1383,44 @@
                      values back to a single $59 / $199 line and remove the two
                      discount-badge divs below. Also revert TIER_PRICING amounts
                      in api/create-payment.js back to the ORIGINAL_ comments there. -->
+
+                <div class="preview-section">
+                    <h2 class="preview-title">${T[LANG].previewTitle}</h2>
+                    <p class="preview-subtitle">${T[LANG].previewSubtitle}</p>
+
+                    <div class="preview-row">
+                        <video class="preview-img" controls preload="none" poster="content_plan_screenshot.png">
+                            <source src="content_plan_walkthrough.mp4" type="video/mp4">
+                        </video>
+                        <div class="preview-text">
+                            <h3>${T[LANG].preview1Title}</h3>
+                            <p>${T[LANG].preview1Desc}</p>
+                        </div>
+                    </div>
+
+                    <div class="preview-row reverse">
+                        <video class="preview-img" controls preload="none" poster="finance_screenshot.png">
+                            <source src="finance_walkthrough.mp4" type="video/mp4">
+                        </video>
+                        <div class="preview-text">
+                            <h3>${T[LANG].preview2Title}</h3>
+                            <p>${T[LANG].preview2Desc}</p>
+                        </div>
+                    </div>
+
+                    <div class="preview-row">
+                        <video class="preview-img" controls preload="none" poster="sales_screenshot.png">
+                            <source src="sales_walkthrough.mp4" type="video/mp4">
+                        </video>
+                        <div class="preview-text">
+                            <h3>${T[LANG].preview3Title}</h3>
+                            <p>${T[LANG].preview3Desc}</p>
+                        </div>
+                    </div>
+
+                    <p class="pre-cta-line">${T[LANG].preCtaLine}</p>
+                </div>
+
                 <div class="upsell">
                     <div class="package">
                         <div class="discount-badge">${T[LANG].limitedTime}</div>
