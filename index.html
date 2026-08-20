@@ -46,8 +46,8 @@
         /* Landing */
         .landing { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; min-height: 85vh; }
         .landing-content { color: var(--white); }
-        .landing-content h1 { font-size: 56px; font-weight: 800; margin-bottom: 30px; line-height: 1.2; }
-        .landing-content .accent { color: #ffd700; }
+        .landing-content h1 { font-size: 60px; font-weight: 900; margin-bottom: 30px; line-height: 1.15; text-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+        .landing-content .accent { color: #ffd700; text-shadow: 0 4px 20px rgba(255,215,0,0.4); }
         .landing-content p { font-size: 18px; color: rgba(255,255,255,0.9); margin-bottom: 20px; }
         
         .form-container { background: var(--white); padding: 45px; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
@@ -112,19 +112,35 @@
         }
         
         .btn {
-            padding: 14px 28px;
+            padding: 17px 28px;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 700;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 800;
             cursor: pointer;
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
             color: var(--white);
             width: 100%;
-            transition: all 0.3s;
+            transition: all 0.25s cubic-bezier(.2,.8,.2,1);
             text-transform: uppercase;
             letter-spacing: 1px;
+            box-shadow: 0 8px 24px rgba(118,75,162,0.35), 0 2px 6px rgba(118,75,162,0.25);
         }
+        .btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 14px 34px rgba(118,75,162,0.45), 0 4px 10px rgba(118,75,162,0.3);
+        }
+        .btn:active { transform: translateY(-1px) scale(0.99); }
+
+        @keyframes ctaPulse {
+            0%, 100% { box-shadow: 0 8px 24px rgba(255,215,0,0.25), 0 0 0 0 rgba(255,215,0,0.5); }
+            50% { box-shadow: 0 8px 30px rgba(255,215,0,0.45), 0 0 0 10px rgba(255,215,0,0); }
+        }
+        .btn-pop {
+            animation: ctaPulse 2.4s ease-in-out infinite;
+            border: 2px solid #ffd700 !important;
+        }
+        .btn-pop:hover { animation-play-state: paused; }
         
         .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(118,75,162,0.3); }
         .btn:disabled { background: #ccc; cursor: not-allowed; }
@@ -346,6 +362,11 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0,184,148,0.5); }
+            50% { transform: scale(1.06); box-shadow: 0 0 0 6px rgba(0,184,148,0); }
         }
         
         .package-period { color: var(--sage); font-size: 14px; margin-bottom: 30px; }
@@ -541,7 +562,7 @@
                             <input type="tel" id="inputPhone" placeholder="Phone number" required>
                         </div>
                     </div>
-                    <button class="btn" id="btnDiagnostic" onclick="goToIntro()">Get My Free Diagnostic →</button>
+                    <button class="btn btn-pop" id="btnDiagnostic" onclick="goToIntro()">Get My Free Diagnostic →</button>
                 </div>
             </div>
         </div>
@@ -902,15 +923,16 @@
                 scoreMid: "You have solid foundations. Let's fill the critical gaps costing you money.",
                 scoreLow: "You're hemorrhaging money and time. Let's fix this now.",
                 gapsIntro: "The gaps you identified above are EXACTLY what the Bricks Blueprint solves.", sendingTo: "Your files will be sent to:", emailWrongHint: "Is this correct? If not, go back and re-check your email above before purchasing.",
+                miniCtaBtn: "See exactly how to fix this ↓",
                 previewTitle: "Here's exactly what you get",
-                previewSubtitle: "Real tools, not a generic PDF. Everything is built and ready to use the moment you buy.",
+                previewSubtitle: "Watch how each tool actually works below — then decide if it's worth it.",
                 preview1Title: "AI Content Plan Generator",
                 preview1Desc: "Answer a few questions about your business and get a full 30-day content calendar — hooks, captions, and CTAs written for you, tailored to your industry and audience.",
                 preview2Title: "Finance Break-Even Toolkit",
                 preview2Desc: "Log your costs and services once. The calculator shows you exactly how many sales you need every week just to break even — and a live dashboard that updates automatically.",
                 preview3Title: "Sales System (Lead & Follow-Up Tracker)",
                 preview3Desc: "Every inquiry logged in one place, response times tracked automatically, and a recovery system so no lead goes silent without a structured follow-up.",
-                preCtaLine: "No fluff, no theory — just the exact tools to fix what your Checkup found.",
+                preCtaLine: "Most business owners bookmark this page and never come back. The ones who fix it start here.",
                 blueprintName: "Bricks Blueprint", oneTime: "One-time investment", limitedTime: "Limited Time \u2014 50% Off",
                 blueprintItem1: "Sales System (lead & follow-up tracker)",
                 blueprintItem2: "Finance Break-Even toolkit",
@@ -963,15 +985,16 @@
                 scoreMid: "لديك أسس جيدة. دعنا نسد الفجوات الجوهرية التي تكلفك المال.",
                 scoreLow: "أنت تخسر المال والوقت. دعنا نعالج هذا الأمر الآن.",
                 gapsIntro: "الفجوات الظاهرة أعلاه هي بالضبط ما تعالجه Bricks Blueprint.", sendingTo: "سيتم إرسال ملفاتك إلى:", emailWrongHint: "هل هذا صحيح؟ إذا لم يكن كذلك، ارجع وتأكد من بريدك الإلكتروني قبل الشراء.",
+                miniCtaBtn: "شاهد بالضبط كيف تعالج هذا ↓",
                 previewTitle: "إليك بالضبط ما ستحصل عليه",
-                previewSubtitle: "أدوات حقيقية، وليست ملف PDF عام. كل شيء جاهز للاستخدام فور الشراء.",
+                previewSubtitle: "شاهد كيف تعمل كل أداة فعلياً — ثم قرر إن كانت تستحق ذلك.",
                 preview1Title: "مولّد خطة المحتوى بالذكاء الاصطناعي",
                 preview1Desc: "أجب عن بعض الأسئلة حول عملك واحصل على تقويم محتوى كامل لمدة 30 يوماً — عناوين جذابة، نصوص، ودعوات لاتخاذ إجراء مُعدة خصيصاً لمجالك وجمهورك.",
                 preview2Title: "أداة نقطة التعادل المالية",
                 preview2Desc: "سجّل تكاليفك وخدماتك مرة واحدة. تُظهر لك الأداة بالضبط عدد المبيعات التي تحتاجها أسبوعياً لتغطية التكاليف — مع لوحة بيانات تتحدث تلقائياً.",
                 preview3Title: "نظام المبيعات (متابعة العملاء)",
                 preview3Desc: "كل استفسار يُسجَّل في مكان واحد، وقت الاستجابة يُتابع تلقائياً، ونظام متابعة يضمن عدم فقدان أي عميل محتمل دون متابعة منظمة.",
-                preCtaLine: "لا حشو ولا نظريات — فقط الأدوات الدقيقة لمعالجة ما كشفه تقييمك.",
+                preCtaLine: "معظم أصحاب الأعمال يحفظون هذه الصفحة ولا يعودون إليها أبداً. من يعالج هذا فعلاً يبدأ من هنا.",
                 blueprintName: "Bricks Blueprint", oneTime: "دفعة واحدة", limitedTime: "لفترة محدودة \u2014 خصم 50%",
                 blueprintItem1: "نظام المبيعات (متابعة العملاء)",
                 blueprintItem2: "أداة نقطة التعادل المالية",
@@ -1363,9 +1386,10 @@
             html += `
                 <div style="background: #faf8fc; padding: 50px; border-radius: 16px; margin-top: 50px; text-align: center; border: 2px solid rgba(118,75,162,0.2); box-shadow: 0 10px 30px rgba(0,0,0,0.08);">
                     <h2 style="color: var(--primary); margin-bottom: 15px; font-size: 32px;">${T[LANG].overallScore}</h2>
-                    <div style="font-size: 96px; font-weight: 900; color: var(--accent); margin: 20px 0;">${overallScore}</div>
+                    <div style="font-size: 96px; font-weight: 900; color: var(--accent); margin: 20px 0; text-shadow: 0 6px 30px rgba(118,75,162,0.35);">${overallScore}</div>
                     <p style="color: var(--sage); font-size: 16px; margin-bottom: 30px;">${scoreMsg}</p>
                     <p style="color: var(--primary); font-size: 16px; font-weight: 600;">💡 ${T[LANG].gapsIntro}</p>
+                    <a href="#pricingSection" class="no-print btn-pop" style="display:inline-block;margin-top:22px;padding:17px 32px;background:linear-gradient(135deg, #764ba2 0%, #667eea 100%);color:#fff;border-radius:10px;font-size:16px;font-weight:800;text-decoration:none;text-transform:uppercase;letter-spacing:1px;box-shadow:0 8px 24px rgba(118,75,162,0.35)">${T[LANG].miniCtaBtn}</a>
                 </div>
 
                 <div class="emailconfirm">
@@ -1426,7 +1450,7 @@
                     <p class="pre-cta-line">${T[LANG].preCtaLine}</p>
                 </div>
 
-                <div class="upsell">
+                <div class="upsell" id="pricingSection">
                     <div class="package">
                         <div class="discount-badge">${T[LANG].limitedTime}</div>
                         <h4>${T[LANG].blueprintName}</h4>
@@ -1439,7 +1463,7 @@
                             <li>${T[LANG].blueprintItem3}</li>
                             <li>${T[LANG].blueprintItem4}</li>
                         </ul>
-                        <button class="btn" id="blueprintBtn" onclick="startPayment('blueprint', this)" style="margin-top: 30px; background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);">${T[LANG].getBlueprint}</button>
+                        <button class="btn btn-pop" id="blueprintBtn" onclick="startPayment('blueprint', this)" style="margin-top: 30px; background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);">${T[LANG].getBlueprint}</button>
                     </div>
                     
                     <div class="package premium">
