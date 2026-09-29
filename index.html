@@ -561,6 +561,19 @@
         .px-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
         .px-p{font-size:22px;font-weight:800;color:var(--primary)}
         .px-tool .btn{width:auto !important;margin:0 !important;padding:8px 18px !important;font-size:14px !important;background:#fff !important;color:#7A1F5C !important;border:1.5px solid #7A1F5C !important;box-shadow:none !important}
+        .px-coupon{text-align:center;margin:-18px 0 30px}
+        .px-coupon-toggle{background:none;border:0;color:#7A1F5C;font-weight:700;font-size:14.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:6px 10px;box-shadow:none}
+        .px-coupon-toggle:hover{color:#9C2A63}
+        #couponBox{max-width:380px;margin:10px auto 0}
+        .px-coupon-row{display:flex;gap:8px}
+        .px-coupon-row input{flex:1;min-width:0;padding:11px 14px;border-radius:10px;border:1.5px solid #EDE2DB;background:#fff;font-size:14px;letter-spacing:.5px;color:var(--primary)}
+        .px-coupon-row input::placeholder{text-transform:none;letter-spacing:0;color:#9b958d}
+        .px-coupon-row input:focus{outline:none;border-color:#9C2A63}
+        .px-coupon-row input:disabled{background:#F7F2EE;color:#6E6A63}
+        .px-coupon-apply{background:#7A1F5C;color:#fff;border:0;border-radius:10px;padding:0 18px;font-weight:700;font-size:14px;cursor:pointer;white-space:nowrap}
+        .px-coupon-apply:hover{background:#651850}
+        .px-coupon-apply.remove{background:#fff;color:#7A1F5C;border:1.5px solid #7A1F5C}
+        .px-coupon-msg{font-size:13px;margin-top:8px;min-height:18px}
         .px-note{text-align:center;font-size:12.5px;color:var(--sage);margin-top:18px}
         @media (max-width:768px){.px-grid,.px-tools{grid-template-columns:1fr}.px-title{font-size:24px}.px-price{font-size:36px}.px-card{padding:24px 20px}}
         @media print{.px-wrap{display:none !important}}
@@ -1026,9 +1039,9 @@
                 otpTitle: "Verify your email", otpSub: "We sent a 6-digit code to", otpVerifyBtn: "Verify & Continue",
                 otpResend: "Resend code", otpCancel: "Cancel", otpResent: "Code resent - check your inbox.",
                 otpWrongCode: "That code isn't correct. Please try again.", otpExpired: "This code expired or is no longer valid. Please close this and click the button again.",
-                redeemBtn: "🎟️ Redeem Code", applyBtn: "Apply", couponPlaceholder: "Enter code",
+                redeemBtn: "Have a promo code?", applyBtn: "Apply", couponPlaceholder: "Enter code",
                 couponApplying: "Checking code...", couponInvalid: "That code isn't valid.",
-                couponAppliedFree: "✓ Code applied — this is on us!", couponAppliedPct: (p) => `✓ Code applied — ${p}% off!`,
+                couponAppliedFree: "✓ Code applied: your purchase is free.", couponAppliedPct: (p) => `✓ Code applied: ${p}% off, taken at checkout.`,
                 couponRemove: "Remove code",
                 pkgTitle: "Fix the gaps in your report",
                 pkgSub: "Choose how much help you want. Start today, one-time payment.",
@@ -1112,9 +1125,9 @@
                 otpTitle: "تأكيد بريدك الإلكتروني", otpSub: "أرسلنا كود مكوّن من 6 أرقام إلى", otpVerifyBtn: "تأكيد ومتابعة",
                 otpResend: "إعادة إرسال الكود", otpCancel: "إلغاء", otpResent: "تم إعادة إرسال الكود - تحقق من بريدك.",
                 otpWrongCode: "هذا الكود غير صحيح. حاول مرة أخرى.", otpExpired: "انتهت صلاحية هذا الكود. أغلق هذه النافذة واضغط على الزر مرة أخرى.",
-                redeemBtn: "🎟️ استبدال كود", applyBtn: "تطبيق", couponPlaceholder: "أدخل الكود",
+                redeemBtn: "لديك كود خصم؟", applyBtn: "تطبيق", couponPlaceholder: "أدخل الكود",
                 couponApplying: "جارٍ التحقق من الكود...", couponInvalid: "هذا الكود غير صالح.",
-                couponAppliedFree: "✓ تم تفعيل الكود — هذه الباقة مجانية!", couponAppliedPct: (p) => `✓ تم تفعيل الكود — خصم ${p}%!`,
+                couponAppliedFree: "✓ تم تفعيل الكود: الشراء مجاني.", couponAppliedPct: (p) => `✓ تم تفعيل الكود: خصم ${p}% يُطبَّق عند الدفع.`,
                 couponRemove: "إزالة الكود",
                 pkgTitle: "عالِج الثغرات التي كشفها تقريرك",
                 pkgSub: "اختر مستوى الدعم الذي يناسبك. ابدأ اليوم بدفعة واحدة.",
@@ -1186,6 +1199,7 @@
         }
 
         function selectLang(l) {
+            try { sessionStorage.setItem('lang', l); } catch (e) {}
             LANG = l;
             document.documentElement.lang = l;
             document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
@@ -1503,16 +1517,6 @@
                     <div class="emailconfirmsub">${T[LANG].emailWrongHint}</div>
                 </div>
                 
-                <div class="no-print" style="text-align:center;margin-top:30px;margin-bottom:10px">
-                    <button type="button" id="couponToggle" onclick="toggleCoupon()" class="btn btn-secondary" style="display:inline-block;width:auto;padding:8px 20px;font-size:13px">${T[LANG].redeemBtn}</button>
-                    <div id="couponBox" style="display:none;max-width:340px;margin:14px auto 0">
-                        <div style="display:flex;gap:8px">
-                            <input type="text" id="couponInput" placeholder="${T[LANG].couponPlaceholder}" style="flex:1;padding:10px 12px;border-radius:8px;border:1.5px solid #e2e0ea;font-size:13px;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
-                            <button type="button" id="couponApplyBtn" onclick="applyCoupon()" class="btn" style="width:auto;padding:10px 16px;font-size:13px">${T[LANG].applyBtn}</button>
-                        </div>
-                        <div id="couponMsg" style="font-size:12px;margin-top:6px"></div>
-                    </div>
-                </div>
 
                 <div class="preview-section">
                     <h2 class="preview-title">${T[LANG].previewTitle}</h2>
@@ -1554,6 +1558,16 @@
                 <div class="px-wrap" id="pricingSection">
                     <h2 class="px-title">${T[LANG].pkgTitle}</h2>
                     <p class="px-sub">${T[LANG].pkgSub}</p>
+                    <div class="px-coupon no-print">
+                        <button type="button" id="couponToggle" class="px-coupon-toggle" onclick="toggleCoupon()" aria-expanded="false" aria-controls="couponBox">${T[LANG].redeemBtn}</button>
+                        <div id="couponBox" style="display:none">
+                            <div class="px-coupon-row">
+                                <input type="text" id="couponInput" placeholder="${T[LANG].couponPlaceholder}" autocomplete="off" spellcheck="false" aria-label="${T[LANG].couponPlaceholder}" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter'){event.preventDefault();document.getElementById('couponApplyBtn').click();}">
+                                <button type="button" id="couponApplyBtn" class="px-coupon-apply" onclick="applyCoupon()">${T[LANG].applyBtn}</button>
+                            </div>
+                            <div id="couponMsg" class="px-coupon-msg" role="status" aria-live="polite"></div>
+                        </div>
+                    </div>
                     <div class="px-grid">
                         <div class="px-card hero">
                             <div class="px-badge">${T[LANG].pkgBadge}</div>
@@ -1612,7 +1626,10 @@
 
         function toggleCoupon() {
             var box = document.getElementById('couponBox');
-            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+            var open = box.style.display === 'none';
+            box.style.display = open ? 'block' : 'none';
+            document.getElementById('couponToggle').setAttribute('aria-expanded', open ? 'true' : 'false');
+            if (open) document.getElementById('couponInput').focus();
         }
 
         async function applyCoupon() {
@@ -1621,7 +1638,7 @@
             const code = input.value.trim();
             if (!code) return;
 
-            msg.style.color = '#888';
+            msg.style.color = '#6E6A63';
             msg.textContent = T[LANG].couponApplying;
 
             try {
@@ -1634,20 +1651,21 @@
 
                 if (data.valid) {
                     appliedCoupon = code.toUpperCase();
-                    msg.style.color = '#6E6A63';
+                    msg.style.color = '#2E7D62';
                     msg.textContent = data.discount === 100 ? T[LANG].couponAppliedFree : T[LANG].couponAppliedPct(data.discount);
                     input.disabled = true;
                     document.getElementById('couponApplyBtn').textContent = T[LANG].couponRemove;
                     document.getElementById('couponApplyBtn').onclick = removeCoupon;
+                    document.getElementById('couponApplyBtn').classList.add('remove');
                 } else {
                     appliedCoupon = null;
-                    msg.style.color = '#9A5B69';
+                    msg.style.color = '#C2413B';
                     msg.textContent = T[LANG].couponInvalid;
                 }
             } catch (err) {
                 console.error(err);
                 appliedCoupon = null;
-                msg.style.color = '#9A5B69';
+                msg.style.color = '#C2413B';
                 msg.textContent = T[LANG].couponInvalid;
             }
         }
@@ -1660,6 +1678,7 @@
             document.getElementById('couponMsg').textContent = '';
             document.getElementById('couponApplyBtn').textContent = T[LANG].applyBtn;
             document.getElementById('couponApplyBtn').onclick = applyCoupon;
+            document.getElementById('couponApplyBtn').classList.remove('remove');
         }
 
         var otpPending = { tier: null, token: null, btnEl: null, originalText: null };
