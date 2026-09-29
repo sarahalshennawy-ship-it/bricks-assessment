@@ -1,27 +1,22 @@
 // POST /api/create-payment
-// Body: { token: string, code: string, tier: "blueprint" | "consultation", name: string, email: string, coupon?: string }
+// Body: { token, code, tier: "entrepreneur" | "starter" | "content" | "planner" | "toolkit" | "upgrade", name, email, coupon? }
 // Requires a valid, unexpired OTP token+code from /api/send-verification first.
 // Returns: { redirect_url: string } OR { redirect_url: string, free: true } for 100% off codes
 
 const crypto = require("crypto");
 const { deliverPurchase } = require("./_lib/delivery.js");
 
-// Pricing in fils (1 AED = 100 fils). Update these if pricing changes.
-//
-// *** LAUNCH DISCOUNT ACTIVE (50% off, since Aug 2026, manual toggle) ***
-// blueprint and consultation are currently HALVED from their normal price.
-// ORIGINAL_blueprint: 21900 fils (219 AED, ~$59)
-// ORIGINAL_consultation: 72900 fils (729 AED, ~$199)
-// To revert: change amountFils below back to the ORIGINAL_ values above,
-// and also revert the pricing display in index.html (search "LAUNCH DISCOUNT").
-//
-// *** UPGRADE PRICE: $50 flat (was $99) - set Aug 2026 ***
-// Special in-email upsell price for existing Blueprint buyers to add the
-// Consultation sessions, framed against the full $199 sticker price.
+// Pricing in fils (1 AED = 100 fils). Ziina charges in AED; the page shows
+// USD. Keep these in sync with PRICES in index.html.
+//   USD -> AED at ~3.6725, rounded to a whole dirham.
 const TIER_PRICING = {
-  blueprint: { amountFils: 10950, label: "Bricks Blueprint" },      // 109.50 AED (~$29.50) - 50% off
-  consultation: { amountFils: 36450, label: "Bricks Consultation Package" }, // 364.50 AED (~$99.50) - 50% off
-  upgrade: { amountFils: 18500, label: "Consultation Upgrade" }     // 185.00 AED (~$50) - email upsell offer
+  entrepreneur: { amountFils: 47400, label: "Bricks Entrepreneur Package" },   // 474 AED  (~$129)
+  starter:      { amountFils: 25400, label: "Bricks Starter Package" },        // 254 AED  (~$69)
+  content:      { amountFils: 18000, label: "AI Content Plan Generator" },     // 180 AED  (~$49)
+  planner:      { amountFils: 10700, label: "UAE Business Launch Planner" },   // 107 AED  (~$29)
+  toolkit:      { amountFils: 10700, label: "Finance & Sales Toolkit" },       // 107 AED  (~$29)
+  // Legacy: the $50 upgrade link already sent in older Blueprint emails.
+  upgrade:      { amountFils: 18500, label: "Consultation Upgrade" }           // 185 AED  (~$50)
 };
 
 // Coupon codes live in the COUPON_CODES environment variable as JSON, e.g.:
@@ -126,9 +121,8 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // Ziina refuses any charge under 2 AED (200 fils). This can happen if a
-    // coupon is applied on top of an already-discounted launch price (e.g.
-    // 50% launch discount + a steep test coupon stacking together). Catch
+    // Ziina refuses any charge under 2 AED (200 fils). This can happen when a
+    // steep coupon is applied to a low-priced tool. Catch
     // this BEFORE calling Ziina, so the customer/admin gets a clear message
     // instead of Ziina's raw "TRANSFER_UNDER_MINIMUM" error surfacing as a
     // generic "something went wrong".
@@ -145,7 +139,8 @@ module.exports = async (req, res) => {
     // bought what once payment succeeds (Ziina's payment intent has no
     // separate metadata field, and the "message" field has a real length
     // limit). We drop the name here to stay safely short.
-    const TIER_CODE = { blueprint: "b", consultation: "c", upgrade: "u" };
+    // IMPORTANT: the Ziina webhook must decode these same letters.
+    const TIER_CODE = { entrepreneur: "e", starter: "s", content: "g", planner: "p", toolkit: "t", upgrade: "u" };
     const packedMessage = `${TIER_CODE[tier]}|${email}`.slice(0, 60);
 
     const ziinaRes = await fetch("https://api-v2.ziina.com/api/payment_intent", {
