@@ -1,5 +1,5 @@
 // POST /api/send-verification
-// Body: { email: string, name?: string, tier: "blueprint" | "consultation" | "upgrade" }
+// Body: { email: string, tier: "entrepreneur" | "starter" | "content" | "planner" | "toolkit" | "upgrade" }
 // Sends a 6-digit code to the customer's email and returns a signed token.
 // No database needed - the token itself carries the code, email, tier and
 // expiry, signed so it can't be tampered with. The frontend holds onto this
@@ -7,7 +7,8 @@
 
 const crypto = require("crypto");
 
-const VALID_TIERS = ["blueprint", "consultation", "upgrade"];
+// Must match TIER_PRICING in create-payment.js. "upgrade" = legacy $50 link in older emails.
+const VALID_TIERS = ["entrepreneur", "starter", "content", "planner", "toolkit", "upgrade"];
 const CODE_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
 function signToken(payload) {
@@ -19,11 +20,12 @@ function signToken(payload) {
 
 async function sendCodeEmail({ to, code }) {
   const html = `
-    <div style="font-family:Arial,sans-serif;max-width:420px;margin:0 auto;color:#2C1F17">
-      <h2>Your verification code</h2>
+    <div style="font-family:Arial,sans-serif;max-width:420px;margin:0 auto;color:#363731">
+      <p style="margin:0 0 4px 0;color:#9C2A63;font-size:12px;font-weight:bold;letter-spacing:1px">BRICKS · BUSINESS BUILDING STUDIO</p>
+      <h2 style="margin-top:0">Your verification code</h2>
       <p>Enter this code to confirm your email and complete your purchase:</p>
-      <div style="font-size:32px;font-weight:800;letter-spacing:8px;background:#f5f0eb;padding:20px;border-radius:10px;text-align:center;margin:20px 0">${code}</div>
-      <p style="font-size:13px;color:#888">This code expires in 10 minutes. If you didn't request this, you can ignore this email.</p>
+      <div style="font-size:32px;font-weight:800;letter-spacing:8px;background:#FBEFF4;color:#4A1242;padding:20px;border-radius:12px;text-align:center;margin:20px 0">${code}</div>
+      <p style="font-size:13px;color:#6E6A63">This code expires in 10 minutes. If you didn't request this, you can ignore this email.</p>
     </div>
   `;
 
