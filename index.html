@@ -531,6 +531,39 @@
         .package:hover{transform:translateY(-4px)}
         .form-container{box-shadow:0 12px 40px rgba(74,18,66,0.08) !important}
         body{background:radial-gradient(circle at 10% 15%, #FBE6EF 0, transparent 35%),#FFFBF8 !important}
+        /* ===== Packages & single tools (Sept 2026 pricing) ===== */
+        .px-wrap{max-width:1000px;margin:50px auto 0}
+        .px-title{font-size:30px;font-weight:800;text-align:center;color:var(--primary);margin-bottom:6px}
+        .px-sub{text-align:center;color:var(--sage);margin-bottom:34px}
+        .px-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:24px;align-items:start}
+        .px-card{background:#fff;border:1.5px solid #EDE2DB;border-radius:18px;padding:30px;position:relative}
+        .px-card.hero{border:2px solid #7A1F5C;box-shadow:0 18px 50px rgba(122,31,92,.12)}
+        .px-badge{position:absolute;top:-14px;inset-inline-start:26px;background:#FFC857;color:#4A1242;font-weight:800;font-size:13px;padding:5px 14px;border-radius:999px}
+        .px-card h3{font-size:22px;font-weight:800;color:var(--primary);margin-bottom:4px}
+        .px-lead{color:var(--sage);font-size:14.5px;margin-bottom:18px}
+        .px-item{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid #EDE2DB;font-size:15px;color:var(--primary)}
+        .px-item>span:first-child::before{content:"✓";color:var(--success);font-weight:800;margin-inline-end:10px}
+        .px-worth{white-space:nowrap;color:var(--sage);font-size:14px}
+        .px-worth s{margin-inline-end:6px}
+        .px-inc{color:#9C2A63;font-weight:700}
+        .px-total{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:18px}
+        .px-was{color:var(--sage);font-size:15px}
+        .px-price{font-size:42px;font-weight:900;color:#7A1F5C;line-height:1;white-space:nowrap}
+        .px-price small{font-size:16px;font-weight:600;color:var(--sage);margin-inline-start:6px}
+        .px-save{display:inline-block;background:#FBEFF4;color:#9C2A63;font-weight:700;font-size:13px;padding:3px 10px;border-radius:999px;margin-top:8px}
+        .px-card .btn{margin-top:20px}
+        .px-card .btn.px-alt{background:#fff !important;color:#7A1F5C !important;border:2px solid #7A1F5C !important;box-shadow:none !important}
+        .px-single{font-size:18px;font-weight:700;text-align:center;margin:44px 0 16px;color:var(--primary)}
+        .px-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+        .px-tool{background:#fff;border:1.5px solid #EDE2DB;border-radius:14px;padding:20px;display:flex;flex-direction:column}
+        .px-tool b{font-size:16px;color:var(--primary)}
+        .px-tool p{font-size:13.5px;color:var(--sage);margin:4px 0 12px;flex:1}
+        .px-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+        .px-p{font-size:22px;font-weight:800;color:var(--primary)}
+        .px-tool .btn{width:auto !important;margin:0 !important;padding:8px 18px !important;font-size:14px !important;background:#fff !important;color:#7A1F5C !important;border:1.5px solid #7A1F5C !important;box-shadow:none !important}
+        .px-note{text-align:center;font-size:12.5px;color:var(--sage);margin-top:18px}
+        @media (max-width:768px){.px-grid,.px-tools{grid-template-columns:1fr}.px-title{font-size:24px}.px-price{font-size:36px}.px-card{padding:24px 20px}}
+        @media print{.px-wrap{display:none !important}}
     </style>
 </head>
 <body>
@@ -996,7 +1029,31 @@
                 redeemBtn: "🎟️ Redeem Code", applyBtn: "Apply", couponPlaceholder: "Enter code",
                 couponApplying: "Checking code...", couponInvalid: "That code isn't valid.",
                 couponAppliedFree: "✓ Code applied — this is on us!", couponAppliedPct: (p) => `✓ Code applied — ${p}% off!`,
-                couponRemove: "Remove code"
+                couponRemove: "Remove code",
+                pkgTitle: "Fix the gaps in your report",
+                pkgSub: "Choose how much help you want. Start today, one-time payment.",
+                pkgBadge: "Most complete",
+                entName: "Entrepreneur Package",
+                entLead: "All the tools, the course, and two sessions with a strategist who has seen your results.",
+                starterName: "Starter Package",
+                starterLead: "All three tools to fix the gaps on your own.",
+                itemContent: "AI Content Plan Generator",
+                itemPlanner: "UAE Business Launch Planner",
+                itemToolkit: "Finance & Sales Toolkit",
+                itemSessions: "Strategy session + follow-up session",
+                itemCourse: "Course material",
+                pkgIncluded: "Included",
+                pkgTotal: "Total value",
+                pkgSave: (m) => `You save ${m}`,
+                pkgOneTime: "one-time",
+                getEnt: "Get the Entrepreneur Package",
+                getStarter: "Get the Starter Package",
+                singleTitle: "Or pick a single tool",
+                descContent: "A 30-day content plan built for your business.",
+                descPlanner: "Your step-by-step licence and launch checklist.",
+                descToolkit: "Break-even calculator and lead follow-up tracker.",
+                buyBtn: "Buy",
+                aedNote: "Prices are in US dollars. You pay the equivalent in AED at checkout."
             },
             ar: {
                 fillAllFields: "يرجى تعبئة جميع الحقول", invalidEmail: "يرجى التأكد من بريدك الإلكتروني - يبدو غير مكتمل أو بصيغة غير صحيحة.",
@@ -1058,7 +1115,31 @@
                 redeemBtn: "🎟️ استبدال كود", applyBtn: "تطبيق", couponPlaceholder: "أدخل الكود",
                 couponApplying: "جارٍ التحقق من الكود...", couponInvalid: "هذا الكود غير صالح.",
                 couponAppliedFree: "✓ تم تفعيل الكود — هذه الباقة مجانية!", couponAppliedPct: (p) => `✓ تم تفعيل الكود — خصم ${p}%!`,
-                couponRemove: "إزالة الكود"
+                couponRemove: "إزالة الكود",
+                pkgTitle: "عالِج الثغرات التي كشفها تقريرك",
+                pkgSub: "اختر مستوى الدعم الذي يناسبك. ابدأ اليوم بدفعة واحدة.",
+                pkgBadge: "الباقة الأشمل",
+                entName: "باقة رائد الأعمال",
+                entLead: "جميع الأدوات، ومحتوى الدورة التدريبية، وجلستان مع مستشار استراتيجي اطّلع على نتائجك.",
+                starterName: "باقة الانطلاق",
+                starterLead: "الأدوات الثلاث لتعالج الثغرات بنفسك.",
+                itemContent: "مولِّد خطة المحتوى بالذكاء الاصطناعي",
+                itemPlanner: "مخطِّط إطلاق الأعمال في الإمارات",
+                itemToolkit: "أدوات المالية والمبيعات",
+                itemSessions: "جلسة استراتيجية + جلسة متابعة",
+                itemCourse: "محتوى الدورة التدريبية",
+                pkgIncluded: "ضمن الباقة",
+                pkgTotal: "القيمة الإجمالية",
+                pkgSave: (m) => `توفير ${m}`,
+                pkgOneTime: "دفعة واحدة",
+                getEnt: "احصل على باقة رائد الأعمال",
+                getStarter: "احصل على باقة الانطلاق",
+                singleTitle: "أو اختر أداة واحدة",
+                descContent: "خطة محتوى لمدة 30 يوماً مصمَّمة لعملك.",
+                descPlanner: "خطوات مفصّلة للحصول على الترخيص وإطلاق عملك.",
+                descToolkit: "حاسبة نقطة التعادل وأداة لمتابعة العملاء المحتملين.",
+                buyBtn: "شراء",
+                aedNote: "الأسعار بالدولار الأمريكي، وتُحتسب بما يعادلها بالدرهم الإماراتي عند إتمام الشراء."
             }
         };
 
@@ -1414,7 +1495,7 @@
                     <div style="font-size: 96px; font-weight: 900; color: var(--accent); margin: 20px 0; text-shadow: 0 6px 30px rgba(156,42,99,0.35);">${overallScore}</div>
                     <p style="color: var(--sage); font-size: 16px; margin-bottom: 30px;">${scoreMsg}</p>
                     <p style="color: var(--primary); font-size: 16px; font-weight: 600;">💡 ${T[LANG].gapsIntro}</p>
-                    <a href="#pricingSection" class="no-print btn-pop" style="display:inline-block;margin-top:22px;padding:17px 32px;background:var(--primary);color:var(--bg);border-radius:10px;font-size:16px;font-weight:800;text-decoration:none;text-transform:uppercase;letter-spacing:1px;box-shadow:0 8px 24px rgba(54,55,49,0.22)">${T[LANG].miniCtaBtn}</a>
+                    <a href="#pricingSection" class="no-print btn-pop" style="display:inline-block;margin-top:22px;padding:17px 32px;background:var(--primary);color:var(--bg);border-radius:10px;font-size:16px;font-weight:800;text-decoration:none;box-shadow:0 8px 24px rgba(54,55,49,0.22)">${T[LANG].miniCtaBtn}</a>
                 </div>
 
                 <div class="emailconfirm">
@@ -1432,11 +1513,6 @@
                         <div id="couponMsg" style="font-size:12px;margin-top:6px"></div>
                     </div>
                 </div>
-                <!-- LAUNCH DISCOUNT: 50% off, active as of Aug 2026, manual toggle.
-                     To revert to full price: change package-price-orig/package-price
-                     values back to a single $59 / $199 line and remove the two
-                     discount-badge divs below. Also revert TIER_PRICING amounts
-                     in api/create-payment.js back to the ORIGINAL_ comments there. -->
 
                 <div class="preview-section">
                     <h2 class="preview-title">${T[LANG].previewTitle}</h2>
@@ -1475,37 +1551,39 @@
                     <p class="pre-cta-line">${T[LANG].preCtaLine}</p>
                 </div>
 
-                <div class="upsell" id="pricingSection">
-                    <div class="package">
-                        <div class="discount-badge">${T[LANG].limitedTime}</div>
-                        <h4>${T[LANG].blueprintName}</h4>
-                        <div class="package-price-orig">$59</div>
-                        <div class="package-price">$29.50</div>
-                        <div class="package-period">${T[LANG].oneTime}</div>
-                        <ul>
-                            <li>${T[LANG].blueprintItem1}</li>
-                            <li>${T[LANG].blueprintItem2}</li>
-                            <li>${T[LANG].blueprintItem3}</li>
-                            <li>${T[LANG].blueprintItem4}</li>
-                        </ul>
-                        <button class="btn btn-pop" id="blueprintBtn" onclick="startPayment('blueprint', this)" style="margin-top: 30px; background: var(--primary);">${T[LANG].getBlueprint}</button>
+                <div class="px-wrap" id="pricingSection">
+                    <h2 class="px-title">${T[LANG].pkgTitle}</h2>
+                    <p class="px-sub">${T[LANG].pkgSub}</p>
+                    <div class="px-grid">
+                        <div class="px-card hero">
+                            <div class="px-badge">${T[LANG].pkgBadge}</div>
+                            <h3>${T[LANG].entName}</h3>
+                            <p class="px-lead">${T[LANG].entLead}</p>
+                            ${pxItem(T[LANG].itemContent, PRICES.content)}
+                            ${pxItem(T[LANG].itemPlanner, PRICES.planner)}
+                            ${pxItem(T[LANG].itemToolkit, PRICES.toolkit)}
+                            ${pxItem(T[LANG].itemSessions, PRICES.sessions)}
+                            ${pxItem(T[LANG].itemCourse, PRICES.course)}
+                            ${pxTotal(ENT_VALUE, PRICES.entrepreneur)}
+                            <button class="btn" id="entBtn" onclick="startPayment('entrepreneur', this)">${T[LANG].getEnt}</button>
+                        </div>
+                        <div class="px-card">
+                            <h3>${T[LANG].starterName}</h3>
+                            <p class="px-lead">${T[LANG].starterLead}</p>
+                            ${pxItem(T[LANG].itemContent, PRICES.content)}
+                            ${pxItem(T[LANG].itemPlanner, PRICES.planner)}
+                            ${pxItem(T[LANG].itemToolkit, PRICES.toolkit)}
+                            ${pxTotal(STARTER_VALUE, PRICES.starter)}
+                            <button class="btn px-alt" id="starterBtn" onclick="startPayment('starter', this)">${T[LANG].getStarter}</button>
+                        </div>
                     </div>
-                    
-                    <div class="package premium">
-                        <div class="premium-badge">${T[LANG].recommended}</div>
-                        <div class="discount-badge">${T[LANG].limitedTime}</div>
-                        <h4>${T[LANG].consultName}</h4>
-                        <div class="package-price-orig">$199</div>
-                        <div class="package-price">$99.50</div>
-                        <div class="package-period">${T[LANG].consultPeriod}</div>
-                        <ul>
-                            <li>${T[LANG].consultItem0}</li>
-                            <li>${T[LANG].consultItem1}</li>
-                            <li>${T[LANG].consultItem2}</li>
-                            <li>${T[LANG].consultItem3}</li>
-                        </ul>
-                        <button class="btn" id="consultBtn" onclick="startPayment('consultation', this)" style="margin-top: 30px;">${T[LANG].bookConsult}</button>
+                    <div class="px-single">${T[LANG].singleTitle}</div>
+                    <div class="px-tools">
+                        ${pxTool(T[LANG].itemContent, T[LANG].descContent, PRICES.content, 'content')}
+                        ${pxTool(T[LANG].itemPlanner, T[LANG].descPlanner, PRICES.planner, 'planner')}
+                        ${pxTool(T[LANG].itemToolkit, T[LANG].descToolkit, PRICES.toolkit, 'toolkit')}
                     </div>
+                    <p class="px-note">${T[LANG].aedNote}</p>
                 </div>
             `;
             
@@ -1513,6 +1591,24 @@
         }
 
         var appliedCoupon = null;
+
+        // Display prices in USD. The amounts actually charged live in
+        // api/create-payment.js (TIER_PRICING) - keep both in sync.
+        const PRICES = { entrepreneur: 129, starter: 69, content: 49, planner: 29, toolkit: 29, sessions: 69, course: 79 };
+        const STARTER_VALUE = PRICES.content + PRICES.planner + PRICES.toolkit;           // 107
+        const ENT_VALUE = STARTER_VALUE + PRICES.sessions + PRICES.course;               // 255
+        function usd(n){ return '<bdi dir="ltr">$' + n + '</bdi>'; }
+        function pxItem(name, worth){
+            return '<div class="px-item"><span>' + name + '</span><span class="px-worth"><s>' + usd(worth) + '</s><span class="px-inc">' + T[LANG].pkgIncluded + '</span></span></div>';
+        }
+        function pxTotal(value, price){
+            return '<div class="px-total"><div><div class="px-was">' + T[LANG].pkgTotal + ' <s>' + usd(value) + '</s></div><span class="px-save">' + T[LANG].pkgSave(usd(value - price)) + '</span></div>' +
+                   '<div class="px-price">' + usd(price) + '<small>' + T[LANG].pkgOneTime + '</small></div></div>';
+        }
+        function pxTool(name, desc, price, tier){
+            return '<div class="px-tool"><b>' + name + '</b><p>' + desc + '</p><div class="px-row"><span class="px-p">' + usd(price) + '</span>' +
+                   '<button class="btn" onclick="startPayment(\'' + tier + '\', this)">' + T[LANG].buyBtn + '</button></div></div>';
+        }
 
         function toggleCoupon() {
             var box = document.getElementById('couponBox');
