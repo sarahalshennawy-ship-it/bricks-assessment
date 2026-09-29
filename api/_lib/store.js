@@ -3,6 +3,8 @@
 //
 // Requires a Redis database connected to THIS project (separate from the
 // content generator's Redis) with REDIS_URL set in Vercel.
+// NOTE: access codes do NOT live here - they live in the content generator's
+// Redis (plan.bricksmedia.org), which the planner site also uses.
 
 const { createClient } = require("redis");
 
@@ -36,7 +38,12 @@ async function saveUser(email, record) {
 // Merges new fields into an existing record (if any), never downgrading
 // `status` (e.g. a real customer revisiting the free assessment again
 // should not get overwritten back down to "free_only").
-const STATUS_RANK = { free_only: 0, purchased_blueprint: 1, purchased_upgrade: 2, purchased_consultation: 3 };
+const STATUS_RANK = {
+  free_only: 0,
+  purchased_toolkit: 1, purchased_planner: 1, purchased_content: 1, purchased_blueprint: 1,
+  purchased_starter: 2, purchased_upgrade: 2,
+  purchased_consultation: 3, purchased_entrepreneur: 4
+};
 
 async function upsertUser(email, updates) {
   const existing = await getUser(email);
