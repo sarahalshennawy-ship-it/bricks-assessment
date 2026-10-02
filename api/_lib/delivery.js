@@ -5,7 +5,7 @@
 //
 // Access codes for BOTH tools are issued by plan.bricksmedia.org's
 // /api/issue-code (one shared code database):
-//   - Content Plan Generator  -> product "content-plan", 34 calls, 30 days
+//   - Content Plan Generator  -> product "content-plan", lifetime, 40 generations a month
 //   - UAE Business Launch Planner -> product "launch-planner", lifetime
 //
 // Env vars used here:
@@ -38,7 +38,7 @@ async function issueCode(product, attempt = 0) {
   const code = prefix + crypto.randomBytes(5).toString("hex").toUpperCase();
   const body = product === "launch-planner"
     ? { code, product: "launch-planner", lifetime: true }
-    : { code, product: "content-plan", callsAllowed: 34, validDays: 30 };
+    : { code, product: "content-plan", lifetime: true, callsAllowed: 40 };
 
   try {
     const res = await fetch(CODE_API, {
@@ -134,8 +134,8 @@ async function sendDeliveryEmail({ to, name, tier, contentToolCode, plannerCode 
   if (t.contentTool) {
     if (contentToolCode) {
       parts.push(codeBlock("AI Content Plan Generator", CONTENT_TOOL_URL, contentToolCode,
-        "Valid for 30 days. Generate your full 30-day plan, then regenerate any single day as often as you like."));
-      text.push(`AI Content Plan Generator\nOpen: ${CONTENT_TOOL_URL}\nAccess code: ${contentToolCode} (valid 30 days)`);
+        "Lifetime access: a new 30-day plan every month, built on your results. 40 generations a month, renewed automatically."));
+      text.push(`AI Content Plan Generator\nOpen: ${CONTENT_TOOL_URL}\nAccess code: ${contentToolCode} (lifetime access, a new plan every month)`);
     } else { parts.push(pendingLine("Content Plan Generator")); text.push("AI Content Plan Generator: your code will follow in a separate email."); missing.push("content code"); }
   }
   if (t.planner) {
@@ -180,7 +180,7 @@ async function sendDeliveryEmail({ to, name, tier, contentToolCode, plannerCode 
     method: "POST",
     headers: { "Authorization": "Bearer " + process.env.RESEND_API_KEY, "Content-Type": "application/json" },
     body: JSON.stringify({
-      from: process.env.SENDER_EMAIL || "Bricks <hello@bricksmedia.org>",
+      from: process.env.SENDER_EMAIL || "Bricks <hello@mail.bricksmedia.org>",
       to: [to],
       subject: t.subject,
       html,
