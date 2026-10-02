@@ -221,6 +221,12 @@
         .goalsub { margin-top: 16px; font-size: 13px; color: var(--sage); }
         .emailconfirm { text-align: center; font-size: 14px; color: var(--primary); background: #F9ECEE; border-radius: 10px; padding: 12px 20px; margin: 20px auto; max-width: 480px; }
         .otp-overlay { position: fixed; inset: 0; background: rgba(20,15,10,0.6); display: flex; align-items: center; justify-content: center; z-index: 999; padding: 20px; }
+        .cf-field { text-align: start; margin-top: 14px; }
+        .cf-field label { display: block; font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+        .cf-field input { width: 100%; padding: 12px 14px; border-radius: 10px; border: 1.5px solid #EDE2DB; font-size: 15px; color: var(--primary); background: #fff; }
+        .cf-field input:focus { outline: none; border-color: #9C2A63; }
+        .cf-field input[type=email], .cf-field input[type=tel] { direction: ltr; text-align: start; }
+        .cf-product { display: inline-block; background: #FBEFF4; color: #9C2A63; font-weight: 700; font-size: 13px; padding: 4px 12px; border-radius: 999px; margin-bottom: 10px; }
         .otp-box { background: #fff; border-radius: 16px; padding: 32px 28px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
         .otp-title { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
         .otp-sub { font-size: 13px; color: #666; margin-bottom: 18px; line-height: 1.5; }
@@ -1036,6 +1042,12 @@
                 optRev: ["<$50k","$50-100k","$100-500k","$500k+"],
                 startAssessment: "Start Assessment →",
                 reportTitle: "Your Growth Diagnostic Report", preparedFor: "Prepared for ", downloadPdf: "Download as PDF",
+                confirmTitle: "Confirm your details",
+                confirmSub: "Your access codes and files will be sent to this email. Please check it's correct before we continue.",
+                confirmEmail: "Email", confirmPhone: "Mobile number",
+                confirmBtn: "Yes, send my verification code",
+                confirmEmailErr: "Please enter a valid email address.",
+                confirmPhoneErr: "Please enter your mobile number.",
                 otpTitle: "Verify your email", otpSub: "We sent a 6-digit code to", otpVerifyBtn: "Verify & Continue",
                 otpResend: "Resend code", otpCancel: "Cancel", otpResent: "Code resent - check your inbox.",
                 otpWrongCode: "That code isn't correct. Please try again.", otpExpired: "This code expired or is no longer valid. Please close this and click the button again.",
@@ -1050,7 +1062,7 @@
                 entLead: "All the tools, the course, and two sessions with a strategist who has seen your results.",
                 starterName: "Starter Package",
                 starterLead: "All three tools to fix the gaps on your own.",
-                itemContent: "AI Content Plan Generator",
+                itemContent: "AI Content Plan Generator (lifetime)",
                 itemPlanner: "UAE Business Launch Planner",
                 itemToolkit: "Finance & Sales Toolkit",
                 itemSessions: "Strategy session + follow-up session",
@@ -1062,7 +1074,7 @@
                 getEnt: "Get the Entrepreneur Package",
                 getStarter: "Get the Starter Package",
                 singleTitle: "Or pick a single tool",
-                descContent: "A 30-day content plan built for your business.",
+                descContent: "Lifetime access: a new 30-day content plan every month, built on your results.",
                 descPlanner: "Your step-by-step licence and launch checklist.",
                 descToolkit: "Break-even calculator and lead follow-up tracker.",
                 buyBtn: "Buy",
@@ -1122,6 +1134,12 @@
                 optRev: ["أقل من 50 ألف دولار","50-100 ألف دولار","100-500 ألف دولار","أكثر من 500 ألف دولار"],
                 startAssessment: "ابدأ التقييم ←",
                 reportTitle: "تقرير تشخيص نمو عملك", preparedFor: "أُعِدّ لـ ", downloadPdf: "تحميل كملف PDF",
+                confirmTitle: "تأكيد بياناتك",
+                confirmSub: "سنرسل رموز الدخول والملفات إلى هذا البريد الإلكتروني. يُرجى التأكد من صحته قبل المتابعة.",
+                confirmEmail: "البريد الإلكتروني", confirmPhone: "رقم الجوال",
+                confirmBtn: "نعم، أرسل كود التحقق",
+                confirmEmailErr: "يُرجى إدخال بريد إلكتروني صحيح.",
+                confirmPhoneErr: "يُرجى إدخال رقم الجوال.",
                 otpTitle: "تأكيد بريدك الإلكتروني", otpSub: "أرسلنا كود مكوّن من 6 أرقام إلى", otpVerifyBtn: "تأكيد ومتابعة",
                 otpResend: "إعادة إرسال الكود", otpCancel: "إلغاء", otpResent: "تم إعادة إرسال الكود - تحقق من بريدك.",
                 otpWrongCode: "هذا الكود غير صحيح. حاول مرة أخرى.", otpExpired: "انتهت صلاحية هذا الكود. أغلق هذه النافذة واضغط على الزر مرة أخرى.",
@@ -1136,7 +1154,7 @@
                 entLead: "جميع الأدوات، ومحتوى الدورة التدريبية، وجلستان مع مستشار استراتيجي اطّلع على نتائجك.",
                 starterName: "باقة الانطلاق",
                 starterLead: "الأدوات الثلاث لتعالج الثغرات بنفسك.",
-                itemContent: "مولِّد خطة المحتوى بالذكاء الاصطناعي",
+                itemContent: "مولِّد خطة المحتوى بالذكاء الاصطناعي (مدى الحياة)",
                 itemPlanner: "مخطِّط إطلاق الأعمال في الإمارات",
                 itemToolkit: "أدوات المالية والمبيعات",
                 itemSessions: "جلسة استراتيجية + جلسة متابعة",
@@ -1148,7 +1166,7 @@
                 getEnt: "احصل على باقة رائد الأعمال",
                 getStarter: "احصل على باقة الانطلاق",
                 singleTitle: "أو اختر أداة واحدة",
-                descContent: "خطة محتوى لمدة 30 يوماً مصمَّمة لعملك.",
+                descContent: "وصول مدى الحياة: خطة محتوى جديدة لمدة 30 يوماً كل شهر، مبنية على نتائجك.",
                 descPlanner: "خطوات مفصّلة للحصول على الترخيص وإطلاق عملك.",
                 descToolkit: "حاسبة نقطة التعادل وأداة لمتابعة العملاء المحتملين.",
                 buyBtn: "شراء",
@@ -1683,7 +1701,66 @@
 
         var otpPending = { tier: null, token: null, btnEl: null, originalText: null };
 
-        async function startPayment(tier, btnEl) {
+        // Step 1 of checkout: let the buyer confirm (or correct) their email and
+        // mobile number before we send the verification code.
+        const TIER_NAMES = {
+            en: { entrepreneur: "Entrepreneur Package", starter: "Starter Package", content: "AI Content Plan Generator", planner: "UAE Business Launch Planner", toolkit: "Finance & Sales Toolkit", upgrade: "Consultation Upgrade" },
+            ar: { entrepreneur: "باقة رائد الأعمال", starter: "باقة الانطلاق", content: "مولِّد خطة المحتوى بالذكاء الاصطناعي", planner: "مخطِّط إطلاق الأعمال في الإمارات", toolkit: "أدوات المالية والمبيعات", upgrade: "ترقية الاستشارة" }
+        };
+
+        function startPayment(tier, btnEl) {
+            const email = sessionStorage.getItem('userEmail') || '';
+            const phone = sessionStorage.getItem('userPhone') || '';
+            const productName = (TIER_NAMES[LANG] || TIER_NAMES.en)[tier] || '';
+            let modal = document.getElementById('otpModal');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'otpModal';
+                document.body.appendChild(modal);
+            }
+            modal.innerHTML = `
+                <div class="otp-overlay" role="dialog" aria-modal="true" aria-labelledby="cfTitle">
+                    <div class="otp-box">
+                        ${productName ? `<div class="cf-product">${esc(productName)}</div>` : ''}
+                        <div class="otp-title" id="cfTitle">${T[LANG].confirmTitle}</div>
+                        <div class="otp-sub">${T[LANG].confirmSub}</div>
+                        <div class="cf-field"><label for="cfEmail">${T[LANG].confirmEmail}</label>
+                            <input type="email" id="cfEmail" autocomplete="email" value="${esc(email)}"></div>
+                        <div class="cf-field"><label for="cfPhone">${T[LANG].confirmPhone}</label>
+                            <input type="tel" id="cfPhone" autocomplete="tel" value="${esc(phone)}"></div>
+                        <div id="cfMsg" class="otp-msg" role="alert"></div>
+                        <button type="button" class="btn" id="cfBtn" style="width:100%;margin-top:14px">${T[LANG].confirmBtn}</button>
+                        <div class="otp-links"><a href="#" onclick="closeOtpModal();return false;">${T[LANG].otpCancel}</a></div>
+                    </div>
+                </div>
+            `;
+            modal.style.display = 'block';
+            document.getElementById('cfBtn').onclick = function () { confirmDetailsAndSend(tier, btnEl); };
+            document.getElementById('cfEmail').onkeydown = function (e) { if (e.key === 'Enter') document.getElementById('cfBtn').click(); };
+            setTimeout(() => { const el = document.getElementById('cfEmail'); if (el) el.focus(); }, 50);
+        }
+
+        function confirmDetailsAndSend(tier, btnEl) {
+            const email = (document.getElementById('cfEmail').value || '').trim();
+            const phone = (document.getElementById('cfPhone').value || '').trim();
+            const msg = document.getElementById('cfMsg');
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.textContent = T[LANG].confirmEmailErr; return; }
+            if (phone.replace(/\D/g, '').length < 7) { msg.textContent = T[LANG].confirmPhoneErr; return; }
+
+            const changed = email !== (sessionStorage.getItem('userEmail') || '') || phone !== (sessionStorage.getItem('userPhone') || '');
+            sessionStorage.setItem('userEmail', email);
+            sessionStorage.setItem('userPhone', phone);
+            const shown = document.querySelector('.emailconfirm b');
+            if (shown) shown.textContent = email;
+            if (changed) { try { trackUserData(); } catch (e) {} }
+
+            const cfBtn = document.getElementById('cfBtn');
+            cfBtn.disabled = true;
+            cfBtn.textContent = LANG === 'ar' ? 'جارٍ إرسال الكود...' : 'Sending code...';
+            sendVerificationCode(tier, btnEl);
+        }
+
+        async function sendVerificationCode(tier, btnEl) {
             const originalText = btnEl.textContent;
             btnEl.disabled = true;
             btnEl.textContent = LANG === 'ar' ? 'جارٍ إرسال الكود...' : 'Sending code...';
@@ -1708,7 +1785,10 @@
                 btnEl.textContent = originalText;
             } catch (err) {
                 console.error(err);
-                alert(LANG === 'ar' ? 'تعذر إرسال كود التحقق. حاول مرة أخرى.' : 'Could not send the verification code. Please try again.');
+                const cfMsg = document.getElementById('cfMsg');
+                const cfBtn = document.getElementById('cfBtn');
+                if (cfMsg) cfMsg.textContent = LANG === 'ar' ? 'تعذر إرسال كود التحقق. تأكد من البريد الإلكتروني وحاول مرة أخرى.' : 'Could not send the verification code. Check the email and try again.';
+                if (cfBtn) { cfBtn.disabled = false; cfBtn.textContent = T[LANG].confirmBtn; }
                 btnEl.disabled = false;
                 btnEl.textContent = originalText;
             }
