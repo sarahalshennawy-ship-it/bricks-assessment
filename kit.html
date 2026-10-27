@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFFBF8">
+<title>The Gulf Founder Kit | Bricks</title>
+<meta name="description" content="Check your idea, open your business right, and manage your first year in the UAE and KSA. Three practical tools, English and Arabic.">
+<style>
+:root{--bg:#FFFBF8;--ink:#363731;--muted:#6E6A63;--line:#EDE2DB;--plum:#7A1F5C;--deep:#4A1242;--rasp:#9C2A63;--sun:#FFC857;--soft:#FBEFF4}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 8% 0,#FBE6EF 0,transparent 420px) no-repeat,var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;padding-bottom:84px}
+.w{max-width:720px;margin:0 auto;padding:16px}
+.top{display:flex;justify-content:space-between;align-items:center}.brand{font-size:12px;letter-spacing:.12em;color:var(--rasp);font-weight:700}
+.lang{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;color:var(--ink)}
+.hero{background:linear-gradient(135deg,var(--deep),var(--plum) 55%,var(--rasp));color:#fff;border-radius:20px;padding:28px 22px;margin-top:14px}
+.hero .brand{color:var(--sun)}h1{font-size:30px;line-height:1.15;margin:8px 0 10px}.hero p{color:#F6DDE8;margin:0 0 14px}
+.price{display:flex;align-items:baseline;gap:10px;margin:12px 0}.price b{font-size:40px;color:var(--sun)}.price span{color:#F6DDE8;font-size:14px}
+.btn{display:block;width:100%;background:var(--sun);color:var(--deep);border:0;border-radius:12px;padding:15px 16px;font-size:17px;font-weight:800;text-align:center;text-decoration:none;cursor:pointer}
+.btn.dark{background:var(--plum);color:#fff}
+h2{font-size:22px;margin:30px 0 10px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+.card h3{margin:0 0 6px;font-size:18px}.tag{display:inline-block;background:var(--soft);color:var(--rasp);font-weight:800;font-size:11px;letter-spacing:.05em;padding:3px 9px;border-radius:6px;margin-bottom:6px}
+.card ul{margin:8px 0 0;padding-inline-start:20px}.card li{margin:4px 0}.muted{color:var(--muted);font-size:14px}
+.mock{background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;font-size:13.5px}
+.bar{height:8px;background:var(--line);border-radius:8px;overflow:hidden;margin:6px 0}.bar i{display:block;height:100%;background:linear-gradient(90deg,#D14B7F,var(--plum))}
+.mrow{display:flex;justify-content:space-between}.ok{color:#2E7D62;font-weight:700}.bad{color:#C2413B;font-weight:700}
+details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:8px 0}summary{cursor:pointer;font-weight:700}details p{margin:8px 0 0;color:var(--muted);font-size:14.5px}
+.val{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)}.val s{color:var(--muted)}
+.bar-cta{position:fixed;inset-inline:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));display:flex;gap:12px;align-items:center;z-index:9}
+.bar-cta .p{font-weight:800;font-size:20px;white-space:nowrap}.bar-cta .btn{padding:12px}
+.foot{font-size:12.5px;color:var(--muted);margin:28px 0}
+[dir=rtl] .mrow{flex-direction:row}
+</style>
+</head>
+<body>
+<div class="w">
+ <div class="top"><div class="brand" data-i="brand"></div><button class="lang" id="lang">العربية</button></div>
+ <div class="hero">
+  <div class="brand" data-i="kicker"></div>
+  <h1 data-i="h1"></h1>
+  <p data-i="sub"></p>
+  <div class="price"><b dir="ltr">$9</b><span data-i="priceNote"></span></div>
+  <a class="btn" id="cta1" href="#" data-i="cta"></a>
+</div>
+
+ <h2 data-i="whatT"></h2>
+ <div class="card"><span class="tag" data-i="t1tag"></span><h3 data-i="t1h"></h3><p class="muted" data-i="t1p"></p>
+  <ul><li data-i="t1a"></li><li data-i="t1b"></li><li data-i="t1c"></li></ul>
+  <div class="mock"><div class="mrow"><b data-i="mScore"></b><b dir="ltr">14 / 20</b></div><div class="bar"><i style="width:70%"></i></div><div class="mrow"><span data-i="mDim1"></span><span class="ok" dir="ltr">4/4</span></div><div class="mrow"><span data-i="mDim2"></span><span class="bad" dir="ltr">1/4</span></div></div></div>
+ <div class="card"><span class="tag" data-i="t2tag"></span><h3 data-i="t2h"></h3><p class="muted" data-i="t2p"></p>
+  <ul><li data-i="t2a"></li><li data-i="t2b"></li><li data-i="t2c"></li></ul>
+  <div class="mock"><div class="mrow"><span data-i="mS1"></span><span class="ok">✓</span></div><div class="mrow"><span data-i="mS2"></span><span class="ok">✓</span></div><div class="mrow"><span data-i="mS3"></span><span class="muted">○</span></div></div></div>
+ <div class="card"><span class="tag" data-i="t3tag"></span><h3 data-i="t3h"></h3><p class="muted" data-i="t3p"></p>
+  <ul><li data-i="t3a"></li><li data-i="t3b"></li><li data-i="t3c"></li></ul>
+  <div class="mock"><div class="mrow"><span data-i="mR1"></span><b class="ok" dir="ltr">52,600</b></div><div class="mrow"><span data-i="mR2"></span><b class="ok" dir="ltr">31,000</b></div><div class="mrow"><span data-i="mR3"></span><b class="bad" dir="ltr">-5,000</b></div></div></div>
+ <div class="card"><span class="tag" data-i="t4tag"></span><h3 data-i="t4h"></h3><p class="muted" data-i="t4p"></p></div>
+
+ <h2 data-i="whoT"></h2>
+ <div class="card"><p style="margin:0" data-i="whoP"></p></div>
+
+ <h2 data-i="valT"></h2>
+ <div class="card">
+  <div class="val"><span data-i="v1"></span><s dir="ltr">$29</s></div>
+  <div class="val"><span data-i="v2"></span><s dir="ltr">$15</s></div>
+  <div class="val"><span data-i="v3"></span><s dir="ltr">$15</s></div>
+  <div class="val"><span><b data-i="v4"></b></span><b dir="ltr">$9</b></div>
+  <p class="muted" data-i="valNote" style="margin:10px 0 0"></p>
+ </div>
+ <a class="btn dark" id="cta2" href="#" data-i="cta"></a>
+
+ <h2 data-i="faqT"></h2>
+ <details><summary data-i="q1"></summary><p data-i="a1"></p></details>
+ <details><summary data-i="q2"></summary><p data-i="a2"></p></details>
+ <details><summary data-i="q3"></summary><p data-i="a3"></p></details>
+ <details><summary data-i="q4"></summary><p data-i="a4"></p></details>
+ <details><summary data-i="q5"></summary><p data-i="a5"></p></details>
+ <p class="foot" data-i="foot"></p>
+</div>
+<div class="bar-cta"><div class="p" dir="ltr">$9</div><a class="btn" id="cta3" href="#" data-i="cta"></a></div>
+<script>
+var L="en";try{var sv=sessionStorage.getItem("lang");if(sv==="ar")L="ar"}catch(e){}
+var D={
+brand:["BRICKS BUSINESS BUILDING STUDIO","استوديو بريكس لبناء الأعمال"],
+kicker:["FOR FOUNDERS IN THE UAE AND KSA","لمؤسسي الأعمال في الإمارات والسعودية"],
+h1:["Check your idea. Open it right. Survive year one.","افحص فكرتك. افتح مشروعك صح. وانجح في سنتك الأولى."],
+sub:["Three working tools built from real experience launching businesses in the Gulf. Not templates. You answer, it calculates and guides.","ثلاث أدوات عملية مبنية على خبرة حقيقية في إطلاق الأعمال في الخليج. ليست قوالب. أنت تجيب وهي تحسب وترشدك."],
+priceNote:["one-time, about 33 AED, lifetime access","دفعة واحدة، حوالي 33 درهمًا، ووصول مدى الحياة"],
+cta:["Get the Founder Kit","احصل على الحقيبة"],
+whatT:["What you get","ما الذي ستحصل عليه"],
+t1tag:["TOOL 1","الأداة 1"],t1h:["Idea Reality Check","فحص واقع الفكرة"],t1p:["Find out if your idea can really become a business, before you spend money.","اعرف هل تصلح فكرتك لتكون مشروعًا حقيقيًا قبل أن تصرف أي مبلغ."],
+t1a:["10 honest questions across 5 areas, with a score","10 أسئلة صريحة في 5 محاور مع درجة"],t1b:["Your two weakest points and how to fix them","أضعف نقطتين وكيف تعالجهما"],t1c:["7-day test plan and a break-even calculator","خطة اختبار 7 أيام وحاسبة نقطة التعادل"],
+mScore:["Your score","نتيجتك"],mDim1:["The problem","المشكلة"],mDim2:["Willingness to pay","الاستعداد للدفع"],
+t2tag:["TOOL 2","الأداة 2"],t2h:["Open It Right","افتح مشروعك صح"],t2p:["Pick the right set-up and follow the steps, without the expensive surprises.","اختر الشكل القانوني المناسب واتبع الخطوات دون مفاجآت مكلفة."],
+t2a:["Set-up finder: freelance permit, free zone or mainland","مرشد الاختيار: تصريح حر أو منطقة حرة أو بر رئيسي"],t2b:["13-step roadmap with 'watch out' warnings","13 خطوة مع تحذيرات 'انتبه'"],t2c:["Quote comparison sheet and tax basics (verified Oct 2026)","ورقة مقارنة العروض وأساسيات الضرائب (آخر مراجعة أكتوبر 2026)"],
+mS1:["Reserve the trade name","احجز الاسم التجاري"],mS2:["Get initial approval","احصل على الموافقة المبدئية"],mS3:["Open the bank account","افتح الحساب البنكي"],
+t3tag:["TOOL 3","الأداة 3"],t3h:["First-Year Manager","مدير السنة الأولى"],t3p:["Run your first 12 months with a plan, not by luck.","أدر أول 12 شهرًا بخطة وليس بالحظ."],
+t3a:["Cash runway tracker: see when money runs out","متتبع السيولة: اعرف متى ينفد المال"],t3b:["12-month playbook, one focus per month","خطة 12 شهرًا بتركيز واحد كل شهر"],t3c:["Compliance calendar with day countdowns and a monthly review","تقويم التزامات بعدّ تنازلي وجلسة مراجعة شهرية"],
+mR1:["Month 1","الشهر 1"],mR2:["Month 5","الشهر 5"],mR3:["Month 9","الشهر 9"],
+t4tag:["BONUS","هدية"],t4h:["What I learned the hard way","ما تعلمته بالطريقة الصعبة"],t4p:["8 short lessons on the mistakes founders make in the Gulf, and what to do instead.","8 دروس قصيرة عن أخطاء المؤسسين في الخليج وما تفعله بدلًا منها."],
+whoT:["Who it is for","لمن هذه الحقيبة"],whoP:["Anyone planning to start, or in their first year of a business in the UAE or KSA: consultants, creators, small shops and service businesses. Available in English and Arabic.","لكل من يخطط لبدء مشروع أو في سنته الأولى في الإمارات أو السعودية: مستشارون وصناع محتوى ومتاجر صغيرة وأعمال خدمية. متوفرة بالعربية والإنجليزية."],
+valT:["What it is worth","قيمتها"],v1:["Idea Reality Check","فحص واقع الفكرة"],v2:["Open It Right","افتح مشروعك صح"],v3:["First-Year Manager","مدير السنة الأولى"],v4:["Your price today","سعرك اليوم"],
+valNote:["The values shown are our own reference prices for similar guidance. You get all three, plus the lessons, for one price.","القيم المعروضة أسعار مرجعية من عندنا لإرشاد مماثل. تحصل على الثلاثة مع الدروس بسعر واحد."],
+faqT:["Questions","أسئلة شائعة"],
+q1:["Is this just templates?","هل هي مجرد قوالب؟"],a1:["No. They are interactive tools: you answer questions and get a score, a recommended set-up, a cash forecast and a countdown calendar.","لا. هي أدوات تفاعلية: تجيب عن أسئلة وتحصل على درجة وتوصية بالشكل القانوني وتوقع للسيولة وتقويم بعد تنازلي."],
+q2:["Is this legal or tax advice?","هل هذه استشارة قانونية أو ضريبية؟"],a2:["No. It is practical planning guidance. Rules change, so confirm with the authority or an accountant before you act.","لا. هي إرشاد تخطيطي عملي. القواعد تتغير، فتأكد من الجهة الرسمية أو محاسب قبل أي إجراء."],
+q3:["Will it guarantee my business works?","هل تضمن نجاح مشروعي؟"],a3:["No tool can. It helps you avoid common, expensive mistakes and decide with real numbers.","لا توجد أداة تضمن ذلك. هي تساعدك على تجنب الأخطاء المكلفة الشائعة وعلى القرار بالأرقام."],
+q4:["How do I access it?","كيف أدخل إليها؟"],a4:["After payment you get an email with your access code and link. It works on your phone or laptop and saves your progress on your device.","بعد الدفع يصلك بريد فيه رمز الدخول والرابط. تعمل على الهاتف والحاسوب وتحفظ تقدمك على جهازك."],
+q5:["What about the full Launch Planner?","وماذا عن مخطط الإطلاق الكامل؟"],a5:["The UAE Business Launch Planner ($29) goes deeper, with every licence, approval and cost for your exact activity and emirate. The Kit is the essentials.","مخطط إطلاق الأعمال في الإمارات (29 دولارًا) أعمق، ويشمل كل رخصة وموافقة وتكلفة حسب نشاطك وإمارتك. أما الحقيبة فهي الأساسيات."],
+foot:["Prices are in US dollars. You pay the equivalent in AED at checkout.","الأسعار بالدولار الأمريكي، وتدفع ما يعادلها بالدرهم عند إتمام الشراء."]
+};
+function paint(){document.documentElement.lang=L;document.documentElement.dir=L==="ar"?"rtl":"ltr";
+ [].forEach.call(document.querySelectorAll("[data-i]"),function(e){e.textContent=D[e.getAttribute("data-i")][L==="ar"?1:0]});
+ [].forEach.call(document.querySelectorAll("[id^=cta]"),function(a){a.href="/?buy=kit&lang="+L});
+ document.getElementById("lang").textContent=L==="ar"?"English":"العربية"}
+document.getElementById("lang").onclick=function(){L=L==="ar"?"en":"ar";try{sessionStorage.setItem("lang",L)}catch(e){}paint()};
+paint();
+</script>
+</body>
+</html>

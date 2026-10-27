@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFFBF8">
+<title>CV Screener | Bricks</title>
+<meta name="description" content="Screen hundreds of CVs against your job requirements and get a shortlist, with candidates applying through your own job link.">
+<style>
+:root{--bg:#FFFBF8;--ink:#363731;--muted:#6E6A63;--line:#EDE2DB;--plum:#7A1F5C;--deep:#4A1242;--rasp:#9C2A63;--sun:#FFC857;--soft:#FBEFF4}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 8% 0,#FBE6EF 0,transparent 420px) no-repeat,var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.w{max-width:780px;margin:0 auto;padding:16px 16px 50px}.top{display:flex;justify-content:space-between;align-items:center}.brand{font-size:12px;letter-spacing:.12em;color:var(--rasp);font-weight:700}
+.lang{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;font-weight:700;cursor:pointer;color:var(--ink)}
+.hero{background:linear-gradient(135deg,var(--deep),var(--plum) 55%,var(--rasp));color:#fff;border-radius:20px;padding:28px 22px;margin-top:14px}.hero .brand{color:var(--sun)}
+h1{font-size:30px;line-height:1.15;margin:8px 0 10px}.hero p{color:#F6DDE8;margin:0}h2{font-size:22px;margin:30px 0 10px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}.card h3{margin:0 0 4px;font-size:18px}.muted{color:var(--muted);font-size:14.5px}
+.steps{counter-reset:s}.steps .card{display:flex;gap:12px;align-items:flex-start}.steps .card:before{counter-increment:s;content:counter(s);background:var(--plum);color:#fff;border-radius:50%;min-width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:800;margin-top:2px}
+.terms{display:flex;gap:8px;margin:14px 0}.terms button{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px 6px;font-weight:700;cursor:pointer;color:var(--ink)}
+.terms button.on{background:var(--plum);color:#fff;border-color:var(--plum)}.terms small{display:block;font-weight:600;font-size:11.5px;opacity:.85}
+.plans{display:grid;gap:12px}@media(min-width:700px){.plans{grid-template-columns:repeat(3,1fr)}}
+.plan{background:#fff;border:1.5px solid var(--line);border-radius:18px;padding:20px;position:relative}.plan.pop{border:2px solid var(--plum);box-shadow:0 14px 40px rgba(122,31,92,.12)}
+.pop-b{position:absolute;top:-12px;inset-inline-start:18px;background:var(--sun);color:var(--deep);font-weight:800;font-size:12px;padding:4px 12px;border-radius:999px}
+.plan h3{margin:0;font-size:20px}.price{font-size:34px;font-weight:800;color:var(--plum);margin:8px 0 2px}.price small{font-size:14px;color:var(--muted);font-weight:600}
+.plan ul{padding-inline-start:20px;margin:10px 0 14px}.plan li{margin:4px 0}
+.btn{display:block;width:100%;background:var(--plum);color:#fff;border:0;border-radius:12px;padding:13px;font-size:16px;font-weight:800;text-align:center;text-decoration:none;cursor:pointer}
+details{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:8px 0}summary{cursor:pointer;font-weight:700}details p{margin:8px 0 0;color:var(--muted);font-size:14.5px}
+.foot{font-size:12.5px;color:var(--muted);margin-top:26px}
+</style>
+</head>
+<body>
+<div class="w">
+ <div class="top"><div class="brand" data-i="brand"></div><button class="lang" id="lang">العربية</button></div>
+ <div class="hero"><div class="brand" data-i="kicker"></div><h1 data-i="h1"></h1><p data-i="sub"></p></div>
+
+ <h2 data-i="howT"></h2>
+ <div class="steps">
+  <div class="card"><div><h3 data-i="s1h"></h3><div class="muted" data-i="s1p"></div></div></div>
+  <div class="card"><div><h3 data-i="s2h"></h3><div class="muted" data-i="s2p"></div></div></div>
+  <div class="card"><div><h3 data-i="s3h"></h3><div class="muted" data-i="s3p"></div></div></div>
+ </div>
+
+ <h2 data-i="planT"></h2>
+ <div class="terms" id="terms"></div>
+ <div class="plans" id="plans"></div>
+ <p class="muted" data-i="priceNote"></p>
+
+ <h2 data-i="faqT"></h2>
+ <details><summary data-i="q1"></summary><p data-i="a1"></p></details>
+ <details><summary data-i="q2"></summary><p data-i="a2"></p></details>
+ <details><summary data-i="q3"></summary><p data-i="a3"></p></details>
+ <details><summary data-i="q4"></summary><p data-i="a4"></p></details>
+ <details><summary data-i="q5"></summary><p data-i="a5"></p></details>
+ <p class="foot" data-i="foot"></p>
+</div>
+<script>
+var L="en";try{if(sessionStorage.getItem("lang")==="ar")L="ar"}catch(e){}
+var PLANS=[{k:"starter",n:"Starter",usd:19,cvs:300,jobs:2},{k:"growth",n:"Growth",usd:49,cvs:1000,jobs:10,pop:1},{k:"pro",n:"Pro",usd:119,cvs:3000,jobs:30}];
+var DISC={1:0,3:.10,6:.15},term=1;
+var D={
+brand:["BRICKS BUSINESS BUILDING STUDIO","استوديو بريكس لبناء الأعمال"],kicker:["FOR HIRING TEAMS IN THE UAE AND KSA","لفرق التوظيف في الإمارات والسعودية"],
+h1:["Stop reading every CV. Start with your best candidates.","توقف عن قراءة كل سيرة ذاتية. ابدأ بأفضل المرشحين."],
+sub:["Set your must-haves and deal-breakers once. The screener reads each CV against them and sorts candidates into Shortlist, Maybe and Reject, with reasons. You make the final decision.","حدد المتطلبات الأساسية وما لا يمكنك قبوله مرة واحدة. يقرأ الفاحص كل سيرة ذاتية مقابل ذلك ويصنف المرشحين إلى: قائمة مختصرة، ربما، مرفوض مع الأسباب. والقرار النهائي لك."],
+howT:["How it works","كيف يعمل"],
+s1h:["Describe the job","صف الوظيفة"],s1p:["Add the description, your must-haves, nice-to-haves and deal-breakers.","أضف الوصف والمتطلبات الأساسية والإضافية وما لا يمكنك قبوله."],
+s2h:["Get CVs in","استقبل السير الذاتية"],s2p:["Upload a backlog of PDF or Word CVs in bulk, or share a job link so candidates apply and are screened on arrival.","ارفع مجموعة سير ذاتية PDF أو Word دفعة واحدة، أو شارك رابط الوظيفة ليتقدم المرشحون ويتم فحصهم فور وصولهم."],
+s3h:["Review and decide","راجع وقرر"],s3p:["See the verdict and reasons for each candidate, open the original CV, and mark your own decision.","شاهد التصنيف وأسبابه لكل مرشح، وافتح السيرة الأصلية، وسجل قرارك."],
+planT:["Choose your plan","اختر باقتك"],priceNote:["Prices are in US dollars. You pay the equivalent in AED at checkout. Your access code arrives by email right after payment.","الأسعار بالدولار الأمريكي، وتدفع ما يعادلها بالدرهم عند إتمام الشراء. يصلك رمز الدخول بالبريد فور الدفع."],
+mo:["month","شهر"],mos:["months","أشهر"],per:["per month","شهريًا"],tot:["total","الإجمالي"],save:["save","وفّر"],pop:["Most popular","الأكثر طلبًا"],buy:["Get","اشترك في"],
+cvsl:["CVs screened per month","سيرة ذاتية شهريًا"],jobsl:["open job links at a time","رابط وظيفة مفتوح في وقت واحد"],f1:["Bulk upload and job apply links","رفع جماعي وروابط تقديم للوظائف"],f2:["Reasons for every verdict","أسباب لكل تصنيف"],
+faqT:["Questions","أسئلة شائعة"],
+q1:["Does the AI decide who I hire?","هل يقرر الذكاء الاصطناعي من أوظف؟"],a1:["No. It gives a recommendation and reasons so you can review faster. You always decide, and you can open the original CV.","لا. يقدم توصية وأسبابًا لتراجع أسرع. أنت من يقرر دائمًا ويمكنك فتح السيرة الأصلية."],
+q2:["Which languages and files work?","ما اللغات والملفات المدعومة؟"],a2:["English CVs in PDF or Word (.docx). Scanned image CVs have no readable text, so open those manually.","السير الذاتية بالإنجليزية بصيغة PDF أو Word. السير الممسوحة كصور لا تحتوي نصًا قابلًا للقراءة، فافتحها يدويًا."],
+q3:["How does renewal work?","كيف يتم التجديد؟"],a3:["Pick 1, 3 or 6 months. When it ends, buy again with the same email and your code is extended, so you keep using the same one.","اختر شهرًا أو 3 أو 6 أشهر. عند الانتهاء اشترِ مرة أخرى بنفس البريد ويتم تمديد رمزك فتستمر في استخدامه."],
+q4:["What happens to candidates' CVs?","ماذا يحدث لسير المرشحين الذاتية؟"],a4:["Candidates agree to share their CV with you when they apply. You can delete any applicant and their CV from your dashboard.","يوافق المرشحون على مشاركة سيرتهم معك عند التقديم. يمكنك حذف أي مرشح وسيرته من لوحتك."],
+q5:["What if I need more CVs than my plan?","وماذا لو احتجت سيرًا أكثر من باقتي؟"],a5:["Choose a bigger plan, or email us and we will adjust your monthly limit.","اختر باقة أكبر أو راسلنا لنعدّل حدك الشهري."],
+foot:["Screening is a recommendation tool, not legal advice. Follow your local employment and anti-discrimination rules.","الفحص أداة توصية وليس استشارة قانونية. التزم بقوانين العمل ومكافحة التمييز المحلية."]
+};
+function t(k){return D[k][L==="ar"?1:0]}
+function price(p,m){return Math.round(p.usd*m*(1-DISC[m]))}
+function paint(){
+ document.documentElement.lang=L;document.documentElement.dir=L==="ar"?"rtl":"ltr";
+ [].forEach.call(document.querySelectorAll("[data-i]"),function(e){e.textContent=t(e.getAttribute("data-i"))});
+ document.getElementById("lang").textContent=L==="ar"?"English":"العربية";
+ document.getElementById("terms").innerHTML=[1,3,6].map(function(m){return '<button class="'+(m===term?"on":"")+'" data-m="'+m+'">'+m+" "+(m>1?t("mos"):t("mo"))+'<small>'+(DISC[m]?t("save")+" "+Math.round(DISC[m]*100)+"%":"")+'&nbsp;</small></button>'}).join("");
+ document.getElementById("plans").innerHTML=PLANS.map(function(p){var tot=price(p,term),per=Math.round(tot/term);
+  return '<div class="plan'+(p.pop?" pop":"")+'">'+(p.pop?'<span class="pop-b">'+t("pop")+'</span>':"")+'<h3>'+p.n+'</h3><div class="price"><bdi dir="ltr">$'+per+'</bdi> <small>'+t("per")+'</small></div>'+
+  (term>1?'<div class="muted"><bdi dir="ltr">$'+tot+'</bdi> '+t("tot")+'</div>':"")+
+  '<ul><li><b><bdi dir="ltr">'+p.cvs+'</bdi></b> '+t("cvsl")+'</li><li><b><bdi dir="ltr">'+p.jobs+'</bdi></b> '+t("jobsl")+'</li><li>'+t("f1")+'</li><li>'+t("f2")+'</li></ul>'+
+  '<a class="btn" href="/?buy=cv'+p.k+term+'&lang='+L+'">'+t("buy")+" "+p.n+'</a></div>'}).join("");
+ [].forEach.call(document.querySelectorAll("#terms button"),function(b){b.onclick=function(){term=+b.getAttribute("data-m");paint()}});
+}
+document.getElementById("lang").onclick=function(){L=L==="ar"?"en":"ar";try{sessionStorage.setItem("lang",L)}catch(e){}paint()};
+paint();
+</script>
+</body>
+</html>
