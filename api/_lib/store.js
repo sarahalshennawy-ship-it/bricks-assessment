@@ -40,7 +40,7 @@ async function saveUser(email, record) {
 // should not get overwritten back down to "free_only").
 const STATUS_RANK = {
   free_only: 0,
-  purchased_toolkit: 1, purchased_planner: 1, purchased_content: 1, purchased_blueprint: 1,
+  purchased_toolkit: 1, purchased_kit: 1, purchased_planner: 1, purchased_content: 1, purchased_blueprint: 1,
   purchased_starter: 2, purchased_upgrade: 2,
   purchased_consultation: 3, purchased_entrepreneur: 4
 };

@@ -17,9 +17,13 @@
 //   REPLY_TO_EMAIL      - optional: where customer replies go (if different from SENDER_EMAIL)
 
 const crypto = require("crypto");
+const { cvTiers } = require("./cv-plans.js");
 
 const CONTENT_TOOL_URL = "https://plan.bricksmedia.org";
 const PLANNER_URL = "https://planner.bricksmedia.org";
+const KIT_URL = "https://kit.bricksmedia.org";
+// CV Screener: set CV_SCREENER_URL (e.g. https://cv.bricksmedia.org) and CV_ADMIN_SECRET (its ADMIN_SECRET) in Vercel.
+const CV_URL = (process.env.CV_SCREENER_URL || "https://cv.bricksmedia.org").replace(/\/+$/, "");
 const CODE_API = `${CONTENT_TOOL_URL}/api/issue-code`;
 
 const TOOLKIT_URL = process.env.TOOLKIT_DRIVE_URL || process.env.BLUEPRINT_DRIVE_URL || "";
@@ -34,10 +38,12 @@ const C = { plum: "#7A1F5C", deep: "#4A1242", rasp: "#9C2A63", sun: "#FFC857", b
 async function issueCode(product, attempt = 0) {
   if (attempt > 1) return null; // give up after 2 tries; the email explains a follow-up is coming
 
-  const prefix = product === "launch-planner" ? "PLANNER-" : "BRICKS-";
+  const prefix = product === "launch-planner" ? "PLANNER-" : product === "founder-kit" ? "KIT-" : "BRICKS-";
   const code = prefix + crypto.randomBytes(5).toString("hex").toUpperCase();
   const body = product === "launch-planner"
     ? { code, product: "launch-planner", lifetime: true }
+    : product === "founder-kit"
+    ? { code, product: "founder-kit", lifetime: true }
     : { code, product: "content-plan", lifetime: true, callsAllowed: 40 };
 
   try {
@@ -61,6 +67,35 @@ async function issueCode(product, attempt = 0) {
 // Kept for anything that still imports the old name.
 function issueContentToolCode() { return issueCode("content-plan"); }
 function issuePlannerCode() { return issueCode("launch-planner"); }
+function issueKitCode() { return issueCode("founder-kit"); }
+
+// ---------- CV Screener access (lives on the CV Screener site) ----------
+// New customer -> new code. Same email + same plan already active -> extend that code (a renewal).
+async function issueCvAccess({ email, name, plan, months }) {
+  const secret = process.env.CV_ADMIN_SECRET;
+  if (!secret) { console.error("CV_ADMIN_SECRET is not set"); return null; }
+  const headers = { "Content-Type": "application/json", "x-admin-secret": secret };
+  const api = CV_URL + "/api/admin/codes";
+  try {
+    const list = await fetch(api, { headers });
+    if (list.ok) {
+      const data = await list.json();
+      const codes = Array.isArray(data.codes) ? data.codes : Object.values(data.codes || {});
+      const existing = codes.find(c => c.active !== false && c.plan === plan && String(c.email || "").toLowerCase() === email.trim().toLowerCase());
+      if (existing) {
+        const r = await fetch(api, { method: "PATCH", headers, body: JSON.stringify({ code: existing.code, extendMonths: months }) });
+        if (r.ok) { const d = await r.json(); return { code: existing.code, paidUntil: d.code && d.code.paidUntil, renewed: true }; }
+      }
+    }
+    const r = await fetch(api, { method: "POST", headers, body: JSON.stringify({ name: name || "", email, plan, months }) });
+    if (!r.ok) { console.error("CV code issue failed:", r.status, await r.text()); return null; }
+    const d = await r.json();
+    return { code: d.code.code, paidUntil: d.code.paidUntil, renewed: false };
+  } catch (err) {
+    console.error("issueCvAccess error:", err);
+    return null;
+  }
+}
 
 // ---------- what each purchase includes ----------
 
@@ -85,16 +120,26 @@ const TIER_CONTENT = {
     subject: "Your UAE Business Launch Planner access",
     planner: true
   },
+  kit: {
+    name: "Gulf Founder Kit",
+    subject: "Your Gulf Founder Kit access",
+    kit: true
+  },
   toolkit: {
     name: "Finance & Sales Toolkit",
     subject: "Your Finance & Sales Toolkit is here",
     toolkit: true
   },
+  // CV Screener plans are added below from cv-plans.js
   // Legacy tiers - no longer sold, kept so any older purchase still delivers.
   blueprint: { name: "Bricks Blueprint", subject: "Your Bricks Blueprint is here", contentTool: true, toolkit: true },
   consultation: { name: "Consultation Package", subject: "Welcome to your Bricks Consultation Package", contentTool: true, toolkit: true, course: true, booking: true },
   upgrade: { name: "Consultation Upgrade", subject: "Your Bricks Consultation Upgrade is confirmed", booking: true }
 };
+
+for (const [k, t] of Object.entries(cvTiers())) {
+  TIER_CONTENT[k] = { name: t.label, subject: "Your CV Screener access", cv: { plan: t.plan, months: t.months, planLabel: t.planLabel, cvs: t.cvs, jobs: t.jobs } };
+}
 
 // ---------- email ----------
 
@@ -123,7 +168,7 @@ function linkBlock(title, url, label) {
   return `<div style="margin:18px 0"><p style="margin:0 0 10px 0;color:${C.ink}"><b>${title}</b></p>${button(url, label)}</div>`;
 }
 
-async function sendDeliveryEmail({ to, name, tier, contentToolCode, plannerCode }) {
+async function sendDeliveryEmail({ to, name, tier, contentToolCode, plannerCode, kitCode, cvAccess }) {
   const t = TIER_CONTENT[tier];
   if (!t) throw new Error("Unknown tier: " + tier);
 
@@ -144,6 +189,22 @@ async function sendDeliveryEmail({ to, name, tier, contentToolCode, plannerCode 
         "Lifetime access. Your progress is saved on the device you use."));
       text.push(`UAE Business Launch Planner\nOpen: ${PLANNER_URL}\nAccess code: ${plannerCode} (lifetime access)`);
     } else { parts.push(pendingLine("Launch Planner")); text.push("UAE Business Launch Planner: your code will follow in a separate email."); missing.push("planner code"); }
+  }
+  if (t.kit) {
+    if (kitCode) {
+      parts.push(codeBlock("Gulf Founder Kit", KIT_URL, kitCode,
+        "Lifetime access. Your progress is saved on the device you use. Available in English and Arabic."));
+      text.push(`Gulf Founder Kit\nOpen: ${KIT_URL}\nAccess code: ${kitCode} (lifetime access)`);
+    } else { parts.push(pendingLine("Founder Kit")); text.push("Gulf Founder Kit: your code will follow in a separate email."); missing.push("kit code"); }
+  }
+  if (t.cv) {
+    if (cvAccess && cvAccess.code) {
+      const until = cvAccess.paidUntil ? ` Your access runs until ${cvAccess.paidUntil}.` : "";
+      const note = (cvAccess.renewed ? "Your existing code was extended, so keep using the same one." : "Keep this code private.") +
+        ` ${t.cv.planLabel} plan: ${t.cv.cvs} CVs a month and ${t.cv.jobs} open jobs at a time.` + until;
+      parts.push(codeBlock("CV Screener", CV_URL, cvAccess.code, note));
+      text.push(`CV Screener\nOpen: ${CV_URL}\nAccess code: ${cvAccess.code}\n${note}`);
+    } else { parts.push(pendingLine("CV Screener")); text.push("CV Screener: your code will follow in a separate email."); missing.push("cv screener code"); }
   }
   if (t.toolkit) {
     if (TOOLKIT_URL) { parts.push(linkBlock("Finance & Sales Toolkit", TOOLKIT_URL, "Open your toolkit files")); text.push(`Finance & Sales Toolkit\nFiles: ${TOOLKIT_URL}`); }
@@ -195,7 +256,7 @@ async function sendDeliveryEmail({ to, name, tier, contentToolCode, plannerCode 
 // Used identically by the webhook (real payments) and create-payment.js (free coupons).
 async function deliverPurchase({ email, name, tier }) {
   const t = TIER_CONTENT[tier];
-  let contentToolCode = null, plannerCode = null;
+  let contentToolCode = null, plannerCode = null, kitCode = null, cvAccess = null;
 
   if (t && t.contentTool) {
     contentToolCode = await issueContentToolCode();
@@ -206,11 +267,21 @@ async function deliverPurchase({ email, name, tier }) {
     if (!plannerCode) console.error(`Could not issue Launch Planner code for ${email} (tier: ${tier}) - issue one manually in admin.html`);
   }
 
-  await sendDeliveryEmail({ to: email, name: name || null, tier, contentToolCode, plannerCode });
+  if (t && t.kit) {
+    kitCode = await issueKitCode();
+    if (!kitCode) console.error(`Could not issue Founder Kit code for ${email} (tier: ${tier}) - issue one manually in admin.html`);
+  }
+
+  if (t && t.cv) {
+    cvAccess = await issueCvAccess({ email, name, plan: t.cv.plan, months: t.cv.months });
+    if (!cvAccess) console.error(`Could not issue CV Screener code for ${email} (tier: ${tier}) - issue one manually in admin.html`);
+  }
+
+  await sendDeliveryEmail({ to: email, name: name || null, tier, contentToolCode, plannerCode, kitCode, cvAccess });
   return contentToolCode; // same return value as before, for existing callers
 }
 
 module.exports = {
-  deliverPurchase, sendDeliveryEmail, issueCode, issueContentToolCode, issuePlannerCode,
-  TIER_CONTENT, CONTENT_TOOL_URL, PLANNER_URL
+  deliverPurchase, sendDeliveryEmail, issueCode, issueContentToolCode, issuePlannerCode, issueKitCode, issueCvAccess,
+  TIER_CONTENT, CONTENT_TOOL_URL, PLANNER_URL, KIT_URL
 };
