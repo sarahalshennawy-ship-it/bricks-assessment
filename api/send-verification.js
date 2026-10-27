@@ -1,5 +1,5 @@
 // POST /api/send-verification
-// Body: { email: string, tier: "entrepreneur" | "starter" | "content" | "planner" | "toolkit" | "upgrade" }
+// Body: { email: string, tier: "entrepreneur" | "starter" | "content" | "planner" | "toolkit" | "kit" | "upgrade" }
 // Sends a 6-digit code to the customer's email and returns a signed token.
 // No database needed - the token itself carries the code, email, tier and
 // expiry, signed so it can't be tampered with. The frontend holds onto this
@@ -8,7 +8,8 @@
 const crypto = require("crypto");
 
 // Must match TIER_PRICING in create-payment.js. "upgrade" = legacy $50 link in older emails.
-const VALID_TIERS = ["entrepreneur", "starter", "content", "planner", "toolkit", "upgrade"];
+const { cvTiers } = require("./_lib/cv-plans.js");
+const VALID_TIERS = ["entrepreneur", "starter", "content", "planner", "toolkit", "kit", "upgrade"].concat(Object.keys(cvTiers()));
 const CODE_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
 function signToken(payload) {

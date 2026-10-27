@@ -1,10 +1,12 @@
 // POST /api/create-payment
-// Body: { token, code, tier: "entrepreneur" | "starter" | "content" | "planner" | "toolkit" | "upgrade", name, email, coupon? }
+// Body: { token, code, tier: "entrepreneur" | "starter" | "content" | "planner" | "toolkit" | "kit" | "upgrade", name, email, coupon? }
 // Requires a valid, unexpired OTP token+code from /api/send-verification first.
 // Returns: { redirect_url: string } OR { redirect_url: string, free: true } for 100% off codes
 
 const crypto = require("crypto");
 const { deliverPurchase } = require("./_lib/delivery.js");
+const { savePendingPurchase } = require("./_lib/store.js");
+const { cvTiers } = require("./_lib/cv-plans.js");
 
 // Pricing in fils (1 AED = 100 fils). Ziina charges in AED; the page shows
 // USD. Keep these in sync with PRICES in index.html.
@@ -16,8 +18,12 @@ const TIER_PRICING = {
   planner:      { amountFils: 10700, label: "UAE Business Launch Planner" },   // 107 AED  (~$29)
   toolkit:      { amountFils: 10700, label: "Finance & Sales Toolkit" },       // 107 AED  (~$29)
   // Legacy: the $50 upgrade link already sent in older Blueprint emails.
+  kit:          { amountFils: 3300,  label: "Gulf Founder Kit" },            // 33 AED   (~$9)
   upgrade:      { amountFils: 18500, label: "Consultation Upgrade" }           // 185 AED  (~$50)
 };
+
+// CV Screener plans (3 plans x 1/3/6 months) are generated from _lib/cv-plans.js
+for (const [k, t] of Object.entries(cvTiers())) TIER_PRICING[k] = { amountFils: t.amountFils, label: t.label };
 
 // Coupon codes live in the COUPON_CODES environment variable as JSON, e.g.:
 // {"TESTFREE100": 100, "LAUNCH50": 50, "FRIENDS20": 20}
@@ -140,8 +146,17 @@ module.exports = async (req, res) => {
     // separate metadata field, and the "message" field has a real length
     // limit). We drop the name here to stay safely short.
     // IMPORTANT: the Ziina webhook must decode these same letters.
-    const TIER_CODE = { entrepreneur: "e", starter: "s", content: "g", planner: "p", toolkit: "t", upgrade: "u" };
+    const TIER_CODE = { entrepreneur: "e", starter: "s", content: "g", planner: "p", toolkit: "t", upgrade: "u", kit: "k" };
+    for (const [k, t] of Object.entries(cvTiers())) TIER_CODE[k] = t.packed;
     const packedMessage = `${TIER_CODE[tier]}|${email}`.slice(0, 60);
+
+    // Remember who is paying (name, coupon, amount) so the webhook can use it
+    // once Ziina confirms. Never block checkout if this fails.
+    try {
+      await savePendingPurchase(email, { name: name || null, tier, coupon: coupon || null, amountFils });
+    } catch (err) {
+      console.error("savePendingPurchase failed (checkout continues):", err);
+    }
 
     const ziinaRes = await fetch("https://api-v2.ziina.com/api/payment_intent", {
       method: "POST",

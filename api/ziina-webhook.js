@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 const { deliverPurchase } = require("./_lib/delivery.js");
 const { consumePendingPurchase } = require("./_lib/store.js");
+const { cvTiers } = require("./_lib/cv-plans.js");
 
 // Vercel gives us the raw body via req.body already parsed as an object by
 // default for JSON content-type. We need the RAW string to verify the HMAC,
@@ -78,7 +79,13 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const TIER_CODE_REVERSE = { b: "blueprint", c: "consultation", u: "upgrade" };
+  // Must match TIER_CODE in create-payment.js. Old letters (b, c) are kept
+  // so any payment started before the Sept 2026 pricing change still delivers.
+  const TIER_CODE_REVERSE = {
+    e: "entrepreneur", s: "starter", g: "content", p: "planner", t: "toolkit",
+    u: "upgrade", k: "kit", b: "blueprint", c: "consultation"
+  };
+  for (const [k, t] of Object.entries(cvTiers())) TIER_CODE_REVERSE[t.packed] = k;
   const [tierCode, email] = (intent.message || "").split("|");
   const tier = TIER_CODE_REVERSE[tierCode];
 
@@ -89,7 +96,10 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const pending = await consumePendingPurchase(email);
+    // Name/coupon saved at checkout. If the database is unavailable, still deliver.
+    let pending = null;
+    try { pending = await consumePendingPurchase(email); }
+    catch (e) { console.error("consumePendingPurchase failed (delivering anyway):", e); }
     const name = pending ? pending.name : null;
     const coupon = pending ? pending.coupon : null;
     const amountPaid = pending && typeof pending.amountFils === "number" ? pending.amountFils / 100 : null;
